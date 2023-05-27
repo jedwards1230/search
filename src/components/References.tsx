@@ -18,6 +18,7 @@ export default function References({
 		return intermediateSteps[currentPage - 1];
 	}, [intermediateSteps, currentPage]);
 
+	if (currentStep.action.tool === "calculator") return null;
 	return (
 		<>
 			<h2 className="text-lg font-medium">References</h2>
