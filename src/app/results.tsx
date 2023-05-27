@@ -1,11 +1,12 @@
 "use client";
 
 import References from "@/components/References";
+import SearchIcon from "@/components/SearchIcon";
 import { FormEvent, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
-const defaultStr =
-	"i am experienced with rest apis and mysql. how can i start learning about graphql?";
+const defaultStr = "5+5";
+//"i am experienced with rest apis and mysql. how can i start learning about graphql?";
 
 export default function Results() {
 	const [loading, setLoading] = useState(false);
@@ -44,13 +45,22 @@ export default function Results() {
 				onSubmit={getResults}
 				className="flex items-center justify-center w-4/5 gap-4"
 			>
-				<TextareaAutosize
-					value={query}
-					autoFocus={true}
-					onChange={(e) => setQuery(e.target.value)}
-					className="w-full h-full p-4 transition-colors border rounded disabled:animate-pulse border-neutral-400 dark:bg-neutral-700 focus:outline-none min-h-fit"
-					placeholder="Ask anything..."
-				/>
+				<div className="relative w-full h-full">
+					<TextareaAutosize
+						value={query}
+						autoFocus={true}
+						onChange={(e) => setQuery(e.target.value)}
+						className="w-full h-full p-4 transition-colors border rounded disabled:animate-pulse border-neutral-400 dark:bg-neutral-700 focus:outline-none min-h-fit"
+						placeholder="Ask anything..."
+					/>
+					<button
+						disabled={loading}
+						type="submit"
+						className="absolute inset-y-4 right-4"
+					>
+						<SearchIcon />
+					</button>
+				</div>
 				<button
 					disabled={loading}
 					type="submit"

@@ -1,5 +1,7 @@
 import Results from "./results";
 
+export const runtime = "edge";
+
 export default async function Page() {
 	return (
 		<main className="flex flex-col items-center justify-center min-h-screen gap-8 p-8">
