@@ -4,6 +4,8 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { GoogleCustomSearch } from "langchain/tools";
 import { Calculator } from "langchain/tools/calculator";
 
+export const runtime = "edge";
+
 export async function POST(request: Request) {
 	const res = await request.json();
 	const query = res.query;
