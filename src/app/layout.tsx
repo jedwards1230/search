@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
     return (
         <html
-            className="container bg-neutral-100 text-neutral-900 transition-colors dark:bg-neutral-900 dark:text-neutral-100"
+            className="container bg-neutral-50 text-neutral-900 transition-colors dark:bg-neutral-900 dark:text-neutral-100"
             lang="en"
             suppressHydrationWarning={true}
         >

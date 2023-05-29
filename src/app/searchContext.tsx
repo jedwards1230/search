@@ -1,28 +1,20 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { createContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 
 type SearchState = {
     loading: boolean;
-    results: string;
-    references: Observation[];
+    results: Result[];
     started: boolean;
-    query: string;
-    setQuery: (query: string) => void;
-    processQuery: (query: string) => void;
+    processQuery: (newInput: string) => void;
     reset: () => void;
 };
 
 const initialState: SearchState = {
     loading: false,
-    results: '',
-    references: [],
+    results: [],
     started: false,
-    query: '',
-    setQuery: () => {
-        console.log('setQuery not implemented');
-    },
     processQuery: () => {
         console.log('processQuery not implemented');
     },
@@ -41,14 +33,23 @@ export function SearchContextProvider({
     children: React.ReactNode;
 }) {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const search = searchParams.get('search');
+
+    const summaryRef = useRef('');
+    const [model, setModel] = useState<Model>('gpt-3.5-turbo');
 
     const [started, setStarted] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [query, setQuery] = useState(search || '');
-    const [references, setReferences] = useState<Observation[]>([]);
-    const [results, setResults] = useState('');
+    const [results, setResults] = useState<Result[]>([]);
+    const [summaryUpdate, setSummaryUpdate] = useState(0);
+
+    useEffect(() => {
+        if (results.length > 0) {
+            const updatedResults = [...results];
+            updatedResults[results.length - 1].summary = summaryRef.current;
+            setResults(updatedResults);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [summaryUpdate]);
 
     const getResults = async (newQuery: string) => {
         const res = await fetch('/api/get_results', {
@@ -57,19 +58,19 @@ export function SearchContextProvider({
         });
         const data = await res.json();
 
-        setReferences(JSON.parse(data.intermediateSteps));
+        const steps = JSON.parse(data.intermediateSteps);
 
-        return data;
+        return steps;
     };
 
     const summarizeResults = async (newQuery: string, results: string) => {
         try {
-            const res = await fetch('/api/summarize_results', {
+            const response = await fetch('/api/summarize_results', {
                 method: 'POST',
                 body: JSON.stringify({ query: newQuery, results: results }),
             });
 
-            const reader = res.body?.getReader();
+            const reader = response.body?.getReader();
             let accumulatedResponse = '';
 
             if (reader) {
@@ -80,42 +81,73 @@ export function SearchContextProvider({
                     if (value) {
                         const decoded = new TextDecoder().decode(value);
                         accumulatedResponse += decoded;
+                        summaryRef.current = accumulatedResponse;
+                        setSummaryUpdate((prev) => prev + 1);
                     }
-                    setResults(accumulatedResponse);
                 }
             }
-
-            return accumulatedResponse;
         } catch (err) {
             console.error('Fetch error:', err);
-            setResults('Error summarizing results');
+            summaryRef.current = 'Error summarizing results';
         }
     };
 
-    const processQuery = async (newQuery: string) => {
+    const processQuery = async (
+        newInput: string
+    ): Promise<boolean | undefined> => {
+        const newQuery = newInput.trim();
+        if (newQuery === '') return;
+
         const url = new URL(window.location.href);
-        url.searchParams.set('search', newQuery);
+        url.searchParams.set('q', newQuery);
         router.replace(url.toString());
 
-        setQuery(newQuery);
-        setResults('');
         setStarted(true);
         setLoading(true);
         try {
+            const newResult = {
+                id: results.length,
+                query: newQuery,
+                model,
+                summary: '',
+                references: [],
+                finished: false,
+            };
             const data = await getResults(newQuery);
-            await summarizeResults(newQuery, JSON.stringify(data));
+            newResult.references = data;
+
+            setResults((results) => {
+                const updatedResults = [...results];
+                updatedResults.push(newResult);
+                return updatedResults;
+            });
+
+            await summarizeResults(
+                newQuery,
+                JSON.stringify(data + '\n' + newInput)
+            );
+            newResult.summary = summaryRef.current;
+            newResult.finished = true;
+
+            setResults((results) => {
+                const updatedResults = [...results];
+                updatedResults[newResult.id] = newResult;
+                return updatedResults;
+            });
+            return true;
         } catch (err) {
             console.error('Fetch error:', err);
             setLoading(false);
+            return false;
         }
     };
 
     const reset = () => {
-        setResults('');
-        setReferences([]);
+        setResults([]);
         setLoading(false);
+        summaryRef.current = '';
         setStarted(false);
-        setQuery('');
+        setSummaryUpdate(0);
         router.replace('/');
     };
 
@@ -124,10 +156,7 @@ export function SearchContextProvider({
             value={{
                 loading,
                 results,
-                references,
                 started,
-                query,
-                setQuery,
                 processQuery,
                 reset,
             }}

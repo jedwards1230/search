@@ -1,32 +1,32 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import SearchIcon from './SearchIcon';
 import { useSearch } from '@/app/searchContext';
 
-export default function Input({ handleSubmit }: { handleSubmit: () => void }) {
-    const { loading, query, setQuery } = useSearch();
+export default function Input({
+    handleSubmit,
+    search,
+}: {
+    handleSubmit: (newInput: string) => void;
+    search?: string | null;
+}) {
+    const { loading } = useSearch();
+    const [query, setQuery] = useState<string>(search || '');
 
-    useEffect(() => {
-        const keyDownHandler = (e: KeyboardEvent) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSubmit();
-            }
-        };
-
-        document.addEventListener('keydown', keyDownHandler);
-        return () => {
-            document.removeEventListener('keydown', keyDownHandler);
-        };
-    }, [handleSubmit]);
+    const onKeyDownHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit(query);
+        }
+    };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        handleSubmit();
+        handleSubmit(query);
     };
 
     return (
@@ -46,7 +46,8 @@ export default function Input({ handleSubmit }: { handleSubmit: () => void }) {
                     value={query}
                     autoFocus={true}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="h-full min-h-fit w-full rounded border border-neutral-400 p-4 transition-colors focus:outline-none disabled:animate-pulse dark:border-neutral-600 dark:bg-neutral-800"
+                    onKeyDown={onKeyDownHandler}
+                    className="h-full min-h-fit w-full rounded border border-neutral-400 p-4 pr-10 transition-colors focus:outline-none disabled:animate-pulse dark:border-neutral-600 dark:bg-neutral-800"
                     placeholder="Ask anything..."
                 />
                 <button

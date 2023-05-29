@@ -1,18 +1,19 @@
 'use client';
 
 import clsx from 'clsx';
+import { useSearchParams } from 'next/navigation';
 
 import { Input, Results, Title } from '@/components';
 import { useSearch } from './searchContext';
 
 export default function SearchPage() {
-    const { started, query, processQuery } = useSearch();
+    const { results, started, processQuery, reset } = useSearch();
+    const searchParams = useSearchParams();
+    const search = searchParams.get('q');
 
-    const handleSubmit = async () => {
-        const newQuery = query.trim();
-        if (newQuery === '') return;
-
-        processQuery(newQuery);
+    const handleSubmit = (newInput: string) => {
+        reset();
+        processQuery(newInput);
     };
 
     return (
@@ -24,9 +25,11 @@ export default function SearchPage() {
                 )}
             >
                 <Title />
-                <Input handleSubmit={handleSubmit} />
+                <Input handleSubmit={handleSubmit} search={search} />
             </div>
-            <Results started={started} />
+            {results.map((result, i) => (
+                <Results result={result} key={`result-${i}`} />
+            ))}
         </>
     );
 }
