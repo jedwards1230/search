@@ -6,7 +6,7 @@ export default function References({
     return (
         <>
             <h2 className="pb-2 text-lg font-medium">References</h2>
-            <div className="max-h-[60vh] overflow-y-scroll">
+            <div className="">
                 {intermediateSteps.map((step, i) => (
                     <div
                         key={step.link + i}
@@ -14,8 +14,8 @@ export default function References({
                     >
                         <div className="rounded p-2 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50">
                             <a href={step.link} target="_blank">
-                                <div className="pb-1 text-sm">{step.title}</div>
-                                <div className="text-xs">{step.snippet}</div>
+                                <div className="pb-1">{step.title}</div>
+                                <div className="text-sm">{step.snippet}</div>
                             </a>
                         </div>
                     </div>

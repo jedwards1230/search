@@ -6,12 +6,23 @@ import {
     HumanMessagePromptTemplate,
 } from 'langchain/prompts';
 
-const chat = new ChatOpenAI({ temperature: 0 });
+const chat = new ChatOpenAI({
+    temperature: 0,
+    streaming: true,
+    callbacks: [
+        {
+            handleLLMNewToken(token: string) {
+                console.log(token);
+            },
+        },
+    ],
+});
 const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         "Thoroughly answer the user's query based on the search results. " +
             'Respond in markdown format. ' +
-            ''
+            'Ensure sources are cited with markdown links. ' +
+            'Ensure all links are simplified with markdown links. '
     ),
     HumanMessagePromptTemplate.fromTemplate(
         'User query: {query}. Search Results: {results}'
