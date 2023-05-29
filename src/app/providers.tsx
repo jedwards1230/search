@@ -1,13 +1,16 @@
-"use client";
+'use client';
 
-import { ThemeProvider } from "next-themes";
-import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from 'next-themes';
+import { Analytics } from '@vercel/analytics/react';
+import { SearchContextProvider } from './searchContext';
 
 export function Providers({ children }: { children: React.ReactNode }) {
-	return (
-		<>
-			<ThemeProvider>{children}</ThemeProvider>
-			<Analytics />
-		</>
-	);
+    return (
+        <>
+            <ThemeProvider>
+                <SearchContextProvider>{children}</SearchContextProvider>
+            </ThemeProvider>
+            <Analytics />
+        </>
+    );
 }

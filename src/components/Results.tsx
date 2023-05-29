@@ -8,6 +8,7 @@ import { NormalComponents } from 'react-markdown/lib/complex-types';
 
 import LoadIcon from './LoadIcon';
 import References from './References';
+import { useSearch } from '@/app/searchContext';
 
 const mdComponents: Partial<
     Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
@@ -60,21 +61,12 @@ const mdComponents: Partial<
     tr: ({ node, ...props }) => <tr {...props} className="border" />,
 };
 
-export default function Results({
-    started,
-    loading,
-    results,
-    references,
-}: {
-    started: boolean;
-    loading: boolean;
-    results: string;
-    references: Observation[];
-}) {
+export default function Results({ started }: { started: boolean }) {
+    const { loading, results, references } = useSearch();
     return (
         <div className="flex gap-8">
             <motion.div layout className="flex w-full flex-col items-center">
-                {started && (
+                {started && results && (
                     <div className="flex w-full flex-col p-2">
                         <h2 className="pb-2 text-lg font-medium">Results</h2>
                         <ReactMarkdown

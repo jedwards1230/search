@@ -5,18 +5,14 @@ import { FormEvent } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import SearchIcon from './SearchIcon';
+import { useSearch } from '@/app/searchContext';
 
 export default function Input({
-    loading,
     handleSubmit,
-    query,
-    setQuery,
 }: {
-    loading: boolean;
     handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-    query: string;
-    setQuery: (query: string) => void;
 }) {
+    const { loading, query, setQuery } = useSearch();
     return (
         <motion.form
             layout
@@ -28,7 +24,7 @@ export default function Input({
                     value={query}
                     autoFocus={true}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="h-full min-h-fit w-full rounded border border-neutral-400 p-4 transition-colors focus:outline-none disabled:animate-pulse dark:bg-neutral-700"
+                    className="h-full min-h-fit w-full rounded border border-neutral-400 p-4 transition-colors focus:outline-none disabled:animate-pulse dark:border-neutral-600 dark:bg-neutral-800"
                     placeholder="Ask anything..."
                 />
                 <button

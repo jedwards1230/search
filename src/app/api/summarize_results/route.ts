@@ -1,5 +1,7 @@
 import { createSummarizeChain } from '@/langchain/chains/summarize';
 
+export const runtime = 'edge';
+
 export async function POST(request: Request) {
     const res = await request.json();
     const query = res.query;
