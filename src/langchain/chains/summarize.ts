@@ -1,4 +1,4 @@
-import { LLMChain } from 'langchain';
+import { LLMChain } from 'langchain/chains';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
 import {
     ChatPromptTemplate,
@@ -6,17 +6,24 @@ import {
     HumanMessagePromptTemplate,
 } from 'langchain/prompts';
 
-const chat = new ChatOpenAI({
-    temperature: 0,
-    streaming: true,
-    callbacks: [
-        {
-            handleLLMNewToken(token: string) {
-                console.log(token);
+interface LLMChainCallback {
+    (token: string): void;
+}
+
+function createChat(callback: LLMChainCallback) {
+    return new ChatOpenAI({
+        temperature: 0,
+        streaming: true,
+        callbacks: [
+            {
+                handleLLMNewToken(token: string) {
+                    callback(token);
+                },
             },
-        },
-    ],
-});
+        ],
+    });
+}
+
 const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         "Thoroughly answer the user's query based on the search results. " +
@@ -29,9 +36,12 @@ const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     ),
 ]);
 
-const summarizeChain = new LLMChain({
-    prompt: summarizePrompt,
-    llm: chat,
-});
+function createSummarizeChain(callback: LLMChainCallback) {
+    const chat = createChat(callback);
+    return new LLMChain({
+        prompt: summarizePrompt,
+        llm: chat,
+    });
+}
 
-export default summarizeChain;
+export { createSummarizeChain };
