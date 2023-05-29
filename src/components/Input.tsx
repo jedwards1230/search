@@ -1,18 +1,34 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FormEvent } from 'react';
+import { useEffect } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import SearchIcon from './SearchIcon';
 import { useSearch } from '@/app/searchContext';
 
-export default function Input({
-    handleSubmit,
-}: {
-    handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-}) {
+export default function Input({ handleSubmit }: { handleSubmit: () => void }) {
     const { loading, query, setQuery } = useSearch();
+
+    useEffect(() => {
+        const keyDownHandler = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSubmit();
+            }
+        };
+
+        document.addEventListener('keydown', keyDownHandler);
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler);
+        };
+    }, [handleSubmit]);
+
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        handleSubmit();
+    };
+
     return (
         <motion.form
             layout
@@ -22,7 +38,7 @@ export default function Input({
             animate={{
                 opacity: 1,
             }}
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
             className="flex w-full flex-col items-center justify-center gap-4 md:w-4/5 md:flex-row"
         >
             <div className="relative h-full w-full">

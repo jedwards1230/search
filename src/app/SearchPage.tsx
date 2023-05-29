@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
 import clsx from 'clsx';
 import { Input, Results, Title } from '@/components';
 import { useSearch } from './searchContext';
@@ -11,8 +10,7 @@ export default function SearchPage() {
 
     const { started, query, setQuery, processQuery } = useSearch();
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         const newQuery = query.trim();
         setQuery(newQuery);
         if (newQuery === '') return;

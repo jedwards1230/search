@@ -29,7 +29,10 @@ const mdComponents: Partial<
     ),
     br: ({ node, ...props }) => <br {...props} className="my-1" />,
     code: ({ node, ...props }) => (
-        <code {...props} className="rounded bg-gray-100 px-1 py-0.5" />
+        <code
+            {...props}
+            className="rounded-lg bg-neutral-300 px-1 py-0.5 dark:bg-neutral-700"
+        />
     ),
     em: ({ node, ...props }) => <em {...props} className="italic" />,
     strong: ({ node, ...props }) => <strong {...props} className="font-bold" />,
@@ -38,7 +41,10 @@ const mdComponents: Partial<
     ol: ({ node, ...props }) => <ol {...props} className="list-decimal" />,
     ul: ({ node, ...props }) => <ul {...props} className="list-disc" />,
     pre: ({ node, ...props }) => (
-        <pre {...props} className="rounded bg-gray-100 p-2" />
+        <pre
+            {...props}
+            className="h-full w-full overflow-scroll rounded border border-neutral-400 bg-neutral-300 p-2 dark:border-neutral-600 dark:bg-neutral-700"
+        />
     ),
     a: ({ node, ...props }) => (
         <a {...props} className="text-blue-500 hover:underline" />
@@ -64,10 +70,10 @@ const mdComponents: Partial<
 export default function Results({ started }: { started: boolean }) {
     const { loading, results, references } = useSearch();
     return (
-        <div className="flex flex-col gap-8 lg:flex-row">
+        <div className="flex w-full flex-col gap-8 overflow-scroll lg:flex-row">
             <div className="flex w-full flex-col items-center">
                 {started && results && (
-                    <div className="flex w-full flex-col p-2">
+                    <div className="flex w-full flex-col lg:p-2">
                         <h2 className="pb-2 text-lg font-medium">Results</h2>
                         <ReactMarkdown
                             className="prose prose-neutral prose-a:text-blue-600 flex flex-col overflow-x-scroll rounded px-3 py-2 [&>*]:my-1"
@@ -93,7 +99,7 @@ export default function Results({ started }: { started: boolean }) {
                     animate={{
                         opacity: 1,
                     }}
-                    className="w-full p-2 lg:w-1/3"
+                    className="w-full lg:w-1/3 lg:p-2"
                 >
                     <References intermediateSteps={references} />
                 </motion.div>

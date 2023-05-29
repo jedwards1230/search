@@ -28,6 +28,7 @@ const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are an AI powered search engine and a helful assistant.' +
             'You use search results as the basis of your conversation.' +
+            'Use the basic form of 1. summarizing what the user needs. 2. explaining. 3. summarizing everything briefly. ' +
             'You are encouraged to render tables and code blocks. ' +
             "Thoroughly answer the user's query based on the search results. " +
             'Respond in markdown format (including github flavored). ' +
