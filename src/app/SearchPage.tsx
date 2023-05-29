@@ -29,7 +29,7 @@ export default function SearchPage() {
             <div
                 className={clsx(
                     'flex w-full items-center justify-center gap-8',
-                    started ? 'flex-row' : 'flex-col'
+                    started ? 'flex-col md:flex-row' : 'flex-col'
                 )}
             >
                 <Title />

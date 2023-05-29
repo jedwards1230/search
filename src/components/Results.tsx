@@ -64,8 +64,8 @@ const mdComponents: Partial<
 export default function Results({ started }: { started: boolean }) {
     const { loading, results, references } = useSearch();
     return (
-        <div className="flex gap-8">
-            <motion.div layout className="flex w-full flex-col items-center">
+        <div className="flex flex-col gap-8 lg:flex-row">
+            <div className="flex w-full flex-col items-center">
                 {started && results && (
                     <div className="flex w-full flex-col p-2">
                         <h2 className="pb-2 text-lg font-medium">Results</h2>
@@ -83,9 +83,9 @@ export default function Results({ started }: { started: boolean }) {
                         <LoadIcon />
                     </div>
                 )}
-            </motion.div>
+            </div>
             {references.length > 0 && (
-                <motion.div layout className="w-1/3 p-2">
+                <motion.div layout className="w-full p-2 lg:w-1/3">
                     <References intermediateSteps={references} />
                 </motion.div>
             )}

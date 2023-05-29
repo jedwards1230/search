@@ -17,7 +17,7 @@ export default function Input({
         <motion.form
             layout
             onSubmit={handleSubmit}
-            className="flex w-4/5 items-center justify-center gap-4"
+            className="flex w-full flex-col items-center justify-center gap-4 md:w-4/5 md:flex-row"
         >
             <div className="relative h-full w-full">
                 <TextareaAutosize
