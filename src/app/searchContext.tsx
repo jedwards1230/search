@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { createContext, useState } from 'react';
 
 type SearchState = {
@@ -40,6 +40,7 @@ export function SearchContextProvider({
 }: {
     children: React.ReactNode;
 }) {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const search = searchParams.get('search');
 
@@ -92,6 +93,10 @@ export function SearchContextProvider({
     };
 
     const processQuery = async (newQuery: string) => {
+        const url = new URL(window.location.href);
+        url.searchParams.set('search', newQuery);
+        router.replace(url.toString());
+
         setQuery(newQuery);
         setResults('');
         setStarted(true);
@@ -111,6 +116,7 @@ export function SearchContextProvider({
         setLoading(false);
         setStarted(false);
         setQuery('');
+        router.replace('/');
     };
 
     return (
