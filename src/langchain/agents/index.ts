@@ -1,3 +1,3 @@
-import searchExecutor from './search';
+import searchExecutor, { buildSearchPrompt } from './search';
 
-export { searchExecutor };
+export { searchExecutor, buildSearchPrompt };

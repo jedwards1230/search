@@ -39,7 +39,7 @@ export class GoogleCustomSearch extends Tool {
         const res = await fetch(
             `https://www.googleapis.com/customsearch/v1?key=${this.apiKey}&cx=${
                 this.googleCSEId
-            }&q=${encodeURIComponent(input)}`
+            }&q=${encodeURIComponent(input)}&start=1`
         );
 
         if (!res.ok) {

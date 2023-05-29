@@ -1,3 +1,4 @@
 import translationChain from './translation';
+import summarizeChain from './summarize';
 
-export { translationChain };
+export { translationChain, summarizeChain };

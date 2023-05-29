@@ -10,7 +10,7 @@ export class CustomHandler extends BaseCallbackHandler {
     name = 'custom_handler';
 
     handleLLMNewToken(token: string) {
-        console.log('token', { token });
+        console.log('LLM new token', { token });
     }
 
     handleLLMStart(llm: { name: string }, _prompts: string[]) {
@@ -49,4 +49,33 @@ export class CustomHandler extends BaseCallbackHandler {
     handleToolEnd(output: string) {
         console.log('handleToolEnd', { output });
     }
+}
+
+export async function searchGoogle(input: string) {
+    const apiKey = process.env.GOOGLE_API_KEY;
+    const googleCSEId = process.env.GOOGLE_CSE_ID;
+
+    const res = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${googleCSEId}&q=${encodeURIComponent(
+            input
+        )}`
+    );
+
+    if (!res.ok) {
+        throw new Error(
+            `Got ${res.status} error from Google custom search: ${res.statusText}`
+        );
+    }
+
+    const json = await res.json();
+
+    const results =
+        json?.items?.map(
+            (item: { title?: string; link?: string; snippet?: string }) => ({
+                title: item.title,
+                link: item.link,
+                snippet: item.snippet,
+            })
+        ) ?? [];
+    return JSON.stringify(results);
 }

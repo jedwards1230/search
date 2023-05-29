@@ -1,47 +1,26 @@
-"use client";
-
-import { useState, useMemo } from "react";
-import Pagination from "./Pagination";
-
 export default function References({
-	intermediateSteps,
+    intermediateSteps,
 }: {
-	intermediateSteps: IntermediateStep[];
+    intermediateSteps: Observation[];
 }) {
-	const [currentPage, setCurrentPage] = useState(1);
-
-	const handlePageChange = (newPage: number) => {
-		setCurrentPage(newPage);
-	};
-
-	const currentStep = useMemo(() => {
-		return intermediateSteps[currentPage - 1];
-	}, [intermediateSteps, currentPage]);
-
-	if (currentStep.action.tool === "calculator") return null;
-	return (
-		<>
-			<h2 className="text-lg font-medium">References</h2>
-			{currentStep && currentStep.observation && (
-				<div className="flex flex-col gap-2 pb-2">
-					{currentStep.observation.map((obs, i) => (
-						<div
-							className="p-2 rounded hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50"
-							key={i}
-						>
-							<a href={obs.link} target="_blank">
-								<div>{obs.title}</div>
-								<div>{obs.snippet}</div>
-							</a>
-						</div>
-					))}
-				</div>
-			)}
-			<Pagination
-				currentPage={currentPage}
-				totalPages={intermediateSteps.length}
-				onPageChange={handlePageChange}
-			/>
-		</>
-	);
+    return (
+        <>
+            <h2 className="pb-2 text-lg font-medium">References</h2>
+            <div className="max-h-[60vh] overflow-y-scroll">
+                {intermediateSteps.map((step, i) => (
+                    <div
+                        key={step.link + i}
+                        className="flex flex-col gap-1 pb-2"
+                    >
+                        <div className="rounded p-2 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50">
+                            <a href={step.link} target="_blank">
+                                <div className="pb-1 text-sm">{step.title}</div>
+                                <div className="text-xs">{step.snippet}</div>
+                            </a>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </>
+    );
 }
