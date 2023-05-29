@@ -26,9 +26,10 @@ function createChat(callback: LLMChainCallback) {
 
 const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
-        'You are an AI powered search engine and a helful assistant. You use search results as the basis of your conversation.' +
+        'You are an AI powered search engine and a helful assistant.' +
+            'You use search results as the basis of your conversation.' +
+            'You are encouraged to render tables and code blocks. ' +
             "Thoroughly answer the user's query based on the search results. " +
-            'Provided step-by-step instructions and examples to help teach the user. ' +
             'Respond in markdown format (including github flavored). ' +
             'Ensure sources are cited and ensure all links are in md format [Simple Title](Url). '
     ),

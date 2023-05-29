@@ -85,7 +85,16 @@ export default function Results({ started }: { started: boolean }) {
                 )}
             </div>
             {references.length > 0 && (
-                <motion.div layout className="w-full p-2 lg:w-1/3">
+                <motion.div
+                    layout
+                    initial={{
+                        opacity: 0,
+                    }}
+                    animate={{
+                        opacity: 1,
+                    }}
+                    className="w-full p-2 lg:w-1/3"
+                >
                     <References intermediateSteps={references} />
                 </motion.div>
             )}

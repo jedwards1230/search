@@ -16,6 +16,12 @@ export default function Input({
     return (
         <motion.form
             layout
+            initial={{
+                opacity: 0,
+            }}
+            animate={{
+                opacity: 1,
+            }}
             onSubmit={handleSubmit}
             className="flex w-full flex-col items-center justify-center gap-4 md:w-4/5 md:flex-row"
         >
@@ -38,7 +44,7 @@ export default function Input({
             <button
                 disabled={loading}
                 type="submit"
-                className="rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 disabled:border disabled:border-neutral-400 disabled:bg-neutral-300 disabled:text-black dark:bg-blue-700 dark:hover:bg-blue-800"
+                className="rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 disabled:border disabled:border-neutral-400 disabled:bg-neutral-300 disabled:text-black dark:bg-blue-700 dark:hover:bg-blue-800 dark:disabled:border-neutral-100 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-100"
             >
                 Search
             </button>
