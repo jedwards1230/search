@@ -26,10 +26,12 @@ function createChat(callback: LLMChainCallback) {
 
 const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
-        "Thoroughly answer the user's query based on the search results. " +
-            'Respond in markdown format. ' +
-            'Ensure sources are cited with markdown links. ' +
-            'Ensure all links are simplified with markdown links. '
+        'You are an AI powered search engine. ' +
+            "Thoroughly answer the user's query based on the search results. " +
+            'Provided step-by-step instructions and examples to help teach the user. ' +
+            'Respond in markdown format (including github flavored). ' +
+            'Ensure sources are cited and ensure all links are cleaned with markdown. ' +
+            'Ensure all links are simplified. No ugly URLs.'
     ),
     HumanMessagePromptTemplate.fromTemplate(
         'User query: {query}. Search Results: {results}'
