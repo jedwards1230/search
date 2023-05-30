@@ -1,16 +1,34 @@
+'use client';
+
+import { useState } from 'react';
+import LinkIcon from './LinkIcon';
+import clsx from 'clsx';
+
 export default function References({
-    intermediateSteps,
+    references,
 }: {
-    intermediateSteps: Observation[];
+    references: Observation[];
 }) {
+    const [open, setOpen] = useState(false);
+
     return (
-        <>
-            <details open={true} className="w-full">
-                <summary className="cursor-pointer pb-2 text-lg font-medium">
-                    References
-                </summary>
+        <div className="flex w-full flex-col justify-start gap-2">
+            <div className="flex items-center justify-between">
+                {open && <div className="text-lg font-medium">References</div>}
+                <button
+                    className={clsx(
+                        'cursor-pointer',
+                        !open &&
+                            'pt-0.5 text-neutral-100 transition-colors dark:text-neutral-500'
+                    )}
+                    onClick={() => setOpen(!open)}
+                >
+                    <LinkIcon />
+                </button>
+            </div>
+            {open && (
                 <div className="w-full overflow-y-auto">
-                    {intermediateSteps.map((step, i) => (
+                    {references.map((step, i) => (
                         <div
                             key={step.link + i}
                             className="flex flex-col gap-1 pb-2"
@@ -26,7 +44,7 @@ export default function References({
                         </div>
                     ))}
                 </div>
-            </details>
-        </>
+            )}
+        </div>
     );
 }

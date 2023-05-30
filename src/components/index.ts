@@ -1,4 +1,5 @@
 import Input from './Input';
+import LinkIcon from './LinkIcon';
 import LoadIcon from './LoadIcon';
 import Pagination from './Pagination';
 import References from './References';
@@ -9,6 +10,7 @@ import Title from './Title';
 
 export {
     Input,
+    LinkIcon,
     LoadIcon,
     Pagination,
     References,

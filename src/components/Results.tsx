@@ -59,9 +59,9 @@ export default function Results({ result }: { result: Result }) {
                     animate={{
                         opacity: 1,
                     }}
-                    className="w-full lg:w-1/3 lg:p-2"
+                    className="w-full lg:w-auto lg:max-w-[30%] lg:p-2"
                 >
-                    <References intermediateSteps={result.references} />
+                    <References references={result.references} />
                 </motion.div>
             )}
         </div>
