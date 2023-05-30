@@ -9,7 +9,7 @@ export default function References({
                 <summary className="cursor-pointer pb-2 text-lg font-medium">
                     References
                 </summary>
-                <div className="max-h-[100vh] w-full overflow-y-scroll">
+                <div className="w-full overflow-y-auto">
                     {intermediateSteps.map((step, i) => (
                         <div
                             key={step.link + i}

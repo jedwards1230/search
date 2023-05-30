@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import LoadIcon from './LoadIcon';
 import References from './References';
@@ -23,9 +23,9 @@ export default function Results({ result }: { result: Result }) {
             ref={ref}
             className="mt-4 flex w-full flex-col gap-8 pt-2 first:mt-0 lg:flex-row"
         >
-            <div className="flex w-full flex-col items-center">
+            <div className="relative flex w-full flex-col items-center gap-8 overflow-x-scroll">
                 {result.summary ? (
-                    <div className="flex w-full flex-col justify-center gap-4 lg:p-2">
+                    <div className="flex w-full flex-col justify-start gap-4 lg:p-2">
                         <h2 className="text-xl font-medium">{result.query}</h2>
                         <h2 className="text-lg font-medium">
                             Result |{' '}
@@ -34,13 +34,19 @@ export default function Results({ result }: { result: Result }) {
                             </span>
                         </h2>
                         <Result result={result.summary} />
-                        {result.finished && (
-                            <Input handleSubmit={processQuery} />
-                        )}
                     </div>
                 ) : (
                     <div className="flex w-full justify-center">
                         <LoadIcon />
+                    </div>
+                )}
+
+                {result.finished && (
+                    <div className="w-full">
+                        <Input
+                            handleSubmit={processQuery}
+                            search={result.query}
+                        />
                     </div>
                 )}
             </div>

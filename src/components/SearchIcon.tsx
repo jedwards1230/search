@@ -5,7 +5,8 @@ export default function SearchIcon() {
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
-            className="h-6 w-6 stroke-blue-500 transition-all hover:stroke-2 dark:stroke-blue-400"
+            stroke="currentColor"
+            className="h-6 w-6"
         >
             <path
                 strokeLinecap="round"
