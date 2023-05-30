@@ -5,6 +5,7 @@ import Pagination from './Pagination';
 import References from './References';
 import Results from './Results';
 import SearchIcon from './SearchIcon';
+import SearchPage from './SearchPage';
 import SettingsIcon from './SettingsIcon';
 import Title from './Title';
 
@@ -17,5 +18,6 @@ export {
     Results,
     SearchIcon,
     SettingsIcon,
+    SearchPage,
     Title,
 };

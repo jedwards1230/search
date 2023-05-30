@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 
 import { Input, Results, Title } from '@/components';
-import { useSearch } from './searchContext';
+import { useSearch } from '../app/searchContext';
 
 export default function SearchPage({ search }: { search: string }) {
     const { results, processQuery, reset } = useSearch();

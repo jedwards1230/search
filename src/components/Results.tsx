@@ -21,9 +21,9 @@ export default function Results({ result }: { result: Result }) {
     return (
         <div
             ref={ref}
-            className="mt-4 flex w-full flex-col gap-8 pt-2 first:mt-0 lg:flex-row"
+            className="mt-4 flex min-h-[50vh] w-full flex-col gap-8 pt-2 first:mt-0 lg:flex-row"
         >
-            <div className="relative flex w-full flex-col items-center gap-8 overflow-x-scroll">
+            <div className="relative flex w-full flex-col items-center justify-between gap-8 overflow-x-scroll">
                 {result.summary ? (
                     <div className="flex w-full flex-col justify-start gap-4 lg:p-2">
                         <h2 className="text-xl font-medium">{result.query}</h2>
