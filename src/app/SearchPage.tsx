@@ -1,15 +1,12 @@
 'use client';
 
 import clsx from 'clsx';
-import { useSearchParams } from 'next/navigation';
 
 import { Input, Results, Title } from '@/components';
 import { useSearch } from './searchContext';
 
-export default function SearchPage() {
+export default function SearchPage({ search }: { search: string }) {
     const { results, started, processQuery, reset } = useSearch();
-    const searchParams = useSearchParams();
-    const search = searchParams.get('q');
 
     const handleSubmit = (newInput: string) => {
         reset();
@@ -27,9 +24,11 @@ export default function SearchPage() {
                 <Title />
                 <Input handleSubmit={handleSubmit} search={search} />
             </div>
-            {results.map((result, i) => (
-                <Results result={result} key={`result-${i}`} />
-            ))}
+            <div className="flex flex-col gap-8">
+                {results.map((result, i) => (
+                    <Results result={result} key={`result-${i}`} />
+                ))}
+            </div>
         </>
     );
 }

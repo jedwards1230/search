@@ -5,8 +5,10 @@ export default function References({
 }) {
     return (
         <>
-            <h2 className="pb-2 text-lg font-medium">References</h2>
-            <div>
+            <details open={false} className="w-full">
+                <summary className="cursor-pointer pb-2 text-lg font-medium">
+                    References
+                </summary>
                 {intermediateSteps.map((step, i) => (
                     <div
                         key={step.link + i}
@@ -20,7 +22,7 @@ export default function References({
                         </div>
                     </div>
                 ))}
-            </div>
+            </details>
         </>
     );
 }

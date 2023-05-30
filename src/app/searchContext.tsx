@@ -122,10 +122,7 @@ export function SearchContextProvider({
                 return updatedResults;
             });
 
-            await summarizeResults(
-                newQuery,
-                JSON.stringify(data + '\n' + newInput)
-            );
+            await summarizeResults(newQuery, JSON.stringify(data));
             newResult.summary = summaryRef.current;
             newResult.finished = true;
 

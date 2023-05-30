@@ -47,24 +47,18 @@ export default function Input({
                     autoFocus={true}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={onKeyDownHandler}
-                    className="h-full min-h-fit w-full rounded border border-neutral-400 p-4 pr-10 transition-colors focus:outline-none disabled:animate-pulse dark:border-neutral-600 dark:bg-neutral-800"
+                    className="h-full min-h-fit w-full rounded border border-neutral-400 p-4 pr-10 shadow transition-colors focus:outline-none disabled:animate-pulse dark:border-neutral-600 dark:bg-neutral-800"
                     placeholder="Ask anything..."
                 />
                 <button
                     disabled={loading}
                     type="submit"
+                    title="Search"
                     className="absolute inset-y-4 right-4"
                 >
                     <SearchIcon />
                 </button>
             </div>
-            <button
-                disabled={loading}
-                type="submit"
-                className="rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 disabled:border disabled:border-neutral-400 disabled:bg-neutral-300 disabled:text-black dark:bg-blue-700 dark:hover:bg-blue-800 dark:disabled:border-neutral-100 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-100"
-            >
-                Search
-            </button>
         </motion.form>
     );
 }

@@ -1,9 +1,11 @@
-import { LLMChain } from 'langchain/chains';
+import { ConversationChain, LLMChain } from 'langchain/chains';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { BufferMemory } from 'langchain/memory';
 import {
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
+    MessagesPlaceholder,
 } from 'langchain/prompts';
 
 const chat = new ChatOpenAI({ temperature: 0 });
@@ -14,11 +16,17 @@ const translationPrompt = ChatPromptTemplate.fromPromptMessages([
             'Do not provide any text other than the search query. ' +
             'Do not use any special characters unless necessary. Avoid qutoes.'
     ),
-    HumanMessagePromptTemplate.fromTemplate('{message}'),
+    new MessagesPlaceholder('history'),
+    HumanMessagePromptTemplate.fromTemplate('{input}'),
 ]);
 
-const translationChain = new LLMChain({
+const translationChain = new ConversationChain({
+    memory: new BufferMemory({
+        returnMessages: true,
+        memoryKey: 'history',
+    }),
     prompt: translationPrompt,
+    verbose: true,
     llm: chat,
 });
 

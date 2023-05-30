@@ -1,9 +1,11 @@
-import { LLMChain } from 'langchain/chains';
+import { ConversationChain } from 'langchain/chains';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { BufferMemory } from 'langchain/memory';
 import {
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
+    MessagesPlaceholder,
 } from 'langchain/prompts';
 
 interface LLMChainCallback {
@@ -33,15 +35,19 @@ const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
             "Thoroughly answer the user's query based on the search results. " +
             'Respond in markdown format (including github flavored). ' +
             'Ensure sources are cited and ensure all links are in md format [Simple Title](Url). ' +
-            'Ensure all code blocks and command examples are in md format ```code```, including the language. ' +
-            'Search Results: {results}'
+            'Ensure all code blocks and command examples are in md format ```code```, including the language. '
     ),
-    HumanMessagePromptTemplate.fromTemplate('User query: {query}'),
+    new MessagesPlaceholder('history'),
+    HumanMessagePromptTemplate.fromTemplate('{input}'),
 ]);
 
 function createSummarizeChain(callback: LLMChainCallback) {
     const chat = createChat(callback);
-    return new LLMChain({
+    return new ConversationChain({
+        memory: new BufferMemory({
+            returnMessages: true,
+            memoryKey: 'history',
+        }),
         prompt: summarizePrompt,
         llm: chat,
     });

@@ -17,7 +17,11 @@ export async function POST(request: Request) {
             };
 
             const summarizeChain = createSummarizeChain(callback);
-            await summarizeChain.call({ query, results });
+            await summarizeChain.call({
+                input: `Search Results: ${JSON.stringify(
+                    results
+                )}\nUser query: ${query}`,
+            });
 
             controller.close();
         },
