@@ -1,34 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Assisted Search Engine
 
-## Getting Started
+A next-generation AI-assisted search engine that allows you to discuss topics, ask questions, troubleshoot code, and have the search engine provide useful context for AI chat.
 
-First, run the development server:
+Built with:
+- Next.js 13 (Edge functions)
+- Streaming
+- TailwindCSS
+- TypeScript
+- LangChain
+- Framer Motion
+- OpenAI GPT
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+## Features
+
+### Current Functionality
+- Search snippets
+- Basic response
+- Basic memory (short context length)
+
+### Planned Improvements
+- Agent tools (web browser, calculator, code sandbox)
+- Toggle models (GPT-3 vs GPT-4)
+- Better prompting
+
+## Installation
+
+1. Clone this repository to your local machine.
+```
+git clone https://github.com/jedwards1230/search.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the project directory and install dependencies.
+```
+cd search
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Obtain API keys for OpenAI and Google and add them to the `.env.local` file.
+```
+OPENAI_API_KEY=your_openai_api_key
+GOOGLE_CSE_ID=your google cse id
+GOOGLE_API_KEY=your google api key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Build and run the project locally.
+```
+npm run build
+npm run dev
+```
 
-## Learn More
+Then, open your browser and navigate to http://localhost:3000 to start using the AI Assisted Search Engine.
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+We welcome contributions from the community! Feel free to open issues, fork the repository, and submit pull requests to help improve this AI-assisted search engine.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
