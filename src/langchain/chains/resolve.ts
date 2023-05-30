@@ -1,6 +1,6 @@
 import { ConversationChain } from 'langchain/chains';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { BufferMemory } from 'langchain/memory';
+import { BufferMemory, ConversationSummaryMemory } from 'langchain/memory';
 import {
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
@@ -26,7 +26,7 @@ function createChat(callback: LLMChainCallback) {
     });
 }
 
-const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
+const resolvePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are an AI powered search engine and a helful assistant.' +
             'You use search results as the basis of your conversation.' +
@@ -41,16 +41,18 @@ const summarizePrompt = ChatPromptTemplate.fromPromptMessages([
     HumanMessagePromptTemplate.fromTemplate('{input}'),
 ]);
 
-function createSummarizeChain(callback: LLMChainCallback) {
+export const chatMemory = new BufferMemory({
+    returnMessages: true,
+    memoryKey: 'history',
+});
+
+function createResolveChain(callback: LLMChainCallback) {
     const chat = createChat(callback);
     return new ConversationChain({
-        memory: new BufferMemory({
-            returnMessages: true,
-            memoryKey: 'history',
-        }),
-        prompt: summarizePrompt,
+        memory: chatMemory,
+        prompt: resolvePrompt,
         llm: chat,
     });
 }
 
-export { createSummarizeChain };
+export { createResolveChain };

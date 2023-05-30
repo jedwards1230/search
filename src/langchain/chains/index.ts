@@ -1,4 +1,5 @@
 import translationChain from './translation';
-import { createSummarizeChain } from './summarize';
+import { createResolveChain } from './resolve';
+import summaryChain from './summary';
 
-export { translationChain, createSummarizeChain };
+export { translationChain, createResolveChain, summaryChain };

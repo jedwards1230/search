@@ -25,11 +25,9 @@ export default function Results({ result }: { result: Result }) {
         >
             <div className="flex w-full flex-col items-center">
                 {result.summary ? (
-                    <div className="flex w-full flex-col justify-center lg:p-2">
-                        <h2 className="pb-2 text-xl font-medium">
-                            {result.query}
-                        </h2>
-                        <h2 className="pb-2 text-lg font-medium">
+                    <div className="flex w-full flex-col justify-center gap-4 lg:p-2">
+                        <h2 className="text-xl font-medium">{result.query}</h2>
+                        <h2 className="text-lg font-medium">
                             Result |{' '}
                             <span className="text-lg font-light">
                                 {result.model}
@@ -41,7 +39,7 @@ export default function Results({ result }: { result: Result }) {
                         )}
                     </div>
                 ) : (
-                    <div className="flex justify-center">
+                    <div className="flex w-full justify-center">
                         <LoadIcon />
                     </div>
                 )}

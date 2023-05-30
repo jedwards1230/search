@@ -6,7 +6,6 @@ import React, { createContext, useEffect, useRef, useState } from 'react';
 type SearchState = {
     loading: boolean;
     results: Result[];
-    started: boolean;
     processQuery: (newInput: string) => void;
     reset: () => void;
 };
@@ -14,7 +13,6 @@ type SearchState = {
 const initialState: SearchState = {
     loading: false,
     results: [],
-    started: false,
     processQuery: () => {
         console.log('processQuery not implemented');
     },
@@ -37,7 +35,6 @@ export function SearchContextProvider({
     const summaryRef = useRef('');
     const [model, setModel] = useState<Model>('gpt-3.5-turbo');
 
-    const [started, setStarted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<Result[]>([]);
     const [summaryUpdate, setSummaryUpdate] = useState(0);
@@ -52,9 +49,18 @@ export function SearchContextProvider({
     }, [summaryUpdate]);
 
     const getResults = async (newQuery: string) => {
+        const history = results.map((result) => {
+            return {
+                query: result.query,
+                summary: result.summary,
+            };
+        });
         const res = await fetch('/api/get_results', {
             method: 'POST',
-            body: JSON.stringify({ query: newQuery }),
+            body: JSON.stringify({
+                query: newQuery,
+                history: JSON.stringify(history),
+            }),
         });
         const data = await res.json();
 
@@ -102,23 +108,28 @@ export function SearchContextProvider({
         url.searchParams.set('q', newQuery);
         router.replace(url.toString());
 
-        setStarted(true);
         setLoading(true);
+        const newResult = {
+            id: results.length,
+            query: newQuery,
+            model,
+            summary: '',
+            references: [],
+            finished: false,
+        };
+
+        setResults((results) => {
+            const updatedResults = [...results];
+            updatedResults.push(newResult);
+            return updatedResults;
+        });
         try {
-            const newResult = {
-                id: results.length,
-                query: newQuery,
-                model,
-                summary: '',
-                references: [],
-                finished: false,
-            };
             const data = await getResults(newQuery);
             newResult.references = data;
 
             setResults((results) => {
                 const updatedResults = [...results];
-                updatedResults.push(newResult);
+                updatedResults[newResult.id] = newResult;
                 return updatedResults;
             });
 
@@ -140,11 +151,10 @@ export function SearchContextProvider({
     };
 
     const reset = () => {
-        setResults([]);
         setLoading(false);
-        summaryRef.current = '';
-        setStarted(false);
+        setResults([]);
         setSummaryUpdate(0);
+        summaryRef.current = '';
         router.replace('/');
     };
 
@@ -153,7 +163,6 @@ export function SearchContextProvider({
             value={{
                 loading,
                 results,
-                started,
                 processQuery,
                 reset,
             }}

@@ -44,7 +44,9 @@ export default function Result({ result }: { result: string }) {
             />
         ),
         br: ({ node, ...props }) => <br {...props} className="my-1" />,
-        pre: ({ node, ...props }) => <pre {...props} className="" />,
+        pre: ({ node, ...props }) => (
+            <pre {...props} className="w-full overflow-x-scroll" />
+        ),
         code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
@@ -52,13 +54,17 @@ export default function Result({ result }: { result: string }) {
                     {...props}
                     style={resolvedTheme !== 'dark' ? vs : vscDarkPlus}
                     language={match[1]}
+                    className="!w-full !overflow-x-scroll"
                 >
                     {String(children).replace(/\n$/, '')}
                 </SyntaxHighlighter>
             ) : (
                 <code
                     {...props}
-                    className={clsx(className, 'transition-colors')}
+                    className={clsx(
+                        className,
+                        '!w-full !overflow-x-scroll transition-colors'
+                    )}
                 >
                     {children}
                 </code>
@@ -108,7 +114,7 @@ export default function Result({ result }: { result: string }) {
 
     return (
         <ReactMarkdown
-            className="prose prose-neutral prose-a:text-blue-600 flex flex-col overflow-x-scroll rounded px-3 py-2 [&>*]:my-1"
+            className="prose prose-neutral prose-a:text-blue-600 flex flex-col overflow-x-scroll rounded px-3 [&>*]:my-1"
             remarkPlugins={[remarkGfm]}
             components={components}
         >

@@ -14,19 +14,20 @@ const translationPrompt = ChatPromptTemplate.fromPromptMessages([
         'You translate messages, issues, and questions into 1 recommended search query for a search engine like google or bing. ' +
             'Do not provide any information that can be used to identify the user. ' +
             'Do not provide any text other than the search query. ' +
-            'Do not use any special characters unless necessary. Avoid qutoes.'
+            'Do not use any special characters unless necessary. Avoid quotes.'
     ),
-    new MessagesPlaceholder('history'),
+    new MessagesPlaceholder('translationHistory'),
     HumanMessagePromptTemplate.fromTemplate('{input}'),
 ]);
 
+export const chatMemory = new BufferMemory({
+    returnMessages: true,
+    memoryKey: 'translationHistory',
+});
+
 const translationChain = new ConversationChain({
-    memory: new BufferMemory({
-        returnMessages: true,
-        memoryKey: 'history',
-    }),
+    memory: chatMemory,
     prompt: translationPrompt,
-    verbose: true,
     llm: chat,
 });
 

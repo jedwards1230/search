@@ -1,11 +1,13 @@
-import { createSummarizeChain } from '@/langchain/chains/summarize';
+import { createResolveChain } from '@/langchain/chains';
 
 export const runtime = 'edge';
 
 export async function POST(request: Request) {
     const res = await request.json();
     const query = res.query;
-    const results = res.results;
+    const input = `Search Results: ${JSON.stringify(
+        res.results
+    )}\nUser query: ${query}`;
 
     const stream = new ReadableStream({
         async start(controller) {
@@ -16,12 +18,8 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
-            const summarizeChain = createSummarizeChain(callback);
-            await summarizeChain.call({
-                input: `Search Results: ${JSON.stringify(
-                    results
-                )}\nUser query: ${query}`,
-            });
+            const resolveChain = createResolveChain(callback);
+            await resolveChain.call({ input });
 
             controller.close();
         },
