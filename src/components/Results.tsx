@@ -1,29 +1,16 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 
 import LoadIcon from './LoadIcon';
 import References from './References';
-import { useSearch } from '@/app/searchContext';
 import Result from './Result';
 import Input from './Input';
 
 export default function Results({ result }: { result: Result }) {
-    const ref = useRef<HTMLDivElement>(null);
-    const isInView = useInView(ref, { once: true });
-    const { processQuery } = useSearch();
-
-    if (!isInView) {
-        ref.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-
     return (
-        <div
-            ref={ref}
-            className="mt-4 flex min-h-[50vh] w-full flex-col gap-8 pt-2 first:mt-0 lg:flex-row"
-        >
-            <div className="relative flex w-full flex-col items-center justify-between gap-8 overflow-x-scroll">
+        <div className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row">
+            <div className="relative flex w-full flex-col items-center justify-start gap-8 overflow-x-scroll">
                 {result.summary ? (
                     <div className="flex w-full flex-col justify-start gap-4 lg:p-2">
                         <h2 className="text-xl font-medium">{result.query}</h2>
@@ -36,17 +23,23 @@ export default function Results({ result }: { result: Result }) {
                         <Result result={result.summary} />
                     </div>
                 ) : (
-                    <div className="flex w-full justify-center">
+                    <motion.div
+                        layout
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        className="flex w-full justify-center"
+                    >
                         <LoadIcon />
-                    </div>
+                    </motion.div>
                 )}
 
                 {result.finished && (
                     <div className="w-full">
-                        <Input
-                            handleSubmit={processQuery}
-                            search={result.query}
-                        />
+                        <Input />
                     </div>
                 )}
             </div>

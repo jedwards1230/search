@@ -3,28 +3,35 @@
 import { useState } from 'react';
 import LinkIcon from './LinkIcon';
 import clsx from 'clsx';
+import { motion } from 'framer-motion';
 
 export default function References({
     references,
 }: {
     references: Observation[];
 }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
 
     return (
         <div className="flex w-full flex-col justify-start gap-2">
-            <div className="flex items-center justify-between">
+            <div
+                className={clsx(
+                    'flex items-center',
+                    open ? 'justify-between' : 'justify-center'
+                )}
+            >
                 {open && <div className="text-lg font-medium">References</div>}
-                <button
+                <motion.button
+                    layout
                     className={clsx(
                         'cursor-pointer',
                         !open &&
-                            'pt-0.5 text-neutral-100 transition-colors dark:text-neutral-500'
+                            'pt-0.5 text-neutral-500 transition-colors dark:text-neutral-500'
                     )}
                     onClick={() => setOpen(!open)}
                 >
                     <LinkIcon />
-                </button>
+                </motion.button>
             </div>
             {open && (
                 <div className="w-full overflow-y-auto">

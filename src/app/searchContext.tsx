@@ -32,11 +32,15 @@ export function SearchContextProvider({
 }) {
     const router = useRouter();
 
-    const summaryRef = useRef('');
-    const [model, setModel] = useState<Model>('gpt-3.5-turbo');
-
+    // default model to analyze results
+    const [model, setModel] = useState<Model>('gpt-4');
+    // loading state
     const [loading, setLoading] = useState(false);
+    // search results. Each result is an object with the query, summary, and references
     const [results, setResults] = useState<Result[]>([]);
+    // use for streaming the summary chunk by chunk
+    const summaryRef = useRef('');
+    // used to force a rerender when the summary is updated
     const [summaryUpdate, setSummaryUpdate] = useState(0);
 
     useEffect(() => {
@@ -48,6 +52,7 @@ export function SearchContextProvider({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [summaryUpdate]);
 
+    // get search results based on query
     const getResults = async (newQuery: string) => {
         const history = results.map((result) => {
             return {
@@ -69,6 +74,7 @@ export function SearchContextProvider({
         return steps;
     };
 
+    // stream the summary of the results
     const summarizeResults = async (newQuery: string, results: string) => {
         try {
             const response = await fetch('/api/summarize_results', {
@@ -98,6 +104,7 @@ export function SearchContextProvider({
         }
     };
 
+    // process the query, get the results, and stream the summary
     const processQuery = async (
         newInput: string
     ): Promise<boolean | undefined> => {

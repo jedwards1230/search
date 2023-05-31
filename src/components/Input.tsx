@@ -9,26 +9,28 @@ import { useSearch } from '@/app/searchContext';
 import SettingsIcon from './SettingsIcon';
 
 export default function Input({
-    handleSubmit,
     search,
+    topLevel,
 }: {
-    handleSubmit: (newInput: string) => void;
     search?: string | null;
+    topLevel?: boolean;
 }) {
-    const { loading } = useSearch();
+    const { loading, processQuery, reset } = useSearch();
     const [query, setQuery] = useState<string>(search || '');
     const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
 
     const onKeyDownHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            handleSubmit(query);
+            if (topLevel) reset();
+            processQuery(query);
         }
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        handleSubmit(query);
+        if (topLevel) reset();
+        processQuery(query);
     };
 
     return (
@@ -64,7 +66,7 @@ export default function Input({
                         <div
                             onClick={() => setSettingsOpen(!settingsOpen)}
                             title="Settings"
-                            className="absolute bottom-2 right-10 top-0 flex cursor-pointer items-center stroke-blue-500 px-2 transition-all hover:stroke-2 dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                            className="absolute bottom-2 right-10 top-0 flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
                         >
                             <SettingsIcon />
                         </div>
@@ -72,7 +74,7 @@ export default function Input({
                             disabled={loading}
                             type="submit"
                             title="Search"
-                            className="absolute bottom-2 right-0 top-0 stroke-blue-500 px-2 transition-all hover:stroke-2 dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                            className="absolute bottom-2 right-0 top-0 border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
                         >
                             <SearchIcon />
                         </button>
