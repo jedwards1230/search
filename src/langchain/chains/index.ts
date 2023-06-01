@@ -1,5 +1,5 @@
-import translationChain from './translation';
+import createQueryBuilderChain from './queryBuilder';
 import { createResolveChain } from './resolve';
 import summaryChain from './summary';
 
-export { translationChain, createResolveChain, summaryChain };
+export { createQueryBuilderChain, createResolveChain, summaryChain };

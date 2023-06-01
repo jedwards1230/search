@@ -2,11 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import React, { createContext, useEffect, useRef, useState } from 'react';
+import { getResults, summarizeResults } from './searchUtils';
 
 type SearchState = {
     loading: boolean;
     results: Result[];
-    processQuery: (newInput: string) => void;
+    processQuery: (newInput: string, updateUrl?: boolean) => void;
     reset: () => void;
 };
 
@@ -52,70 +53,22 @@ export function SearchContextProvider({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [summaryUpdate]);
 
-    // get search results based on query
-    const getResults = async (newQuery: string) => {
-        const history = results.map((result) => {
-            return {
-                query: result.query,
-                summary: result.summary,
-            };
-        });
-        const res = await fetch('/api/get_results', {
-            method: 'POST',
-            body: JSON.stringify({
-                query: newQuery,
-                history: JSON.stringify(history),
-            }),
-        });
-        const data = await res.json();
-
-        const steps = JSON.parse(data.intermediateSteps);
-
-        return steps;
-    };
-
-    // stream the summary of the results
-    const summarizeResults = async (newQuery: string, results: string) => {
-        try {
-            const response = await fetch('/api/summarize_results', {
-                method: 'POST',
-                body: JSON.stringify({ query: newQuery, results: results }),
-            });
-
-            const reader = response.body?.getReader();
-            let accumulatedResponse = '';
-
-            if (reader) {
-                setLoading(false);
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    if (value) {
-                        const decoded = new TextDecoder().decode(value);
-                        accumulatedResponse += decoded;
-                        summaryRef.current = accumulatedResponse;
-                        setSummaryUpdate((prev) => prev + 1);
-                    }
-                }
-            }
-        } catch (err) {
-            console.error('Fetch error:', err);
-            summaryRef.current = 'Error summarizing results';
-        }
-    };
-
     // process the query, get the results, and stream the summary
     const processQuery = async (
-        newInput: string
+        newInput: string,
+        updateUrl?: boolean
     ): Promise<boolean | undefined> => {
         const newQuery = newInput.trim();
         if (newQuery === '') return;
-
-        const url = new URL(window.location.href);
-        url.searchParams.set('q', newQuery);
-        router.replace(url.toString());
-
         setLoading(true);
+
+        // update URL
+        if (updateUrl) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', newQuery);
+            router.replace(url.toString());
+        }
+
         const newResult = {
             id: results.length,
             query: newQuery,
@@ -130,8 +83,9 @@ export function SearchContextProvider({
             updatedResults.push(newResult);
             return updatedResults;
         });
+
         try {
-            const data = await getResults(newQuery);
+            const data = await getResults(newQuery, results);
             newResult.references = data;
 
             setResults((results) => {
@@ -140,7 +94,14 @@ export function SearchContextProvider({
                 return updatedResults;
             });
 
-            await summarizeResults(newQuery, JSON.stringify(data));
+            await summarizeResults(
+                newQuery,
+                JSON.stringify(data),
+                summaryRef,
+                setLoading,
+                setSummaryUpdate
+            );
+
             newResult.summary = summaryRef.current;
             newResult.finished = true;
 

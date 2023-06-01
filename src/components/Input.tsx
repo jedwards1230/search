@@ -23,7 +23,7 @@ export default function Input({
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (topLevel) reset();
-            processQuery(query);
+            processQuery(query, topLevel);
         }
     };
 

@@ -1,6 +1,10 @@
 # AI Assisted Search Engine
 
+![home.png](./home.png) 
+
 A next-generation AI-assisted search engine that allows you to discuss topics, ask questions, troubleshoot code, and have the search engine provide useful context for AI chat.
+
+![results.png](./results.png) 
 
 Built with:
 - Next.js 13 (Edge functions)
@@ -10,6 +14,10 @@ Built with:
 - LangChain
 - Framer Motion
 - OpenAI GPT
+
+## Overview
+
+![chart.excalidraw.png](./chart.excalidraw.png) 
 
 ## Features
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { translationChain } from '@/langchain/chains';
+import { createQueryBuilderChain } from '@/langchain/chains';
 import { searchGoogle } from '@/langchain/utils';
 
 export const runtime = 'edge';
@@ -10,7 +10,8 @@ export async function POST(request: Request) {
     const history = res.history;
 
     try {
-        const searchQuery = await translationChain.call({
+        const queryBuilderChain = createQueryBuilderChain();
+        const searchQuery = await queryBuilderChain.call({
             input: `background info: ${history}\nUser Query: ${query}`,
         });
         const searchResults = await searchGoogle(searchQuery.response);
