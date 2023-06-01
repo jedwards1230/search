@@ -23,6 +23,7 @@ export default function References({
                 {open && <div className="text-lg font-medium">References</div>}
                 <motion.button
                     layout
+                    title="Toggle references"
                     className={clsx(
                         'cursor-pointer',
                         !open &&

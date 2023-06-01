@@ -5,20 +5,21 @@ import React, { createContext, useCallback, useReducer } from 'react';
 import { getResults, summarizeResults } from './searchUtils';
 
 type State = {
-    /** Loading state */
     loading: boolean;
-    /** Search results. Each result is an object with the query, summary, and references */
     results: Result[];
-    /** Active model to analyze results */
     model: Model;
+    hideReferences: boolean;
+    toggleSettings: () => void;
     processQuery: (newInput: string, updateUrl?: boolean) => void;
     reset: () => void;
 };
 
 type Action =
     | { type: 'ADD_RESULT'; payload: Result }
+    | { type: 'FINISH'; payload: number }
     | { type: 'RESET' }
     | { type: 'SET_LOADING'; payload: boolean }
+    | { type: 'TOGGLE_HIDE_REFERENCES' }
     | { type: 'UPDATE_MODEL'; payload: Model }
     | {
           type: 'UPDATE_SEARCH_RESULTS';
@@ -30,6 +31,10 @@ const initialState: State = {
     loading: false,
     results: [],
     model: 'gpt-3.5-turbo',
+    hideReferences: false,
+    toggleSettings: () => {
+        console.log('toggleSettings not implemented');
+    },
     processQuery: () => {
         console.log('processQuery not implemented');
     },
@@ -44,12 +49,32 @@ export const useSearch = () => React.useContext(SearchContext);
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case 'ADD_RESULT':
+            return { ...state, results: [...state.results, action.payload] };
+        case 'FINISH':
+            return {
+                ...state,
+                results: state.results.map((result) =>
+                    result.id === action.payload
+                        ? {
+                              ...result,
+                              loading: false,
+                              finished: true,
+                          }
+                        : result
+                ),
+            };
         case 'RESET':
             return initialState;
         case 'SET_LOADING':
             return { ...state, loading: action.payload };
-        case 'ADD_RESULT':
-            return { ...state, results: [...state.results, action.payload] };
+        case 'TOGGLE_HIDE_REFERENCES':
+            return { ...state, hideReferences: !state.hideReferences };
+        case 'UPDATE_MODEL':
+            return {
+                ...state,
+                model: action.payload,
+            };
         case 'UPDATE_SEARCH_RESULTS':
             return {
                 ...state,
@@ -70,15 +95,9 @@ const reducer = (state: State, action: Action): State => {
                         ? {
                               ...result,
                               summary: action.payload.summary,
-                              finished: true,
                           }
                         : result
                 ),
-            };
-        case 'UPDATE_MODEL':
-            return {
-                ...state,
-                model: action.payload,
             };
         default:
             return state;
@@ -139,6 +158,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     id,
                     updateSummary
                 );
+                dispatch({ type: 'FINISH', payload: id });
             } catch (error) {
                 console.error(error);
                 dispatch({
@@ -156,12 +176,18 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: 'RESET' });
     }, []);
 
+    const toggleSettings = useCallback(() => {
+        dispatch({ type: 'TOGGLE_HIDE_REFERENCES' });
+    }, []);
+
     return (
         <SearchContext.Provider
             value={{
                 loading: state.loading,
                 results: state.results,
                 model: state.model,
+                hideReferences: state.hideReferences,
+                toggleSettings,
                 processQuery,
                 reset,
             }}

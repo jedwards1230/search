@@ -19,7 +19,11 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
-            const resolveChain = createResolveChain(callback, results, 'gpt-4');
+            const resolveChain = createResolveChain(
+                callback,
+                results,
+                'gpt-3.5-turbo'
+            );
             await resolveChain.call({ input });
 
             controller.close();
