@@ -58,7 +58,7 @@ export async function searchGoogle(input: string) {
     const res = await fetch(
         `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${googleCSEId}&q=${encodeURIComponent(
             input
-        )}`
+        )}&start=1`
     );
 
     if (!res.ok) {

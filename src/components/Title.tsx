@@ -10,12 +10,6 @@ export default function Title() {
     return (
         <motion.div
             layout
-            initial={{
-                opacity: 0,
-            }}
-            animate={{
-                opacity: 1,
-            }}
             onClick={reset}
             className="cursor-pointer text-4xl font-medium underline decoration-black/50 transition-colors hover:decoration-black dark:decoration-white/50 dark:hover:decoration-white"
         >

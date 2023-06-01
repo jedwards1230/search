@@ -46,12 +46,6 @@ export default function Results({ result }: { result: Result }) {
             {result.references.length > 0 && (
                 <motion.div
                     layout
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
                     className="w-full lg:w-auto lg:max-w-[30%] lg:p-2"
                 >
                     <References references={result.references} />

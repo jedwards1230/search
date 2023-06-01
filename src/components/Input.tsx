@@ -37,12 +37,6 @@ export default function Input({
         <>
             <motion.form
                 layout
-                initial={{
-                    opacity: 0,
-                }}
-                animate={{
-                    opacity: 1,
-                }}
                 onSubmit={onSubmit}
                 className="flex w-full flex-col items-center justify-center gap-4"
             >
@@ -82,7 +76,7 @@ export default function Input({
                 </div>
             </motion.form>
             {settingsOpen && (
-                <motion.div
+                <motion.dialog
                     layout
                     initial={{
                         opacity: 0,
@@ -90,9 +84,12 @@ export default function Input({
                     animate={{
                         opacity: 1,
                     }}
-                    className="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-neutral-300/75 dark:bg-neutral-800/75"
+                    transition={{
+                        duration: 0.2,
+                    }}
+                    className="flex h-screen w-screen items-center justify-center bg-neutral-300/75 dark:bg-neutral-800/75"
                 >
-                    <div className="relative z-20 flex min-w-[30%] flex-col rounded border border-neutral-300 bg-neutral-200 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100">
+                    <div className="relative flex min-w-[30%] flex-col rounded border border-neutral-300 bg-neutral-200 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100">
                         <div className="flex justify-center pb-2 text-lg">
                             Config
                         </div>
@@ -136,7 +133,7 @@ export default function Input({
                             x
                         </div>
                     </div>
-                </motion.div>
+                </motion.dialog>
             )}
         </>
     );
