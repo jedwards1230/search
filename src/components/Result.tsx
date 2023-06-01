@@ -114,7 +114,7 @@ export default function Result({ result }: { result: string }) {
 
     return (
         <ReactMarkdown
-            className=" flex flex-col overflow-x-scroll rounded px-3 [&>*]:my-1"
+            className="flex flex-col overflow-x-scroll rounded px-2 [&>*]:my-1"
             remarkPlugins={[remarkGfm]}
             components={components}
         >

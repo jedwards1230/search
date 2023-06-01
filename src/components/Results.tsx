@@ -15,7 +15,7 @@ export default function Results({ result }: { result: Result }) {
         <div className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row">
             <div className="relative flex h-full w-full flex-col items-center justify-between gap-8">
                 <div className="sticky top-4 flex w-full flex-col gap-4">
-                    <div className="flex w-full flex-col justify-start gap-6 lg:gap-4 lg:p-2">
+                    <div className="flex w-full flex-col justify-start gap-4 lg:p-2">
                         <div>
                             {edit ? (
                                 <Input
@@ -31,11 +31,9 @@ export default function Results({ result }: { result: Result }) {
                                 </h2>
                             )}
                         </div>
-                        <h2 className="text-lg font-medium">
+                        <h2 className="pl-2 font-medium">
                             Result |{' '}
-                            <span className="text-lg font-light">
-                                {result.model}
-                            </span>
+                            <span className="font-light">{result.model}</span>
                         </h2>
                         {result.summary ? (
                             <Result result={result.summary} />
