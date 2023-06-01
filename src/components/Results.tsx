@@ -15,7 +15,7 @@ export default function Results({ result }: { result: Result }) {
         <div className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row">
             <div className="relative flex h-full w-full flex-col items-center justify-between gap-8">
                 <div className="sticky top-4 flex w-full flex-col gap-4">
-                    <div className="flex w-full flex-col justify-start gap-4 lg:p-2">
+                    <div className="flex w-full flex-col justify-start gap-2 lg:gap-4">
                         <div>
                             {edit ? (
                                 <Input

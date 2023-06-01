@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import SearchIcon from './SearchIcon';
@@ -23,6 +23,10 @@ export default function Input({
 }) {
     const { loading, processQuery, reset } = useSearch();
     const [query, setQuery] = useState(search || '');
+
+    useEffect(() => {
+        if (search) setQuery(search);
+    }, [search]);
 
     const onKeyDownHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
