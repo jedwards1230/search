@@ -24,9 +24,8 @@ export const getResults = async (newQuery: string, results: Result[]) => {
 export const summarizeResults = async (
     newQuery: string,
     results: string,
-    summaryRef: React.MutableRefObject<string>,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-    setSummaryUpdate: React.Dispatch<React.SetStateAction<number>>
+    id: number,
+    updateSummary: (id: number, summary: string) => void
 ) => {
     try {
         const response = await fetch('/api/summarize_results', {
@@ -34,24 +33,26 @@ export const summarizeResults = async (
             body: JSON.stringify({ query: newQuery, results: results }),
         });
 
-        const reader = response.body?.getReader();
+        if (!response.body) {
+            throw new Error('No response body');
+        }
+
+        const reader = response.body.getReader();
         let accumulatedResponse = '';
 
         if (reader) {
-            setLoading(false);
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
                 if (value) {
                     const decoded = new TextDecoder().decode(value);
                     accumulatedResponse += decoded;
-                    summaryRef.current = accumulatedResponse;
-                    setSummaryUpdate((prev) => prev + 1);
+                    updateSummary(id, accumulatedResponse);
                 }
             }
         }
     } catch (err) {
         console.error('Fetch error:', err);
-        summaryRef.current = 'Error summarizing results';
+        updateSummary(id, `Error summarizing results: ${err}`);
     }
 };

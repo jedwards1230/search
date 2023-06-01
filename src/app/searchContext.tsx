@@ -1,19 +1,35 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { createContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useCallback, useReducer } from 'react';
 import { getResults, summarizeResults } from './searchUtils';
 
-type SearchState = {
+type State = {
+    /** Loading state */
     loading: boolean;
+    /** Search results. Each result is an object with the query, summary, and references */
     results: Result[];
+    /** Active model to analyze results */
+    model: Model;
     processQuery: (newInput: string, updateUrl?: boolean) => void;
     reset: () => void;
 };
 
-const initialState: SearchState = {
+type Action =
+    | { type: 'RESET' }
+    | { type: 'SET_LOADING'; payload: boolean }
+    | { type: 'ADD_RESULT'; payload: Result }
+    | {
+          type: 'UPDATE_SEARCH_RESULTS';
+          payload: { id: number; searchResults: Observation[] };
+      }
+    | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } }
+    | { type: 'UPDATE_MODEL'; payload: Model };
+
+const initialState: State = {
     loading: false,
     results: [],
+    model: 'gpt-3.5-turbo',
     processQuery: () => {
         console.log('processQuery not implemented');
     },
@@ -22,115 +38,129 @@ const initialState: SearchState = {
     },
 };
 
-const SearchContext = createContext<SearchState>(initialState);
+const SearchContext = createContext<State>(initialState);
 
 export const useSearch = () => React.useContext(SearchContext);
 
-export function SearchContextProvider({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+const reducer = (state: State, action: Action): State => {
+    switch (action.type) {
+        case 'RESET':
+            return initialState;
+        case 'SET_LOADING':
+            return { ...state, loading: action.payload };
+        case 'ADD_RESULT':
+            return { ...state, results: [...state.results, action.payload] };
+        case 'UPDATE_SEARCH_RESULTS':
+            return {
+                ...state,
+                results: state.results.map((result) =>
+                    result.id === action.payload.id
+                        ? {
+                              ...result,
+                              references: action.payload.searchResults,
+                          }
+                        : result
+                ),
+            };
+        case 'UPDATE_SUMMARY':
+            return {
+                ...state,
+                results: state.results.map((result) =>
+                    result.id === action.payload.id
+                        ? {
+                              ...result,
+                              summary: action.payload.summary,
+                              finished: true,
+                          }
+                        : result
+                ),
+            };
+        case 'UPDATE_MODEL':
+            return {
+                ...state,
+                model: action.payload,
+            };
+        default:
+            return state;
+    }
+};
+
+export function SearchProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
-    // default model to analyze results
-    const [model, setModel] = useState<Model>('gpt-4');
-    // loading state
-    const [loading, setLoading] = useState(false);
-    // search results. Each result is an object with the query, summary, and references
-    const [results, setResults] = useState<Result[]>([]);
-    // use for streaming the summary chunk by chunk
-    const summaryRef = useRef('');
-    // used to force a rerender when the summary is updated
-    const [summaryUpdate, setSummaryUpdate] = useState(0);
+    const [state, dispatch] = useReducer(reducer, initialState);
 
-    useEffect(() => {
-        if (results.length > 0) {
-            const updatedResults = [...results];
-            updatedResults[results.length - 1].summary = summaryRef.current;
-            setResults(updatedResults);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [summaryUpdate]);
+    const processQuery = useCallback(
+        async (newInput: string, updateUrl?: boolean) => {
+            const newQuery = newInput.trim();
+            if (newQuery === '') return;
+            dispatch({ type: 'SET_LOADING', payload: true });
 
-    // process the query, get the results, and stream the summary
-    const processQuery = async (
-        newInput: string,
-        updateUrl?: boolean
-    ): Promise<boolean | undefined> => {
-        const newQuery = newInput.trim();
-        if (newQuery === '') return;
-        setLoading(true);
+            // update URL
+            if (updateUrl) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('q', newQuery);
+                router.replace(url.toString());
+            }
 
-        // update URL
-        if (updateUrl) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('q', newQuery);
-            router.replace(url.toString());
-        }
+            const id = state.results.length;
 
-        const newResult = {
-            id: results.length,
-            query: newQuery,
-            model,
-            summary: '',
-            references: [],
-            finished: false,
-        };
-
-        setResults((results) => {
-            const updatedResults = [...results];
-            updatedResults.push(newResult);
-            return updatedResults;
-        });
-
-        try {
-            const data = await getResults(newQuery, results);
-            newResult.references = data;
-
-            setResults((results) => {
-                const updatedResults = [...results];
-                updatedResults[newResult.id] = newResult;
-                return updatedResults;
+            dispatch({
+                type: 'ADD_RESULT',
+                payload: {
+                    id,
+                    query: newQuery,
+                    model: state.model,
+                    summary: '',
+                    references: [],
+                    finished: false,
+                },
             });
 
-            await summarizeResults(
-                newQuery,
-                JSON.stringify(data),
-                summaryRef,
-                setLoading,
-                setSummaryUpdate
-            );
+            // fetch data and update result
+            try {
+                const searchResults = await getResults(newQuery, state.results);
+                dispatch({
+                    type: 'UPDATE_SEARCH_RESULTS',
+                    payload: { id: id, searchResults },
+                });
 
-            newResult.summary = summaryRef.current;
-            newResult.finished = true;
+                const updateSummary = (id: number, summary: string) => {
+                    dispatch({
+                        type: 'UPDATE_SUMMARY',
+                        payload: { id, summary },
+                    });
+                };
 
-            setResults((results) => {
-                const updatedResults = [...results];
-                updatedResults[newResult.id] = newResult;
-                return updatedResults;
-            });
-            return true;
-        } catch (err) {
-            console.error('Fetch error:', err);
-            setLoading(false);
-            return false;
-        }
-    };
+                await summarizeResults(
+                    newQuery,
+                    JSON.stringify(searchResults),
+                    id,
+                    updateSummary
+                );
+            } catch (error) {
+                console.error(error);
+                dispatch({
+                    type: 'UPDATE_SUMMARY',
+                    payload: { id: id, summary: 'Error' },
+                });
+            } finally {
+                dispatch({ type: 'SET_LOADING', payload: false });
+            }
+        },
+        [state.results, router, state.model]
+    );
 
-    const reset = () => {
-        setLoading(false);
-        setResults([]);
-        setSummaryUpdate(0);
-        summaryRef.current = '';
-        router.replace('/');
-    };
+    const reset = useCallback(() => {
+        dispatch({ type: 'RESET' });
+    }, []);
 
     return (
         <SearchContext.Provider
             value={{
-                loading,
-                results,
+                loading: state.loading,
+                results: state.results,
+                model: state.model,
                 processQuery,
                 reset,
             }}
