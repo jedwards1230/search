@@ -5,8 +5,9 @@ export const runtime = 'edge';
 export async function POST(request: Request) {
     const res = await request.json();
     const query = res.query;
+    const results: Result[] = res.results;
     const input = `Search Results: ${JSON.stringify(
-        res.results
+        res.searchResults
     )}\nUser query: ${query}`;
 
     const stream = new ReadableStream({
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
-            const resolveChain = createResolveChain(callback);
+            const resolveChain = createResolveChain(callback, results, 'gpt-4');
             await resolveChain.call({ input });
 
             controller.close();

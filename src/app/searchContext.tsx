@@ -16,15 +16,15 @@ type State = {
 };
 
 type Action =
+    | { type: 'ADD_RESULT'; payload: Result }
     | { type: 'RESET' }
     | { type: 'SET_LOADING'; payload: boolean }
-    | { type: 'ADD_RESULT'; payload: Result }
+    | { type: 'UPDATE_MODEL'; payload: Model }
     | {
           type: 'UPDATE_SEARCH_RESULTS';
           payload: { id: number; searchResults: Observation[] };
       }
-    | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } }
-    | { type: 'UPDATE_MODEL'; payload: Model };
+    | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } };
 
 const initialState: State = {
     loading: false,
@@ -135,6 +135,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 await summarizeResults(
                     newQuery,
                     JSON.stringify(searchResults),
+                    state.results,
                     id,
                     updateSummary
                 );

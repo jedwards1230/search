@@ -23,14 +23,15 @@ export const getResults = async (newQuery: string, results: Result[]) => {
 // stream the summary of the results
 export const summarizeResults = async (
     newQuery: string,
-    results: string,
+    searchResults: string,
+    results: Result[],
     id: number,
     updateSummary: (id: number, summary: string) => void
 ) => {
     try {
         const response = await fetch('/api/summarize_results', {
             method: 'POST',
-            body: JSON.stringify({ query: newQuery, results: results }),
+            body: JSON.stringify({ query: newQuery, results, searchResults }),
         });
 
         if (!response.body) {
