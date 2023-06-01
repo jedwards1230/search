@@ -6,7 +6,7 @@ export default function LinkIcon() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="h-6 w-6"
+            className="h-6 w-6 text-neutral-400 transition-colors hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-neutral-100"
         >
             <path
                 strokeLinecap="round"

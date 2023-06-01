@@ -9,7 +9,7 @@ type State = {
     results: Result[];
     model: Model;
     hideReferences: boolean;
-    toggleSettings: () => void;
+    toggleReferences: () => void;
     processQuery: (newInput: string, updateUrl?: boolean) => void;
     reset: () => void;
 };
@@ -32,8 +32,8 @@ const initialState: State = {
     results: [],
     model: 'gpt-3.5-turbo',
     hideReferences: false,
-    toggleSettings: () => {
-        console.log('toggleSettings not implemented');
+    toggleReferences: () => {
+        console.log('toggleReferences not implemented');
     },
     processQuery: () => {
         console.log('processQuery not implemented');
@@ -176,7 +176,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: 'RESET' });
     }, []);
 
-    const toggleSettings = useCallback(() => {
+    const toggleReferences = useCallback(() => {
         dispatch({ type: 'TOGGLE_HIDE_REFERENCES' });
     }, []);
 
@@ -187,7 +187,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 results: state.results,
                 model: state.model,
                 hideReferences: state.hideReferences,
-                toggleSettings,
+                toggleReferences,
                 processQuery,
                 reset,
             }}

@@ -1,6 +1,10 @@
+'use client';
+
+import { useSearch } from '@/app/searchContext';
 import { motion } from 'framer-motion';
 
 export default function SettingsDialog({ close }: { close: () => void }) {
+    const { hideReferences, toggleReferences } = useSearch();
     return (
         <motion.dialog
             key="settings-dialog"
@@ -27,6 +31,16 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                         <option value="gpt-4">gpt-4</option>
                     </select>
+                </div>
+
+                <div className="flex w-full items-center justify-between gap-4 px-4 py-2 dark:bg-neutral-800">
+                    <div>Hide References:</div>
+                    <input
+                        type="checkbox"
+                        className="bg-inherit"
+                        checked={hideReferences}
+                        onChange={toggleReferences}
+                    />
                 </div>
                 <div className="flex w-full items-center justify-between gap-4 px-4 py-2 dark:bg-neutral-800">
                     <div>OpenAI API Key:</div>

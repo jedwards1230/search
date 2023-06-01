@@ -16,12 +16,14 @@ interface LLMChainCallback {
 
 function createChat(
     callback: LLMChainCallback,
-    modelName: Model = 'gpt-3.5-turbo'
+    modelName: Model = 'gpt-3.5-turbo',
+    key?: string
 ) {
     return new ChatOpenAI({
-        temperature: 0,
+        temperature: 0.1,
         streaming: true,
         modelName: modelName,
+        openAIApiKey: key,
         callbacks: [
             {
                 handleLLMNewToken(token: string) {
@@ -38,7 +40,6 @@ const resolvePrompt = ChatPromptTemplate.fromPromptMessages([
             'You use internet search results to help the user.' +
             'Use the basic form of 1. summarizing what the user asked for. 2. explaining/demonstrating. 3. summarizing everything briefly. ' +
             'Respond in markdown format (including github flavored). ' +
-            'You are encouraged to render tables and all forms of markdown styling. ' +
             'Ensure sources are cited in-text and ensure all links are in md format. ' +
             'Ensure all code blocks and command examples are in md format ```code```, including the language. '
     ),
@@ -49,7 +50,8 @@ const resolvePrompt = ChatPromptTemplate.fromPromptMessages([
 function createResolveChain(
     callback: LLMChainCallback,
     results: Result[],
-    model?: Model
+    model?: Model,
+    key?: string
 ) {
     const pastMessages: (HumanChatMessage | AIChatMessage)[] = [];
     for (const result of results) {
@@ -57,7 +59,7 @@ function createResolveChain(
         pastMessages.push(new AIChatMessage(result.summary));
     }
 
-    const chat = createChat(callback, model);
+    const chat = createChat(callback, model, key);
     const chatMemory = new BufferMemory({
         chatHistory: new ChatMessageHistory(pastMessages),
         returnMessages: true,

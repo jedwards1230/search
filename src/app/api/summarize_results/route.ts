@@ -4,8 +4,16 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
     const res = await request.json();
-    const query = res.query;
-    const results: Result[] = res.results;
+    const {
+        query,
+        results,
+        encryptedKey,
+    }: {
+        query: string;
+        results: Result[];
+        encryptedKey: string;
+    } = res;
+
     const input = `Search Results: ${JSON.stringify(
         res.searchResults
     )}\nUser query: ${query}`;
@@ -19,10 +27,13 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
+            let key;
+
             const resolveChain = createResolveChain(
                 callback,
                 results,
-                'gpt-3.5-turbo'
+                'gpt-3.5-turbo',
+                key
             );
             await resolveChain.call({ input });
 

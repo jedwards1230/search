@@ -4,13 +4,15 @@ import { useState } from 'react';
 import LinkIcon from './LinkIcon';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import { useSearch } from '@/app/searchContext';
 
 export default function References({
     references,
 }: {
     references: Observation[];
 }) {
-    const [open, setOpen] = useState(true);
+    const { hideReferences } = useSearch();
+    const [open, setOpen] = useState(!hideReferences);
 
     return (
         <div className="flex w-full flex-col justify-start gap-2">
@@ -41,7 +43,7 @@ export default function References({
                             key={step.link + i}
                             className="flex flex-col gap-1 pb-2"
                         >
-                            <div className="rounded p-2 hover:bg-neutral-200/50 dark:hover:bg-neutral-600/50">
+                            <div className="rounded p-2 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50">
                                 <a href={step.link} target="_blank">
                                     <div className="pb-1">{step.title}</div>
                                     <div className="text-sm">

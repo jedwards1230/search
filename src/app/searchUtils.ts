@@ -29,9 +29,16 @@ export const summarizeResults = async (
     updateSummary: (id: number, summary: string) => void
 ) => {
     try {
+        const key = 'sk-1234******';
+        const encryptedKey = key; // encrypt this
         const response = await fetch('/api/summarize_results', {
             method: 'POST',
-            body: JSON.stringify({ query: newQuery, results, searchResults }),
+            body: JSON.stringify({
+                query: newQuery,
+                results,
+                searchResults,
+                encryptedKey,
+            }),
         });
 
         if (!response.body) {
