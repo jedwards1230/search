@@ -16,10 +16,10 @@ export default function Header({ search }: { search: string }) {
         <>
             <div
                 className={clsx(
-                    'flex w-full flex-col items-center gap-8',
+                    'flex w-full items-center gap-8',
                     results.length > 0
-                        ? 'justify-between md:flex-row'
-                        : 'flex-1 justify-center'
+                        ? 'flex-row justify-between'
+                        : 'flex-1 flex-col justify-center'
                 )}
             >
                 <Title />
