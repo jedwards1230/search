@@ -13,7 +13,7 @@ export default function Results({ result }: { result: Result }) {
 
     return (
         <div className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row">
-            <div className="relative flex h-full w-full flex-col items-center justify-between gap-8">
+            <div className="relative flex h-full w-full flex-col items-center justify-between gap-8 pb-6">
                 <div className="sticky top-4 flex w-full flex-col gap-4">
                     <div className="flex w-full flex-col justify-start gap-2 lg:gap-4">
                         <div>
@@ -52,13 +52,12 @@ export default function Results({ result }: { result: Result }) {
                             </motion.div>
                         )}
                     </div>
-
-                    {result.finished && (
-                        <div className="w-full">
-                            <Input />
-                        </div>
-                    )}
                 </div>
+                {result.finished && (
+                    <div className="sticky bottom-4 w-full">
+                        <Input />
+                    </div>
+                )}
             </div>
             {result.references.length > 0 && (
                 <motion.div

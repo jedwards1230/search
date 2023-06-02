@@ -55,11 +55,19 @@ export async function searchGoogle(input: string) {
     const apiKey = process.env.GOOGLE_API_KEY;
     const googleCSEId = process.env.GOOGLE_CSE_ID;
 
-    const res = await fetch(
-        `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${googleCSEId}&q=${encodeURIComponent(
-            input
-        )}&start=1`
-    );
+    if (!apiKey || !googleCSEId) {
+        throw new Error(
+            'Missing GOOGLE_API_KEY or GOOGLE_CSE_ID environment variables'
+        );
+    }
+
+    const url = new URL('https://www.googleapis.com/customsearch/v1');
+    url.searchParams.set('key', apiKey);
+    url.searchParams.set('cx', googleCSEId);
+    url.searchParams.set('q', input);
+    url.searchParams.set('start', '1');
+
+    const res = await fetch(url);
 
     if (!res.ok) {
         throw new Error(

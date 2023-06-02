@@ -37,10 +37,10 @@ function createChat(
 const resolvePrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are a helpful assistant.' +
-            'You use internet search results to help the user.' +
+            'You use internet search results to inform your conversation with the user.' +
+            'Provide responses as an in-depth explanation' +
             'Use the basic form of 1. summarizing what the user asked for. 2. explaining/demonstrating. 3. summarizing everything briefly. ' +
             'Respond in markdown format (including github flavored). ' +
-            'Ensure sources are cited in-text and ensure all links are in md format. ' +
             'Ensure all code blocks and command examples are in md format ```code```, including the language. '
     ),
     new MessagesPlaceholder('history'),

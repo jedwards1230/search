@@ -7,7 +7,7 @@
     },
     "dependencies": {
         "@types/node": "20.2.5",
-        "@types/react": "18.2.7",
+        "@types/react": "18.2.8",
         "@types/react-dom": "18.2.4",
         "@vercel/analytics": "^1.0.1",
         "@types/react-syntax-highlighter": "^15.5.7",
@@ -18,7 +18,7 @@
         "eslint": "8.41.0",
         "eslint-config-next": "13.4.4",
         "framer-motion": "^10.12.16",
-        "langchain": "^0.0.87",
+        "langchain": "^0.0.88",
         "next": "13.4.4",
         "next-themes": "^0.2.1",
         "postcss": "8.4.24",
@@ -32,6 +32,6 @@
         "react-textarea-autosize": "^8.4.1",
         "remark-gfm": "^3.0.1",
         "tailwindcss": "3.3.2",
-        "typescript": "5.0.4"
+        "typescript": "5.1.3"
     }
 }

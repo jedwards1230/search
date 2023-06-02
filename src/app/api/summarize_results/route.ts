@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         encryptedKey: string;
     } = res;
 
-    const input = `Search Results: ${JSON.stringify(
+    const input = `context: ${JSON.stringify(
         res.searchResults
     )}\nUser query: ${query}`;
 
