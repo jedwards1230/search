@@ -1,11 +1,12 @@
 import {
+    AIChatMessage,
     AgentAction,
     AgentFinish,
     ChainValues,
+    HumanChatMessage,
     LLMResult,
-} from 'langchain/dist/schema';
+} from 'langchain/schema';
 import { BaseCallbackHandler } from 'langchain/callbacks';
-import { AxiosRequestConfig, AxiosPromise } from 'axios';
 
 export class CustomHandler extends BaseCallbackHandler {
     name = 'custom_handler';
@@ -87,4 +88,13 @@ export async function searchGoogle(input: string) {
             })
         ) ?? [];
     return results;
+}
+
+export function resultsToChatMessages(results: Result[]) {
+    const messages: (HumanChatMessage | AIChatMessage)[] = [];
+    for (const result of results) {
+        messages.push(new HumanChatMessage(result.query));
+        messages.push(new AIChatMessage(result.summary));
+    }
+    return messages;
 }

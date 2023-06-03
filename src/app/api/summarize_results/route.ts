@@ -38,13 +38,7 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
-            let key;
-            const resolveChain = createResolveChain(
-                callback,
-                results,
-                model,
-                key
-            );
+            const resolveChain = createResolveChain(callback, results, model);
             await resolveChain.call({ input });
 
             controller.close();

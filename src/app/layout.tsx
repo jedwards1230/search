@@ -55,7 +55,7 @@ export default function RootLayout({
 }) {
     return (
         <html
-            className="container flex h-full w-full bg-neutral-50 text-neutral-900 transition-colors dark:bg-neutral-800 dark:text-neutral-100"
+            className="container flex h-full w-full bg-neutral-50 px-2 text-neutral-900 transition-colors dark:bg-neutral-800 dark:text-neutral-100 md:px-0"
             lang="en"
             suppressHydrationWarning={true}
         >

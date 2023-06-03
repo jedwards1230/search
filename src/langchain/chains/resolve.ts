@@ -8,7 +8,7 @@ import {
     MessagesPlaceholder,
 } from 'langchain/prompts';
 import { ChatMessageHistory } from 'langchain/memory';
-import { HumanChatMessage, AIChatMessage } from 'langchain/schema';
+import { resultsToChatMessages } from '../utils';
 
 interface LLMChainCallback {
     (token: string): void;
@@ -53,11 +53,7 @@ function createResolveChain(
     model?: Model,
     key?: string
 ) {
-    const pastMessages: (HumanChatMessage | AIChatMessage)[] = [];
-    for (const result of results) {
-        pastMessages.push(new HumanChatMessage(result.query));
-        pastMessages.push(new AIChatMessage(result.summary));
-    }
+    const pastMessages = resultsToChatMessages(results);
 
     const chat = createChat(callback, model, key);
     const chatMemory = new BufferMemory({

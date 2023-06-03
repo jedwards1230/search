@@ -16,27 +16,27 @@ export default function Header({ search }: { search: string }) {
         <>
             <div
                 className={clsx(
-                    'flex w-full items-center gap-8',
+                    'flex w-full flex-col items-center gap-8',
                     results.length > 0
-                        ? 'flex-row justify-between'
-                        : 'flex-1 flex-col justify-center'
+                        ? 'justify-between md:flex-row'
+                        : 'flex-1 justify-center'
                 )}
             >
                 <Title />
 
-                <Input
-                    topLevel={true}
-                    search={search}
-                    close={() => setSettingsOpen(true)}
-                />
-                {results.length > 0 && (
+                <div className="flex w-full items-center gap-4">
+                    <Input
+                        topLevel={true}
+                        search={search}
+                        close={() => setSettingsOpen(true)}
+                    />
                     <div
                         onClick={() => setSettingsOpen(true)}
                         className="cursor-pointer"
                     >
                         <SettingsIcon />
                     </div>
-                )}
+                </div>
                 <AnimatePresence>
                     {settingsOpen && (
                         <SettingsDialog close={() => setSettingsOpen(false)} />
