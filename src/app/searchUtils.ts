@@ -15,7 +15,7 @@ export const getResults = async (newQuery: string, results: Result[]) => {
     });
     const data = await res.json();
 
-    const steps = JSON.parse(data.intermediateSteps);
+    const steps = data.intermediateSteps;
 
     return steps;
 };

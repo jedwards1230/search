@@ -9,7 +9,7 @@ import { useSearch } from '@/app/searchContext';
 export default function References({
     references,
 }: {
-    references: Observation[];
+    references: SearchResult[];
 }) {
     const { hideReferences } = useSearch();
     const [open, setOpen] = useState(!hideReferences);

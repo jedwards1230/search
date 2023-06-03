@@ -23,7 +23,7 @@ type Action =
     | { type: 'UPDATE_MODEL'; payload: Model }
     | {
           type: 'UPDATE_SEARCH_RESULTS';
-          payload: { id: number; searchResults: Observation[] };
+          payload: { id: number; searchResults: SearchResult[] };
       }
     | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } };
 

@@ -77,7 +77,7 @@ export async function searchGoogle(input: string) {
 
     const json = await res.json();
 
-    const results =
+    const results: SearchResult[] =
         json?.items?.map(
             (item: { title?: string; link?: string; snippet?: string }) => ({
                 title: item.title,
@@ -85,5 +85,5 @@ export async function searchGoogle(input: string) {
                 snippet: item.snippet,
             })
         ) ?? [];
-    return JSON.stringify(results);
+    return results;
 }

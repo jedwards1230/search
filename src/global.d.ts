@@ -4,10 +4,10 @@ interface IntermediateStep {
         toolInput: string;
         log: string;
     };
-    observation: Observation[];
+    observation: SearchResult[];
 }
 
-interface Observation {
+interface SearchResult {
     link: string;
     snippet: string;
     title: string;
@@ -19,7 +19,7 @@ type Result = {
     id: number;
     query: string;
     summary: string;
-    references: Observation[];
+    references: SearchResult[];
     model: Model;
     finished: boolean;
 };
