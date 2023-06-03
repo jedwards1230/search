@@ -22,13 +22,21 @@ Built with:
 ## Features
 
 ### Current Functionality
-- Search snippets
+- Scrapes and analyzes top 5 Google results
 - Basic response
-- Basic memory (short context length)
+- Basic chat history
 
 ### Planned Improvements
+- Alternate search engines
 - Agent tools (web browser, calculator, code sandbox)
-- Toggle models (GPT-3 vs GPT-4)
+- Better chat history
+  - Currently only remembers what is displayed on front-end
+  - Need to store chat history in database
+  - Need to vectorize scraped pages and chat history
+- Caching
+- Better chat editing
+  - How does it impact chat history?
+  - if chat chunks are vectorized, do those get deleted if the conversation is edited?
 - Better prompting
 
 ## Installation

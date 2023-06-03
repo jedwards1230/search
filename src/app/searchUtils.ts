@@ -20,16 +20,35 @@ export const getResults = async (newQuery: string, results: Result[]) => {
     return searchResults;
 };
 
-export const analyzeResults = async (searchResults: SearchResult[]) => {
+export const analyzeSingleResult = async (
+    searchResult: SearchResult,
+    query: string
+) => {
     const res = await fetch('/api/analyze_results', {
         method: 'POST',
         body: JSON.stringify({
-            searchResults,
+            searchResult,
+            query,
         }),
     });
     const data = await res.json();
 
-    const analyzedResults: SearchResult[] = data.searchResults;
+    const analyzedResult: SearchResult = data.searchResult;
+
+    return analyzedResult;
+};
+
+export const analyzeResults = async (
+    searchResults: SearchResult[],
+    query: string
+) => {
+    const analyzedResultsPromises = searchResults.map((result) =>
+        analyzeSingleResult(result, query)
+    );
+
+    const analyzedResults: SearchResult[] = await Promise.all(
+        analyzedResultsPromises
+    );
 
     return analyzedResults;
 };

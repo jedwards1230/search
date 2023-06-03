@@ -60,24 +60,15 @@ export default function Input({
                             className="h-full w-full rounded-r-none border border-neutral-500 p-4 shadow transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:disabled:bg-neutral-700/50"
                             placeholder="Ask anything..."
                         />
-                        {close &&
-                            (topLevel ? (
-                                <div
-                                    onClick={close}
-                                    title="Settings"
-                                    className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
-                                >
-                                    <SettingsIcon />
-                                </div>
-                            ) : (
-                                <div
-                                    onClick={close}
-                                    title="Hide Input"
-                                    className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
-                                >
-                                    <HideIcon />
-                                </div>
-                            ))}
+                        {close && !topLevel && (
+                            <div
+                                onClick={close}
+                                title="Hide Input"
+                                className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                            >
+                                <HideIcon />
+                            </div>
+                        )}
                         <button
                             disabled={loading}
                             type="submit"

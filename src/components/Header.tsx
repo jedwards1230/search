@@ -23,13 +23,13 @@ export default function Header({ search }: { search: string }) {
                 )}
             >
                 <Title />
-                {results.length === 0 ? (
-                    <Input
-                        topLevel={true}
-                        search={search}
-                        close={() => setSettingsOpen(true)}
-                    />
-                ) : (
+
+                <Input
+                    topLevel={true}
+                    search={search}
+                    close={() => setSettingsOpen(true)}
+                />
+                {results.length > 0 && (
                     <div
                         onClick={() => setSettingsOpen(true)}
                         className="cursor-pointer"

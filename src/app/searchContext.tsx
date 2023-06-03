@@ -1,24 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, {
-    createContext,
-    useCallback,
-    useEffect,
-    useReducer,
-} from 'react';
+import React, { createContext, useCallback, useReducer } from 'react';
 import { analyzeResults, getResults, summarizeResults } from './searchUtils';
-
-type State = {
-    loading: boolean;
-    results: Result[];
-    model: Model;
-    hideReferences: boolean;
-    toggleReferences: () => void;
-    processQuery: (newInput: string, updateUrl?: boolean) => void;
-    reset: () => void;
-    setModel: (model: Model) => void;
-};
 
 type Action =
     | { type: 'ADD_RESULT'; payload: Result }
@@ -33,11 +17,22 @@ type Action =
       }
     | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } };
 
+type State = {
+    loading: boolean;
+    results: Result[];
+    model: Model;
+    hideReferences: boolean;
+    toggleReferences: () => void;
+    processQuery: (newInput: string, updateUrl?: boolean) => void;
+    reset: () => void;
+    setModel: (model: Model) => void;
+};
+
 const initialState: State = {
     loading: false,
     results: [],
     model: 'gpt-3.5-turbo',
-    hideReferences: true,
+    hideReferences: false,
     toggleReferences: () => {
         console.log('toggleReferences not implemented');
     },
@@ -118,16 +113,12 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    useEffect(() => {});
-
     const processQuery = useCallback(
         async (newInput: string, updateUrl?: boolean) => {
             const newQuery = newInput.trim();
             if (newQuery === '') return;
             dispatch({ type: 'SET_LOADING', payload: true });
-            console.log('processQuery', state.model);
 
-            // update URL
             if (updateUrl) {
                 const url = new URL(window.location.href);
                 url.searchParams.set('q', newQuery);
@@ -148,7 +139,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 },
             });
 
-            // fetch data and update result
             try {
                 const searchResults = await getResults(newQuery, state.results);
                 dispatch({
@@ -157,7 +147,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 });
 
                 const searchResultsWithContent = await analyzeResults(
-                    searchResults
+                    searchResults,
+                    newQuery
                 );
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',

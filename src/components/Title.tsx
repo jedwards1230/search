@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 import { useSearch } from '@/app/searchContext';
 import RGB from './RGB';
 import clsx from 'clsx';
@@ -12,7 +10,7 @@ export default function Title() {
     const router = useRouter();
 
     return (
-        <motion.div
+        <div
             onClick={() => {
                 router.push('/');
                 reset();
@@ -26,6 +24,6 @@ export default function Title() {
         >
             Search
             {results.length > 0 && <RGB size="sm" />}
-        </motion.div>
+        </div>
     );
 }
