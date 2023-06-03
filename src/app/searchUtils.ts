@@ -1,3 +1,5 @@
+import { readStream } from '@/lib/stream';
+
 // get search results based on query
 export const getResults = async (newQuery: string, results: Result[]) => {
     const history = results.map((result) => {
@@ -80,20 +82,7 @@ export const summarizeResults = async (
             throw new Error('No response body');
         }
 
-        const reader = response.body.getReader();
-        let accumulatedResponse = '';
-
-        if (reader) {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                if (value) {
-                    const decoded = new TextDecoder().decode(value);
-                    accumulatedResponse += decoded;
-                    updateSummary(id, accumulatedResponse);
-                }
-            }
-        }
+        readStream(response.body, (chunk: string) => updateSummary(id, chunk));
     } catch (err) {
         console.error('Fetch error:', err);
         updateSummary(id, `Error summarizing results: ${err}`);
