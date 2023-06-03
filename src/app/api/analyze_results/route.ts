@@ -71,7 +71,6 @@ export async function POST(request: Request) {
             ...searchResult,
             content: content.response,
         };
-        console.log({ searchResultWithContent });
 
         return NextResponse.json({
             searchResult: searchResultWithContent,

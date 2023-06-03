@@ -38,32 +38,35 @@ export default function References({
             </div>
             {open && (
                 <div className="w-full overflow-y-auto">
-                    {references.map((reference, i) => (
-                        <motion.div
-                            layout
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: i * 0.1 }}
-                            key={reference.url + i}
-                            className="flex flex-col gap-1 pb-2"
-                        >
-                            <div
-                                className={clsx(
-                                    'rounded p-2 transition-colors hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
-                                    !reference.content
-                                        ? 'text-neutral-400 dark:text-neutral-500'
-                                        : ''
-                                )}
+                    {references.map((reference, i) => {
+                        if (!reference) return null;
+                        return (
+                            <motion.div
+                                layout
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: i * 0.1 }}
+                                key={reference.url + i}
+                                className="flex flex-col gap-1 pb-2"
                             >
-                                <a href={reference.url} target="_blank">
-                                    <div>{reference.title}</div>
-                                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                                        {reference.snippet}
-                                    </div>
-                                </a>
-                            </div>
-                        </motion.div>
-                    ))}
+                                <div
+                                    className={clsx(
+                                        'rounded p-2 transition-colors hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
+                                        !reference.content
+                                            ? 'text-neutral-400 dark:text-neutral-500'
+                                            : ''
+                                    )}
+                                >
+                                    <a href={reference.url} target="_blank">
+                                        <div>{reference.title}</div>
+                                        <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                                            {reference.snippet}
+                                        </div>
+                                    </a>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             )}
         </div>

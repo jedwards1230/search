@@ -30,7 +30,9 @@ export async function POST(request: Request) {
 
     const input = `context: ${JSON.stringify(
         searchResults.map((result, index) => {
-            if (!result.content) return '';
+            if (!result || !result.content) {
+                return '';
+            }
             return JSON.stringify({
                 title: result.title,
                 reference: `[${index}](${result.url})`,

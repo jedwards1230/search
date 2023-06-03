@@ -2,111 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import React, { createContext, useCallback, useReducer } from 'react';
+
 import { analyzeResults, getResults, summarizeResults } from './searchUtils';
-
-type Action =
-    | { type: 'ADD_RESULT'; payload: Result }
-    | { type: 'FINISH'; payload: number }
-    | { type: 'RESET' }
-    | { type: 'SET_LOADING'; payload: boolean }
-    | { type: 'TOGGLE_HIDE_REFERENCES' }
-    | { type: 'UPDATE_MODEL'; payload: Model }
-    | {
-          type: 'UPDATE_SEARCH_RESULTS';
-          payload: { id: number; searchResults: SearchResult[] };
-      }
-    | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } };
-
-type State = {
-    loading: boolean;
-    results: Result[];
-    model: Model;
-    hideReferences: boolean;
-    toggleReferences: () => void;
-    processQuery: (newInput: string, updateUrl?: boolean) => void;
-    reset: () => void;
-    setModel: (model: Model) => void;
-};
-
-const initialState: State = {
-    loading: false,
-    results: [],
-    model: 'gpt-3.5-turbo',
-    hideReferences: false,
-    toggleReferences: () => {
-        console.log('toggleReferences not implemented');
-    },
-    processQuery: () => {
-        console.log('processQuery not implemented');
-    },
-    reset: () => {
-        console.log('reset not implemented');
-    },
-    setModel: () => {
-        console.log('setModel not implemented');
-    },
-};
+import reducer from './searchReducer';
+import initialState from './initialState';
 
 const SearchContext = createContext<State>(initialState);
 
 export const useSearch = () => React.useContext(SearchContext);
-
-const reducer = (state: State, action: Action): State => {
-    switch (action.type) {
-        case 'ADD_RESULT':
-            return { ...state, results: [...state.results, action.payload] };
-        case 'FINISH':
-            return {
-                ...state,
-                results: state.results.map((result) =>
-                    result.id === action.payload
-                        ? {
-                              ...result,
-                              loading: false,
-                              finished: true,
-                          }
-                        : result
-                ),
-            };
-        case 'RESET':
-            return initialState;
-        case 'SET_LOADING':
-            return { ...state, loading: action.payload };
-        case 'TOGGLE_HIDE_REFERENCES':
-            return { ...state, hideReferences: !state.hideReferences };
-        case 'UPDATE_MODEL':
-            return {
-                ...state,
-                model: action.payload,
-            };
-        case 'UPDATE_SEARCH_RESULTS':
-            return {
-                ...state,
-                results: state.results.map((result) =>
-                    result.id === action.payload.id
-                        ? {
-                              ...result,
-                              references: action.payload.searchResults,
-                          }
-                        : result
-                ),
-            };
-        case 'UPDATE_SUMMARY':
-            return {
-                ...state,
-                results: state.results.map((result) =>
-                    result.id === action.payload.id
-                        ? {
-                              ...result,
-                              summary: action.payload.summary,
-                          }
-                        : result
-                ),
-            };
-        default:
-            return state;
-    }
-};
 
 export function SearchProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();

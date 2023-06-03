@@ -25,3 +25,27 @@ type Result = {
     model: Model;
     finished: boolean;
 };
+
+type Action =
+    | { type: 'ADD_RESULT'; payload: Result }
+    | { type: 'FINISH'; payload: number }
+    | { type: 'RESET' }
+    | { type: 'SET_LOADING'; payload: boolean }
+    | { type: 'TOGGLE_HIDE_REFERENCES' }
+    | { type: 'UPDATE_MODEL'; payload: Model }
+    | {
+          type: 'UPDATE_SEARCH_RESULTS';
+          payload: { id: number; searchResults: SearchResult[] };
+      }
+    | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } };
+
+type State = {
+    loading: boolean;
+    results: Result[];
+    model: Model;
+    hideReferences: boolean;
+    toggleReferences: () => void;
+    processQuery: (newInput: string, updateUrl?: boolean) => void;
+    reset: () => void;
+    setModel: (model: Model) => void;
+};

@@ -4,12 +4,10 @@ import { initializeAgentExecutorWithOptions } from 'langchain/agents';
 import { Calculator } from 'langchain/tools/calculator';
 import { WebBrowser } from 'langchain/tools/webbrowser';
 import { CustomHandler } from '../utils';
-import { GoogleSnippets } from '../tools/googleSearch';
-import { PromptTemplate } from 'langchain';
 
 export default async function searchExecutor() {
     const handler = new CustomHandler();
-    const model = new ChatOpenAI({ temperature: 0, callbacks: [handler] });
+    const model = new ChatOpenAI({ temperature: 0 });
     const embeddings = new OpenAIEmbeddings();
     const tools = [
         //new GoogleSnippets(),
@@ -23,22 +21,15 @@ export default async function searchExecutor() {
         {
             agentType: 'chat-zero-shot-react-description',
             agentArgs: {
-                //callbacks: [handler],
+                callbacks: [handler],
                 //suffix: 'use markdown format. provide relevant links to this query:',
             },
             returnIntermediateSteps: true,
+            maxIterations: 2,
             verbose: true,
-            //callbacks: [handler],
+            callbacks: [handler],
         }
     );
 
     return searchExecutor;
 }
-
-/* const promptB = PromptTemplate.fromTemplate(
-    'Provide relevant links to this query: {query}?'
-); */
-
-/* export async function buildSearchPrompt(query: string) {
-    return await promptB.format({ query });
-} */

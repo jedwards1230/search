@@ -11,9 +11,10 @@ export default function ResultsList() {
     }
     return (
         <div className="flex w-full flex-col gap-8 pb-16">
-            {results.map((result, i) => (
-                <Results result={result} key={`result-${i}`} />
-            ))}
+            {results.map((result, i) => {
+                if (!result) return null;
+                return <Results result={result} key={`result-${i}`} />;
+            })}
         </div>
     );
 }
