@@ -1,7 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { createContext, useCallback, useReducer } from 'react';
+import React, {
+    createContext,
+    useCallback,
+    useEffect,
+    useReducer,
+} from 'react';
 import { analyzeResults, getResults, summarizeResults } from './searchUtils';
 
 type State = {
@@ -12,6 +17,7 @@ type State = {
     toggleReferences: () => void;
     processQuery: (newInput: string, updateUrl?: boolean) => void;
     reset: () => void;
+    setModel: (model: Model) => void;
 };
 
 type Action =
@@ -40,6 +46,9 @@ const initialState: State = {
     },
     reset: () => {
         console.log('reset not implemented');
+    },
+    setModel: () => {
+        console.log('setModel not implemented');
     },
 };
 
@@ -109,11 +118,14 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    useEffect(() => {});
+
     const processQuery = useCallback(
         async (newInput: string, updateUrl?: boolean) => {
             const newQuery = newInput.trim();
             if (newQuery === '') return;
             dispatch({ type: 'SET_LOADING', payload: true });
+            console.log('processQuery', state.model);
 
             // update URL
             if (updateUrl) {
@@ -161,12 +173,12 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                         payload: { id, summary },
                     });
                 };
-
                 await summarizeResults(
                     newQuery,
                     searchResultsWithContent,
                     state.results,
                     id,
+                    state.model,
                     updateSummary
                 );
                 dispatch({ type: 'FINISH', payload: id });
@@ -174,7 +186,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 console.error(error);
                 dispatch({
                     type: 'UPDATE_SUMMARY',
-                    payload: { id: id, summary: 'Error' },
+                    payload: { id: id, summary: `Error: ${error}` },
                 });
             } finally {
                 dispatch({ type: 'SET_LOADING', payload: false });
@@ -183,13 +195,17 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         [state.results, router, state.model]
     );
 
-    const reset = useCallback(() => {
+    const reset = () => {
         dispatch({ type: 'RESET' });
-    }, []);
+    };
 
-    const toggleReferences = useCallback(() => {
+    const toggleReferences = () => {
         dispatch({ type: 'TOGGLE_HIDE_REFERENCES' });
-    }, []);
+    };
+
+    const setModel = (model: Model) => {
+        dispatch({ type: 'UPDATE_MODEL', payload: model });
+    };
 
     return (
         <SearchContext.Provider
@@ -201,6 +217,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 toggleReferences,
                 processQuery,
                 reset,
+                setModel,
             }}
         >
             {children}

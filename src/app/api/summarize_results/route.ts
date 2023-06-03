@@ -9,11 +9,13 @@ export async function POST(request: Request) {
         results,
         encryptedKey,
         searchResults,
+        model,
     }: {
         query: string;
         results: Result[];
         encryptedKey: string;
         searchResults: SearchResult[];
+        model: Model;
     } = res;
 
     const input = `context: ${JSON.stringify(
@@ -37,11 +39,10 @@ export async function POST(request: Request) {
             };
 
             let key;
-
             const resolveChain = createResolveChain(
                 callback,
                 results,
-                'gpt-3.5-turbo',
+                model,
                 key
             );
             await resolveChain.call({ input });

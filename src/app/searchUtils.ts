@@ -40,6 +40,7 @@ export const summarizeResults = async (
     searchResults: SearchResult[],
     results: Result[],
     id: number,
+    model: Model,
     updateSummary: (id: number, summary: string) => void
 ) => {
     try {
@@ -52,6 +53,7 @@ export const summarizeResults = async (
                 results,
                 searchResults,
                 encryptedKey,
+                model,
             }),
         });
 

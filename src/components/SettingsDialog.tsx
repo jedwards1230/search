@@ -4,7 +4,7 @@ import { useSearch } from '@/app/searchContext';
 import { motion } from 'framer-motion';
 
 export default function SettingsDialog({ close }: { close: () => void }) {
-    const { hideReferences, toggleReferences } = useSearch();
+    const { hideReferences, model, toggleReferences, setModel } = useSearch();
     return (
         <motion.dialog
             key="settings-dialog"
@@ -28,7 +28,11 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                 <div className="flex flex-col gap-4 rounded p-4 dark:bg-neutral-800">
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>Model:</div>
-                        <select className="rounded border border-neutral-500 bg-inherit p-2">
+                        <select
+                            value={model}
+                            onChange={(e) => setModel(e.target.value as Model)}
+                            className="rounded border border-neutral-500 bg-inherit p-2"
+                        >
                             <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                             <option value="gpt-4">gpt-4</option>
                         </select>
