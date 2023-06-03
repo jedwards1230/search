@@ -1,18 +1,23 @@
 import { Tool } from 'langchain/tools';
+import { searchGoogle } from '../utils';
 
 export interface GoogleCustomSearchParams {
     apiKey?: string;
     googleCSEId?: string;
 }
 
-export class GoogleCustomSearch extends Tool {
-    name = 'google-custom-search';
+export class GoogleSnippets extends Tool {
+    name = 'google-snippets';
 
     protected apiKey: string;
     protected googleCSEId: string;
 
     description =
-        'a custom search engine. useful for when you need to answer questions about current events. input should be a search query. outputs a JSON array of results.';
+        'a search engine. ' +
+        'useful for when you need quick answers to questions about current events. ' +
+        'provides several links and relevant snippets. ' +
+        'input should be a search query. ' +
+        'outputs a JSON array of results.';
 
     constructor(
         fields: GoogleCustomSearchParams = {
@@ -36,32 +41,8 @@ export class GoogleCustomSearch extends Tool {
     }
 
     async _call(input: string) {
-        const res = await fetch(
-            `https://www.googleapis.com/customsearch/v1?key=${this.apiKey}&cx=${
-                this.googleCSEId
-            }&q=${encodeURIComponent(input)}&start=1`
-        );
+        const res = await searchGoogle(input);
 
-        if (!res.ok) {
-            throw new Error(
-                `Got ${res.status} error from Google custom search: ${res.statusText}`
-            );
-        }
-
-        const json = await res.json();
-
-        const results =
-            json?.items?.map(
-                (item: {
-                    title?: string;
-                    link?: string;
-                    snippet?: string;
-                }) => ({
-                    title: item.title,
-                    link: item.link,
-                    snippet: item.snippet,
-                })
-            ) ?? [];
-        return JSON.stringify(results);
+        return res;
     }
 }
