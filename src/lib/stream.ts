@@ -11,7 +11,7 @@ export async function readStream(
         if (value) {
             const decoded = new TextDecoder().decode(value);
             accumulatedResponse += decoded;
-            chunkCallback(decoded);
+            chunkCallback(accumulatedResponse);
         }
     }
 }
