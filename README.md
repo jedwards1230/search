@@ -2,11 +2,11 @@
 
 ![home.png](./home.png) 
 
-A next-generation AI-assisted search engine that allows you to discuss topics, ask questions, troubleshoot code, and have the search engine provide useful context for AI chat.
+A next-generation AI-assisted search engine designed for discussing topics, asking questions, troubleshooting code, and engaging with AI chat while receiving relevant contextual information.
 
 ![results.png](./results.png) 
 
-Built with:
+Built using:
 - Next.js 13 (Edge functions)
 - Streaming
 - TailwindCSS
@@ -21,27 +21,27 @@ Built with:
 
 ## Features
 
-### Current Functionality
-- Scrapes and analyzes top 5 Google results
-- Basic response
-- Basic chat history
+- Scrapes and analyzes the top 5 Google search results
+- Provides basic explanations
+- Stores basic chat history
+- Progressive web app (PWA)
 
 ### Planned Improvements
-- Alternate search engines
-- Agent tools (web browser, calculator, code sandbox)
-- Better chat history
-  - Currently only remembers what is displayed on front-end
-  - Need to store chat history in database
-  - Need to vectorize scraped pages and chat history
+- Integration with alternative search engines
+- Enhanced agent tools (web browser, calculator, code sandbox)
+- Improved chat history management
+  - Store chat history in a database
+  - Vectorize scraped pages and chat history
 - Caching
-- Better chat editing
-  - How does it impact chat history?
-  - if chat chunks are vectorized, do those get deleted if the conversation is edited?
-- Better prompting
+- Advanced chat editing
+  - Consider the impact of chat history
+  - Adjust vectorized chat chunks if the conversation is edited
+- Optimized prompting
 
 ## Installation
 
 1. Clone this repository to your local machine.
+
 ```
 git clone https://github.com/jedwards1230/search.git
 ```

@@ -4,12 +4,13 @@ import { Providers } from './providers';
 import clsx from 'clsx';
 import type { Metadata } from 'next';
 
-const APP_NAME = 'Search App';
-const APP_DEFAULT_TITLE = 'My Awesome Search App';
-const APP_TITLE_TEMPLATE = '%s - Search App';
+const APP_NAME = 'Search';
+const APP_DEFAULT_TITLE = 'Search';
+const APP_TITLE_TEMPLATE = 'Search - %s';
 const APP_DESCRIPTION = 'Search-assisted GPT chatbot';
 
 export const metadata: Metadata = {
+    metadataBase: new URL('http://localhost:3000'),
     applicationName: APP_NAME,
     title: {
         default: APP_DEFAULT_TITLE,
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
     manifest: '/manifest.json',
-    themeColor: '#FFFFFF',
+    themeColor: '#262626',
     appleWebApp: {
         capable: true,
         statusBarStyle: 'default',
@@ -55,7 +56,7 @@ export default function RootLayout({
 }) {
     return (
         <html
-            className="container flex h-full w-full bg-neutral-50 px-2 text-neutral-900 transition-colors dark:bg-neutral-800 dark:text-neutral-100 md:px-0"
+            className="mx-auto flex h-full w-full bg-neutral-50 p-2 text-neutral-900 transition-colors dark:bg-neutral-800 dark:text-neutral-100 lg:max-w-7xl"
             lang="en"
             suppressHydrationWarning={true}
         >
