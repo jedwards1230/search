@@ -7,25 +7,35 @@ export async function POST(request: Request) {
     const {
         query,
         results,
-        encryptedKey,
         searchResults,
         model,
     }: {
         query: string;
         results: Result[];
-        encryptedKey: string;
         searchResults: SearchResult[];
         model: Model;
     } = res;
 
+    if (!query) {
+        return new Response('No query', {
+            status: 400,
+        });
+    }
+
+    if (!model) {
+        return new Response('No model', {
+            status: 400,
+        });
+    }
+
     const input = `context: ${JSON.stringify(
         searchResults.map((result, index) => {
-            if (!result.content) return;
-            return {
+            if (!result.content) return '';
+            return JSON.stringify({
                 title: result.title,
-                reference: `[${index}](${result.link})`,
+                reference: `[${index}](${result.url})`,
                 content: result.content,
-            };
+            });
         })
     )}\n\nQuery: ${query}`;
 

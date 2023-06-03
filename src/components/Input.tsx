@@ -1,15 +1,12 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import SearchIcon from './SearchIcon';
 import { useSearch } from '@/app/searchContext';
 import HideIcon from './HideIcon';
-import SettingsIcon from './SettingsIcon';
-import SettingsDialog from './SettingsDialog';
-import clsx from 'clsx';
 import RGB from './RGB';
 
 export default function Input({

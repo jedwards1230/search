@@ -44,7 +44,7 @@ export default function References({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: i * 0.1 }}
-                            key={reference.link + i}
+                            key={reference.url + i}
                             className="flex flex-col gap-1 pb-2"
                         >
                             <div
@@ -55,7 +55,7 @@ export default function References({
                                         : ''
                                 )}
                             >
-                                <a href={reference.link} target="_blank">
+                                <a href={reference.url} target="_blank">
                                     <div>{reference.title}</div>
                                     <div className="text-sm text-neutral-600 dark:text-neutral-400">
                                         {reference.snippet}

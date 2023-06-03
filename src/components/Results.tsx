@@ -40,7 +40,7 @@ export default function Results({ result }: { result: Result }) {
                             ) : (
                                 <h2
                                     onClick={() => setEdit(!edit)}
-                                    className="cursor-pointer rounded px-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                    className="line-clamp-4 max-h-48 cursor-pointer rounded p-1 px-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                                 >
                                     {result.query}
                                 </h2>

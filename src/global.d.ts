@@ -8,7 +8,7 @@ interface IntermediateStep {
 }
 
 interface SearchResult {
-    link: string;
+    url: string;
     snippet: string;
     title: string;
     content?: string;

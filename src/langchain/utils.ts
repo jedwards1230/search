@@ -7,6 +7,10 @@ import {
     LLMResult,
 } from 'langchain/schema';
 import { BaseCallbackHandler } from 'langchain/callbacks';
+import supabase from '@/lib/supabase';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { SupabaseVectorStore } from 'langchain/vectorstores/supabase';
+import { Document } from 'langchain/document';
 
 export class CustomHandler extends BaseCallbackHandler {
     name = 'custom_handler';
@@ -83,7 +87,7 @@ export async function searchGoogle(input: string) {
         json?.items?.map(
             (item: { title?: string; link?: string; snippet?: string }) => ({
                 title: item.title,
-                link: item.link,
+                url: item.link,
                 snippet: item.snippet,
             })
         ) ?? [];
@@ -97,4 +101,23 @@ export function resultsToChatMessages(results: Result[]) {
         messages.push(new AIChatMessage(result.summary));
     }
     return messages;
+}
+
+export async function getDocs(docs: Document[], query: string) {
+    const embeddings = new OpenAIEmbeddings();
+    const vectorStore = new SupabaseVectorStore(embeddings, {
+        client: supabase,
+        tableName: 'documents',
+    });
+
+    // add documents
+    try {
+        await vectorStore.addDocuments(docs);
+    } catch (e) {
+        console.log(e);
+    }
+
+    // find similar documents
+    const results = await vectorStore.similaritySearch(query, 4);
+    const content = results.map((res) => res.pageContent).join('\n');
 }

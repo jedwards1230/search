@@ -7,6 +7,7 @@
     },
     "dependencies": {
         "@ducanh2912/next-pwa": "^8.5.1",
+        "@supabase/supabase-js": "^2.24.0",
         "@types/node": "20.2.5",
         "@types/react": "18.2.8",
         "@types/react-dom": "18.2.4",
