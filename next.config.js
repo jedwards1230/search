@@ -7,7 +7,7 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     compiler: {
-        removeConsole: isDev ? false : true,
+        //removeConsole: isDev ? false : true,
     },
 };
 
