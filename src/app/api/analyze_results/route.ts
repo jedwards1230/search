@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { createQueryBuilderChain } from '@/langchain/chains';
-import { searchGoogle } from '@/langchain/utils';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { WebBrowser } from 'langchain/tools/webbrowser';
@@ -10,15 +8,9 @@ export const runtime = 'edge';
 export async function POST(request: Request) {
     const res = await request.json();
     const query = res.query;
-    const history = res.history;
+    const searchResults: SearchResult[] = res.searchResults;
 
     try {
-        const queryBuilderChain = createQueryBuilderChain();
-        const searchQuery = await queryBuilderChain.call({
-            input: `background info: ${history}\nUser Query: ${query}`,
-        });
-        const searchResults = await searchGoogle(searchQuery.response);
-
         const chat = new ChatOpenAI({ temperature: 0 });
         const embeddings = new OpenAIEmbeddings();
 

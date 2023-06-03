@@ -25,7 +25,7 @@ export default function Results({ result }: { result: Result }) {
                             ) : (
                                 <h2
                                     onClick={() => setEdit(!edit)}
-                                    className="cursor-pointer rounded p-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                    className="cursor-pointer rounded px-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                                 >
                                     {result.query}
                                 </h2>
@@ -52,18 +52,15 @@ export default function Results({ result }: { result: Result }) {
                             </motion.div>
                         )}
                     </div>
+                    {result.finished && (
+                        <div className="sticky bottom-4 w-full">
+                            <Input />
+                        </div>
+                    )}
                 </div>
-                {result.finished && (
-                    <div className="sticky bottom-4 w-full">
-                        <Input />
-                    </div>
-                )}
             </div>
             {result.references.length > 0 && (
-                <motion.div
-                    layout
-                    className="w-full lg:w-auto lg:max-w-[30%] lg:p-2"
-                >
+                <motion.div layout className="w-full lg:w-auto lg:max-w-[30%]">
                     <References references={result.references} />
                 </motion.div>
             )}

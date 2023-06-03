@@ -39,7 +39,11 @@ export default function References({
             {open && (
                 <div className="w-full overflow-y-auto">
                     {references.map((step, i) => (
-                        <div
+                        <motion.div
+                            layout
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: i * 0.1 }}
                             key={step.link + i}
                             className="flex flex-col gap-1 pb-2"
                         >
@@ -51,7 +55,7 @@ export default function References({
                                     </div>
                                 </a>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             )}

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { createContext, useCallback, useReducer } from 'react';
-import { getResults, summarizeResults } from './searchUtils';
+import { analyzeResults, getResults, summarizeResults } from './searchUtils';
 
 type State = {
     loading: boolean;
@@ -31,7 +31,7 @@ const initialState: State = {
     loading: false,
     results: [],
     model: 'gpt-3.5-turbo',
-    hideReferences: false,
+    hideReferences: true,
     toggleReferences: () => {
         console.log('toggleReferences not implemented');
     },
@@ -144,6 +144,17 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     payload: { id: id, searchResults },
                 });
 
+                const searchResultsWithContent = await analyzeResults(
+                    searchResults
+                );
+                dispatch({
+                    type: 'UPDATE_SEARCH_RESULTS',
+                    payload: {
+                        id: id,
+                        searchResults: searchResultsWithContent,
+                    },
+                });
+
                 const updateSummary = (id: number, summary: string) => {
                     dispatch({
                         type: 'UPDATE_SUMMARY',
@@ -153,7 +164,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
                 await summarizeResults(
                     newQuery,
-                    JSON.stringify(searchResults),
+                    searchResultsWithContent,
                     state.results,
                     id,
                     updateSummary

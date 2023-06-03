@@ -11,6 +11,8 @@ interface SearchResult {
     link: string;
     snippet: string;
     title: string;
+    content?: string;
+    error?: string;
 }
 
 type Model = 'gpt-3.5-turbo' | 'gpt-4';

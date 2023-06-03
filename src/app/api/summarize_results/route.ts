@@ -8,15 +8,24 @@ export async function POST(request: Request) {
         query,
         results,
         encryptedKey,
+        searchResults,
     }: {
         query: string;
         results: Result[];
         encryptedKey: string;
+        searchResults: SearchResult[];
     } = res;
 
     const input = `context: ${JSON.stringify(
-        res.searchResults
-    )}\nUser query: ${query}`;
+        searchResults.map((result, index) => {
+            if (!result.content) return;
+            return {
+                title: result.title,
+                reference: `[${index}](${result.link})`,
+                content: result.content,
+            };
+        })
+    )}\n\nQuery: ${query}`;
 
     const stream = new ReadableStream({
         async start(controller) {

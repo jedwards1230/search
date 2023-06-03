@@ -15,15 +15,29 @@ export const getResults = async (newQuery: string, results: Result[]) => {
     });
     const data = await res.json();
 
-    const steps = data.intermediateSteps;
+    const searchResults: SearchResult[] = data.searchResults;
 
-    return steps;
+    return searchResults;
+};
+
+export const analyzeResults = async (searchResults: SearchResult[]) => {
+    const res = await fetch('/api/analyze_results', {
+        method: 'POST',
+        body: JSON.stringify({
+            searchResults,
+        }),
+    });
+    const data = await res.json();
+
+    const analyzedResults: SearchResult[] = data.searchResults;
+
+    return analyzedResults;
 };
 
 // stream the summary of the results
 export const summarizeResults = async (
     newQuery: string,
-    searchResults: string,
+    searchResults: SearchResult[],
     results: Result[],
     id: number,
     updateSummary: (id: number, summary: string) => void

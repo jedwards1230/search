@@ -43,6 +43,6 @@ export class GoogleSnippets extends Tool {
     async _call(input: string) {
         const res = await searchGoogle(input);
 
-        return res;
+        return JSON.stringify(res);
     }
 }

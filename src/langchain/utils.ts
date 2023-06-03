@@ -5,6 +5,7 @@ import {
     LLMResult,
 } from 'langchain/dist/schema';
 import { BaseCallbackHandler } from 'langchain/callbacks';
+import { AxiosRequestConfig, AxiosPromise } from 'axios';
 
 export class CustomHandler extends BaseCallbackHandler {
     name = 'custom_handler';
