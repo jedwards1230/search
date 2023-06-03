@@ -27,6 +27,7 @@ Built using:
 - Progressive web app (PWA)
 
 ### Planned Improvements
+- Save config to local storage
 - Integration with alternative search engines
 - Enhanced agent tools (web browser, calculator, code sandbox)
 - Improved chat history management
