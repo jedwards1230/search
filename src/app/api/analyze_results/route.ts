@@ -19,9 +19,7 @@ export async function POST(request: Request) {
             embeddings: embeddings,
         });
 
-        const content = await webBrowser._call(
-            `${searchResult.link}, ${query}`
-        );
+        const content = await webBrowser.call(`${searchResult.link}, ${query}`);
         const searchResultWithContent: SearchResult = {
             ...searchResult,
             content,

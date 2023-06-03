@@ -6,13 +6,28 @@ import LoadIcon from './LoadIcon';
 import References from './References';
 import Result from './Result';
 import Input from './Input';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Results({ result }: { result: Result }) {
     const [edit, setEdit] = useState(false);
+    const [started, setStarted] = useState(false);
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (scrollRef.current && !started) {
+            scrollRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            });
+            setStarted(true);
+        }
+    }, [result.summary, started]);
 
     return (
-        <div className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row">
+        <div
+            ref={scrollRef}
+            className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row"
+        >
             <div className="relative flex h-full w-full flex-col items-center justify-between gap-8 pb-6">
                 <div className="sticky top-4 flex w-full flex-col gap-4">
                     <div className="flex w-full flex-col justify-start gap-2 lg:gap-4">

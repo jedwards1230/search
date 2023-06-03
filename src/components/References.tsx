@@ -38,20 +38,27 @@ export default function References({
             </div>
             {open && (
                 <div className="w-full overflow-y-auto">
-                    {references.map((step, i) => (
+                    {references.map((reference, i) => (
                         <motion.div
                             layout
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: i * 0.1 }}
-                            key={step.link + i}
+                            key={reference.link + i}
                             className="flex flex-col gap-1 pb-2"
                         >
-                            <div className="rounded p-2 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50">
-                                <a href={step.link} target="_blank">
-                                    <div className="pb-1">{step.title}</div>
-                                    <div className="text-sm">
-                                        {step.snippet}
+                            <div
+                                className={clsx(
+                                    'rounded p-2 transition-colors hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
+                                    !reference.content
+                                        ? 'text-neutral-400 dark:text-neutral-500'
+                                        : ''
+                                )}
+                            >
+                                <a href={reference.link} target="_blank">
+                                    <div>{reference.title}</div>
+                                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                                        {reference.snippet}
                                     </div>
                                 </a>
                             </div>
