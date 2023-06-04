@@ -51,7 +51,11 @@ export async function POST(request: Request) {
             };
 
             const resolveChain = createResolveChain(callback, results, model);
-            await resolveChain.call({ input });
+            try {
+                await resolveChain.call({ input });
+            } catch (e) {
+                console.log(e);
+            }
 
             controller.close();
         },
