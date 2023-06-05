@@ -21,7 +21,7 @@ export default function Header({ search }: { search: string }) {
                         : 'flex-1 justify-center gap-12 md:gap-8'
                 )}
             >
-                <div className="relative flex w-full items-center justify-center">
+                <div className="relative flex w-full items-center justify-center md:w-auto">
                     <Title />
                     <div
                         className={clsx([
