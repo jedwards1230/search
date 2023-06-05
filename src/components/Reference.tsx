@@ -15,6 +15,7 @@ export default function Reference({
             animate={{ opacity: 1 }}
             transition={{ delay: i * 0.1 }}
             key={reference.url + i}
+            title={!reference.content ? 'Unable to process page' : undefined}
             className="flex flex-col gap-1 pb-2"
         >
             <div
@@ -28,7 +29,7 @@ export default function Reference({
                 <a href={reference.url} target="_blank">
                     <div>{reference.title}</div>
                     {reference.content ? (
-                        <div className="text-sm text-neutral-700 dark:text-neutral-300/80">
+                        <div className="text-sm text-neutral-700 dark:text-neutral-300">
                             {reference.content}
                         </div>
                     ) : (

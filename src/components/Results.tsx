@@ -84,7 +84,7 @@ export default function Results({ result }: { result: Result }) {
                 </div>
             </div>
             {result.references.length > 0 && (
-                <motion.div layout className="w-full lg:w-auto lg:max-w-[30%]">
+                <motion.div layout className="w-full lg:w-auto lg:max-w-[40%]">
                     <References references={result.references} />
                 </motion.div>
             )}
