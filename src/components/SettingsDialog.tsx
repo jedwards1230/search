@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearch } from '@/app/searchContext';
 import { useConfig } from '@/app/config';
 import { motion } from 'framer-motion';
 

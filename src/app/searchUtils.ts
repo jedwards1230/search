@@ -31,7 +31,7 @@ export const getResults = async (
 
     const searchResults: SearchResult[] = data.searchResults;
 
-    return searchResults.splice(0, 4);
+    return searchResults;
 };
 
 export const analyzeSingleResult = async (
@@ -59,9 +59,11 @@ export const analyzeResults = async (
     query: string,
     key: string
 ) => {
-    const analyzedResultsPromises = searchResults.map((result) =>
-        //timeout(analyzeSingleResult(result, query, key), 60000)
-        analyzeSingleResult(result, query, key)
+    const analyzedResultsPromises: Promise<SearchResult>[] = searchResults.map(
+        (result) => {
+            // return timeout(analyzeSingleResult(result, query, key), 10000)
+            return analyzeSingleResult(result, query, key);
+        }
     );
 
     try {

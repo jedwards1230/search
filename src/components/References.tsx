@@ -53,7 +53,7 @@ export default function References({
                             >
                                 <div
                                     className={clsx(
-                                        'rounded p-2 transition-colors hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
+                                        'rounded p-2 transition-colors duration-300 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
                                         !reference.content
                                             ? 'text-neutral-400 dark:text-neutral-500'
                                             : ''
