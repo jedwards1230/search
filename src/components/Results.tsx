@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 
 import LoadIcon from './LoadIcon';
-import References from './ReferenceList';
+import ReferenceList from './ReferenceList';
 import Result from './Result';
 import Input from './Input';
 import { useEffect, useRef, useState } from 'react';
@@ -28,8 +28,8 @@ export default function Results({ result }: { result: Result }) {
             ref={scrollRef}
             className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row"
         >
-            <div className="relative flex h-full w-full flex-col items-center justify-between gap-8 pb-6">
-                <div className="sticky top-4 flex w-full flex-col gap-4">
+            <div className="relative flex h-full flex-1 flex-col items-center justify-between gap-8 pb-6">
+                <div className="sticky bottom-4 top-4 flex w-full flex-col gap-4">
                     <div className="flex w-full flex-col justify-start gap-2 lg:gap-4">
                         <div>
                             {edit ? (
@@ -77,16 +77,14 @@ export default function Results({ result }: { result: Result }) {
                         )}
                     </div>
                     {result.finished && (
-                        <div className="sticky bottom-4 w-full">
+                        <div className=" w-full">
                             <Input />
                         </div>
                     )}
                 </div>
             </div>
             {result.references.length > 0 && (
-                <motion.div layout className="w-full lg:w-auto lg:max-w-[40%]">
-                    <References references={result.references} />
-                </motion.div>
+                <ReferenceList references={result.references} />
             )}
         </div>
     );

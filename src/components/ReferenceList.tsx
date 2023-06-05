@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { useConfig } from '@/app/config';
 import Reference from './Reference';
 
-export default function References({
+export default function ReferenceList({
     references,
 }: {
     references: SearchResult[];
@@ -26,7 +26,10 @@ export default function References({
     }, [references]);
 
     return (
-        <div className="flex w-full flex-col justify-start gap-2">
+        <motion.div
+            layout
+            className="flex w-full flex-col justify-start gap-2 lg:w-auto lg:min-w-[40%] lg:max-w-[40%]"
+        >
             <div
                 className={clsx(
                     'flex items-center',
@@ -58,6 +61,6 @@ export default function References({
                     ))}
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 }

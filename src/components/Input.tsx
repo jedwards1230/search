@@ -54,6 +54,7 @@ export default function Input({
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={onKeyDownHandler}
                             rows={1}
+                            maxRows={25}
                             className="h-full w-full rounded-r-none border border-neutral-500 p-4 shadow transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:disabled:bg-neutral-700/50"
                             placeholder="Ask anything..."
                         />
