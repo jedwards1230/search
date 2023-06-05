@@ -13,6 +13,7 @@ interface SearchResult {
     title: string;
     content?: string;
     error?: string;
+    reviewed?: boolean;
 }
 
 type Model = 'gpt-3.5-turbo' | 'gpt-4';

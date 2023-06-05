@@ -35,7 +35,8 @@ export const analyzeSingleResult = async (
     searchResult: SearchResult,
     query: string,
     key: string,
-    updateReference: (reference: string) => void
+    updateReference: (reference: string) => void,
+    onFinish: (content: string) => void
 ) => {
     const res = await fetch('/api/analyze_results', {
         method: 'POST',
@@ -49,7 +50,11 @@ export const analyzeSingleResult = async (
         throw new Error('No response body');
     }
 
-    readStream(res.body, (chunk: string) => updateReference(chunk));
+    await readStream(
+        res.body,
+        (token: string) => updateReference(token),
+        (content: string) => onFinish(content)
+    );
 };
 
 export const analyzeResults = async (
@@ -66,7 +71,21 @@ export const analyzeResults = async (
                 content,
             });
         };
-        await analyzeSingleResult(result, query, key, updateResult);
+        const finishResult = (content: string) => {
+            console.log(`finished llm stream for ${result.title}`);
+            callback(id, {
+                ...result,
+                content,
+                reviewed: true,
+            });
+        };
+        await analyzeSingleResult(
+            result,
+            query,
+            key,
+            updateResult,
+            finishResult
+        );
         return result;
     });
 

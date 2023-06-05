@@ -14,14 +14,14 @@ export default function Results({ result }: { result: Result }) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (scrollRef.current && !started) {
+        if (scrollRef.current && result.references.length > 0 && !started) {
             scrollRef.current.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start',
             });
             setStarted(true);
         }
-    }, [result.summary, started]);
+    }, [result.references, started]);
 
     return (
         <div
@@ -54,7 +54,7 @@ export default function Results({ result }: { result: Result }) {
                                 </span>
                             </h2>
                             {result.status !== 'Done' && (
-                                <div className="rounded-lg bg-neutral-300 p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900 dark:selection:bg-neutral-200">
+                                <div className="rounded-lg bg-neutral-200 p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900 dark:selection:bg-neutral-200">
                                     {result.status}
                                 </div>
                             )}
@@ -77,7 +77,7 @@ export default function Results({ result }: { result: Result }) {
                         )}
                     </div>
                     {result.finished && (
-                        <div className=" w-full">
+                        <div className="w-full">
                             <Input />
                         </div>
                     )}

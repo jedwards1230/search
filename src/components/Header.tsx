@@ -1,12 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import clsx from 'clsx';
 
-import { Input, SettingsIcon, Title } from '@/components';
+import { Input, Title } from '@/components';
 import { useSearch } from '../app/searchContext';
-import { AnimatePresence } from 'framer-motion';
-import SettingsDialog from './SettingsDialog';
-import { useState } from 'react';
+import SettingsButton from './SettingsButton';
 
 export default function Header({ search }: { search: string }) {
     const [settingsOpen, setSettingsOpen] = useState(false);
@@ -16,32 +15,46 @@ export default function Header({ search }: { search: string }) {
         <>
             <div
                 className={clsx(
-                    'flex w-full flex-col items-center gap-12 md:gap-8',
+                    'flex w-full flex-col items-center ',
                     results.length > 0
-                        ? 'justify-between md:flex-row'
-                        : 'flex-1 justify-center'
+                        ? 'justify-between gap-4 md:flex-row'
+                        : 'flex-1 justify-center gap-12 md:gap-8'
                 )}
             >
-                <Title />
-
-                <div className="flex w-full items-center gap-4">
-                    <Input
-                        topLevel={true}
-                        search={search}
-                        close={() => setSettingsOpen(true)}
-                    />
+                <div className="relative flex w-full items-center justify-center">
+                    <Title />
                     <div
-                        onClick={() => setSettingsOpen(true)}
-                        className="cursor-pointer"
+                        className={clsx([
+                            results.length > 0
+                                ? 'absolute right-0 order-2 md:hidden'
+                                : 'fixed right-4 top-4',
+                        ])}
                     >
-                        <SettingsIcon />
+                        <SettingsButton
+                            open={settingsOpen}
+                            openDialog={() => setSettingsOpen(true)}
+                            closeDialog={() => setSettingsOpen(false)}
+                        />
                     </div>
                 </div>
-                <AnimatePresence>
-                    {settingsOpen && (
-                        <SettingsDialog close={() => setSettingsOpen(false)} />
-                    )}
-                </AnimatePresence>
+                <Input
+                    topLevel={true}
+                    search={search}
+                    close={() => setSettingsOpen(true)}
+                />
+                <div
+                    className={clsx([
+                        results.length > 0
+                            ? 'static order-2 hidden md:flex'
+                            : 'fixed right-4 top-4',
+                    ])}
+                >
+                    <SettingsButton
+                        open={settingsOpen}
+                        openDialog={() => setSettingsOpen(true)}
+                        closeDialog={() => setSettingsOpen(false)}
+                    />
+                </div>
             </div>
         </>
     );

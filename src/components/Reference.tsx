@@ -20,10 +20,11 @@ export default function Reference({
         >
             <div
                 className={clsx(
-                    'rounded p-2 transition-colors duration-300 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
+                    'rounded-xl p-2 transition-colors duration-300 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
                     !reference.content
                         ? 'text-neutral-500/80 hover:text-neutral-500 dark:text-neutral-500'
                         : ''
+                    // reference.reviewed ? 'bg-green-200 dark:bg-green-700' : ''
                 )}
             >
                 <a href={reference.url} target="_blank">
@@ -31,15 +32,17 @@ export default function Reference({
                     <div className="truncate pb-1 text-sm text-neutral-500">
                         {reference.url}
                     </div>
-                    {reference.content ? (
-                        <div className="text-sm text-neutral-700 dark:text-neutral-300">
-                            {reference.content}
-                        </div>
-                    ) : (
-                        <div className="text-sm text-neutral-400 dark:text-neutral-500">
-                            {reference.snippet}
-                        </div>
-                    )}
+                    <div className="transition-all">
+                        {reference.content ? (
+                            <div className="text-sm text-neutral-700 dark:text-neutral-300">
+                                {reference.content}
+                            </div>
+                        ) : (
+                            <div className="text-sm text-neutral-400 dark:text-neutral-500">
+                                {reference.snippet}
+                            </div>
+                        )}
+                    </div>
                 </a>
             </div>
         </motion.div>

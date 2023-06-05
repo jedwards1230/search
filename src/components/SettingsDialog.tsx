@@ -34,7 +34,7 @@ export default function SettingsDialog({ close }: { close: () => void }) {
         >
             <div className="relative flex w-full flex-col rounded-md border border-neutral-100 bg-neutral-50 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100 md:w-auto">
                 <div className="flex justify-center pb-2 text-lg">Config</div>
-                <div className="flex flex-col gap-4 rounded p-4 dark:bg-neutral-800">
+                <div className="flex flex-col gap-4 rounded p-2 dark:bg-neutral-800">
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>Model:</div>
                         <select
@@ -112,11 +112,9 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     </div>
                 </div>
                 <div
-                    className="absolute right-4 top-4 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-neutral-300 text-center hover:bg-neutral-400 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                    className="absolute right-5 top-5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-red-600 bg-red-500 text-center hover:border-red-400/75 hover:bg-red-300 dark:bg-neutral-600 dark:hover:bg-neutral-500 md:h-5 md:w-5"
                     onClick={close}
-                >
-                    x
-                </div>
+                />
             </div>
         </motion.dialog>
     );

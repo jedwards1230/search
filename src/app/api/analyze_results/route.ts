@@ -84,18 +84,18 @@ export async function POST(request: Request) {
                                 handleLLMNewToken(token: string) {
                                     callback(token);
                                 },
+                                handleLLMEnd() {
+                                    const endEvent = encoder.encode('LLM_END');
+                                    controller.enqueue(endEvent);
+                                },
                             },
                         ],
                     }),
                 });
-                const content = await summaryChain.call({
+
+                await summaryChain.call({
                     input: `data: ${context}\n\nquery: ${query}`,
                 });
-
-                /* const searchResultWithContent: SearchResult = {
-                    ...searchResult,
-                    content: content.response,
-                }; */
 
                 controller.close();
             },
