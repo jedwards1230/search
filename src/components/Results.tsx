@@ -53,9 +53,11 @@ export default function Results({ result }: { result: Result }) {
                                     {result.model}
                                 </span>
                             </h2>
-                            <div className="rounded-lg p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900">
-                                {result.status}
-                            </div>
+                            {result.status !== 'Done' && (
+                                <div className="rounded-lg p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900">
+                                    {result.status}
+                                </div>
+                            )}
                         </div>
                         {result.summary ? (
                             <Result result={result.summary} />

@@ -44,6 +44,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
             try {
                 const searchResults = await getResults(newQuery, state.results);
+
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
                     payload: { id, searchResults, status: 'Scraping links' },
@@ -53,6 +54,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     searchResults,
                     newQuery
                 );
+
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
                     payload: {
@@ -68,6 +70,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                         payload: { id, summary },
                     });
                 };
+
                 await summarizeResults(
                     newQuery,
                     searchResultsWithContent,
@@ -76,6 +79,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     state.model,
                     updateSummary
                 );
+
                 dispatch({ type: 'FINISH', payload: id });
             } catch (error) {
                 console.error(error);
