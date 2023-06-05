@@ -1,14 +1,30 @@
-type Config = {
-    model: Model;
-    hideReferences: boolean;
-    openaiApiKey: string | null;
-    googleApiKey: string | null;
-    googleCseApiKey: string | null;
-};
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export function useConfig() {
+    const [config, setConfigState] = useState(getConfig());
+
+    useEffect(() => {
+        setConfig(config);
+    }, [config]);
+
+    return { config, setConfigState };
+}
 
 export function getConfig(): Config {
+    if (typeof window === 'undefined')
+        return {
+            model: 'gpt-3.5-turbo',
+            hideReferences: false,
+            openaiApiKey: null,
+            googleApiKey: null,
+            googleCseApiKey: null,
+        };
     return {
-        model: window.localStorage.getItem('model') as Model,
+        model: window.localStorage.getItem('model')
+            ? (window.localStorage.getItem('model') as Model)
+            : 'gpt-3.5-turbo',
         hideReferences:
             window.localStorage.getItem('hideReferences') === 'true',
         openaiApiKey: window.localStorage.getItem('openaiApiKey'),
@@ -34,18 +50,10 @@ export function setConfig(config: Config) {
 export const initialState: State = {
     loading: false,
     results: [],
-    model: 'gpt-3.5-turbo',
-    hideReferences: false,
-    toggleReferences: () => {
-        console.log('toggleReferences not implemented');
-    },
     processQuery: () => {
         console.log('processQuery not implemented');
     },
     reset: () => {
         console.log('reset not implemented');
-    },
-    setModel: () => {
-        console.log('setModel not implemented');
     },
 };

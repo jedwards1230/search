@@ -34,8 +34,6 @@ type Action =
     | { type: 'FINISH'; payload: number }
     | { type: 'RESET' }
     | { type: 'SET_LOADING'; payload: boolean }
-    | { type: 'TOGGLE_HIDE_REFERENCES' }
-    | { type: 'UPDATE_MODEL'; payload: Model }
     | {
           type: 'UPDATE_SEARCH_RESULTS';
           payload: {
@@ -49,13 +47,17 @@ type Action =
           payload: { id: number; summary: string };
       };
 
+type Config = {
+    model: Model;
+    hideReferences: boolean;
+    openaiApiKey: string | null;
+    googleApiKey: string | null;
+    googleCseApiKey: string | null;
+};
+
 type State = {
     loading: boolean;
     results: Result[];
-    model: Model;
-    hideReferences: boolean;
-    toggleReferences: () => void;
     processQuery: (newInput: string, updateUrl?: boolean) => void;
     reset: () => void;
-    setModel: (model: Model) => void;
 };

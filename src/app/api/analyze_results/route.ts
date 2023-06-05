@@ -76,7 +76,6 @@ export async function POST(request: Request) {
             searchResult: searchResultWithContent,
         });
     } catch (e) {
-        console.log('error: ', e);
         return NextResponse.json({
             error: e,
         });

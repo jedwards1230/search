@@ -4,14 +4,16 @@ import { useState } from 'react';
 import LinkIcon from './LinkIcon';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { useSearch } from '@/app/searchContext';
+import { useConfig } from '@/app/config';
 
 export default function References({
     references,
 }: {
     references: SearchResult[];
 }) {
-    const { hideReferences } = useSearch();
+    const {
+        config: { hideReferences },
+    } = useConfig();
     const [open, setOpen] = useState(!hideReferences);
 
     return (

@@ -1,10 +1,20 @@
 'use client';
 
 import { useSearch } from '@/app/searchContext';
+import { useConfig } from '@/app/config';
 import { motion } from 'framer-motion';
 
 export default function SettingsDialog({ close }: { close: () => void }) {
-    const { hideReferences, model, toggleReferences, setModel } = useSearch();
+    const {
+        config: {
+            hideReferences,
+            model,
+            openaiApiKey,
+            googleApiKey,
+            googleCseApiKey,
+        },
+        setConfigState,
+    } = useConfig();
     return (
         <motion.dialog
             key="settings-dialog"
@@ -30,7 +40,12 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         <div>Model:</div>
                         <select
                             value={model}
-                            onChange={(e) => setModel(e.target.value as Model)}
+                            onChange={(e) =>
+                                setConfigState((s) => ({
+                                    ...s,
+                                    model: e.target.value as Model,
+                                }))
+                            }
                             className="rounded border border-neutral-500 bg-inherit p-2"
                         >
                             <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
@@ -41,15 +56,27 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         <div>Hide References:</div>
                         <input
                             type="checkbox"
-                            className="bg-inherit"
+                            className="cursor-pointer bg-inherit"
                             checked={hideReferences}
-                            onChange={toggleReferences}
+                            onChange={(e) =>
+                                setConfigState((s) => ({
+                                    ...s,
+                                    hideReferences: e.target.checked,
+                                }))
+                            }
                         />
                     </div>
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>OpenAI API Key:</div>
                         <input
                             type="text"
+                            value={openaiApiKey || ''}
+                            onChange={(e) =>
+                                setConfigState((s) => ({
+                                    ...s,
+                                    openaiApiKey: e.target.value,
+                                }))
+                            }
                             className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
                             placeholder="************"
                         />
@@ -58,6 +85,13 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         <div>Google API Key:</div>
                         <input
                             type="text"
+                            value={googleApiKey || ''}
+                            onChange={(e) =>
+                                setConfigState((s) => ({
+                                    ...s,
+                                    googleApiKey: e.target.value,
+                                }))
+                            }
                             className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
                             placeholder="************"
                         />
@@ -66,6 +100,13 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         <div>Google CSE API Key:</div>
                         <input
                             type="text"
+                            value={googleCseApiKey || ''}
+                            onChange={(e) =>
+                                setConfigState((s) => ({
+                                    ...s,
+                                    googleCseApiKey: e.target.value,
+                                }))
+                            }
                             className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
                             placeholder="************"
                         />

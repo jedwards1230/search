@@ -52,7 +52,7 @@ export const analyzeResults = async (
         analyzedResultsPromises
     );
 
-    return analyzedResults;
+    return analyzedResults.filter((result) => !result);
 };
 
 // stream the summary of the results

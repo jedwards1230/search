@@ -22,13 +22,6 @@ export default function reducer(state: State, action: Action): State {
             return initialState;
         case 'SET_LOADING':
             return { ...state, loading: action.payload };
-        case 'TOGGLE_HIDE_REFERENCES':
-            return { ...state, hideReferences: !state.hideReferences };
-        case 'UPDATE_MODEL':
-            return {
-                ...state,
-                model: action.payload,
-            };
         case 'UPDATE_SEARCH_RESULTS':
             return {
                 ...state,

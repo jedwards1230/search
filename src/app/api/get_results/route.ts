@@ -18,36 +18,44 @@ export async function POST(request: Request) {
     const history = res.history;
 
     try {
-        const chat = new ChatOpenAI({ temperature: 0 });
-        const queryBuilderPrompt = ChatPromptTemplate.fromPromptMessages([
-            SystemMessagePromptTemplate.fromTemplate(
-                'You translate messages, issues, and questions into 1 recommended search query for a search engine like google or bing. ' +
-                    'Do not provide any information that can be used to identify the user. ' +
-                    'Do not provide any text other than the search query. ' +
-                    'Do not use any special characters unless necessary. Avoid quotes.'
-            ),
-            new MessagesPlaceholder('queryBuilderHistory'),
-            HumanMessagePromptTemplate.fromTemplate('{input}'),
-        ]);
-        const chatMemory = new BufferMemory({
-            returnMessages: true,
-            memoryKey: 'queryBuilderHistory',
-        });
-        const queryBuilderChain = new ConversationChain({
-            memory: chatMemory,
-            prompt: queryBuilderPrompt,
-            llm: chat,
-        });
+        if (query.length > 30) {
+            const chat = new ChatOpenAI({ temperature: 0 });
+            const queryBuilderPrompt = ChatPromptTemplate.fromPromptMessages([
+                SystemMessagePromptTemplate.fromTemplate(
+                    'You translate messages, issues, and questions into 1 recommended search query for a search engine like google or bing. ' +
+                        'Do not provide any information that can be used to identify the user. ' +
+                        'Do not provide any text other than the search query. ' +
+                        'Do not use any special characters unless necessary. Avoid quotes.'
+                ),
+                new MessagesPlaceholder('queryBuilderHistory'),
+                HumanMessagePromptTemplate.fromTemplate('{input}'),
+            ]);
+            const chatMemory = new BufferMemory({
+                returnMessages: true,
+                memoryKey: 'queryBuilderHistory',
+            });
+            const queryBuilderChain = new ConversationChain({
+                memory: chatMemory,
+                prompt: queryBuilderPrompt,
+                llm: chat,
+            });
 
-        const searchQuery = await queryBuilderChain.call({
-            input: `background info: ${history}\n\nUser Query: ${query}`,
-        });
+            const searchQuery = await queryBuilderChain.call({
+                input: `background info: ${history}\n\nUser Query: ${query}`,
+            });
 
-        const searchResults = await searchGoogle(searchQuery.response);
+            const searchResults = await searchGoogle(searchQuery.response);
 
-        return NextResponse.json({
-            searchResults,
-        });
+            return NextResponse.json({
+                searchResults,
+            });
+        } else {
+            const searchResults = await searchGoogle(query);
+
+            return NextResponse.json({
+                searchResults,
+            });
+        }
     } catch (e) {
         console.log('error: ', e);
         return NextResponse.json({

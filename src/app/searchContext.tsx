@@ -6,12 +6,14 @@ import { createContext, useCallback, useContext, useReducer } from 'react';
 import { analyzeResults, getResults, summarizeResults } from './searchUtils';
 import reducer from './searchReducer';
 import { initialState } from './config';
+import { useConfig } from '@/app/config';
 
 const SearchContext = createContext<State>(initialState);
 
 export const useSearch = () => useContext(SearchContext);
 
 export function SearchProvider({ children }: { children: React.ReactNode }) {
+    const { config } = useConfig();
     const [state, dispatch] = useReducer(reducer, initialState);
     const router = useRouter();
 
@@ -34,7 +36,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 payload: {
                     id,
                     query: newQuery,
-                    model: state.model,
+                    model: config.model,
                     summary: '',
                     references: [],
                     finished: false,
@@ -76,7 +78,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     searchResultsWithContent,
                     state.results,
                     id,
-                    state.model,
+                    config.model,
                     updateSummary
                 );
 
@@ -91,19 +93,11 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 dispatch({ type: 'SET_LOADING', payload: false });
             }
         },
-        [state.results, router, state.model]
+        [state.results, router, config.model]
     );
 
     const reset = () => {
         dispatch({ type: 'RESET' });
-    };
-
-    const toggleReferences = () => {
-        dispatch({ type: 'TOGGLE_HIDE_REFERENCES' });
-    };
-
-    const setModel = (model: Model) => {
-        dispatch({ type: 'UPDATE_MODEL', payload: model });
     };
 
     return (
@@ -111,12 +105,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             value={{
                 loading: state.loading,
                 results: state.results,
-                model: state.model,
-                hideReferences: state.hideReferences,
-                toggleReferences,
                 processQuery,
                 reset,
-                setModel,
             }}
         >
             {children}
