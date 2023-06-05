@@ -21,8 +21,8 @@ export class GoogleSnippets extends Tool {
 
     constructor(
         fields: GoogleCustomSearchParams = {
-            apiKey: process.env.GOOGLE_API_KEY,
-            googleCSEId: process.env.GOOGLE_CSE_ID,
+            apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+            googleCSEId: process.env.NEXT_PUBLIC_GOOGLE_CSE_ID,
         }
     ) {
         super();
@@ -41,7 +41,7 @@ export class GoogleSnippets extends Tool {
     }
 
     async _call(input: string) {
-        const res = await searchGoogle(input);
+        const res = await searchGoogle(input, this.apiKey, this.googleCSEId);
 
         return JSON.stringify(res);
     }

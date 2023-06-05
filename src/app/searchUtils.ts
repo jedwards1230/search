@@ -7,7 +7,9 @@ const timeout = (prom: Promise<any>, time: number | undefined) =>
 export const getResults = async (
     newQuery: string,
     results: Result[],
-    key: string
+    openaiKey: string,
+    googleApiKey: string,
+    googleCSEId: string
 ) => {
     const history = results.map((result) => {
         return {
@@ -20,14 +22,16 @@ export const getResults = async (
         body: JSON.stringify({
             query: newQuery,
             history: JSON.stringify(history),
-            key,
+            openaiKey,
+            googleApiKey,
+            googleCSEId,
         }),
     });
     const data = await res.json();
 
     const searchResults: SearchResult[] = data.searchResults;
 
-    return searchResults;
+    return searchResults.splice(0, 4);
 };
 
 export const analyzeSingleResult = async (
@@ -56,7 +60,8 @@ export const analyzeResults = async (
     key: string
 ) => {
     const analyzedResultsPromises = searchResults.map((result) =>
-        timeout(analyzeSingleResult(result, query, key), 10000)
+        //timeout(analyzeSingleResult(result, query, key), 60000)
+        analyzeSingleResult(result, query, key)
     );
 
     try {
@@ -64,7 +69,7 @@ export const analyzeResults = async (
             analyzedResultsPromises
         );
 
-        return analyzedResults.filter((result) => !result);
+        return analyzedResults.filter((result) => result !== undefined);
     } catch (err) {
         return [];
     }

@@ -12,14 +12,18 @@ export function useConfig() {
     return { config, setConfigState };
 }
 
+const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+const GOOGLE_CSE_ID = process.env.NEXT_PUBLIC_GOOGLE_CSE_ID;
+
 export function getConfig(): Config {
     if (typeof window === 'undefined')
         return {
             model: 'gpt-3.5-turbo',
             hideReferences: false,
-            openaiApiKey: process.env.OPENAI_API_KEY || null,
-            googleApiKey: process.env.GOOGLE_API_KEY || null,
-            googleCseApiKey: process.env.GOOGLE_CSE_ID || null,
+            openaiApiKey: OPENAI_API_KEY ? OPENAI_API_KEY : null,
+            googleApiKey: GOOGLE_API_KEY ? GOOGLE_API_KEY : null,
+            googleCseApiKey: GOOGLE_CSE_ID ? GOOGLE_CSE_ID : null,
         };
     return {
         model: window.localStorage.getItem('model')
@@ -27,15 +31,15 @@ export function getConfig(): Config {
             : 'gpt-3.5-turbo',
         hideReferences:
             window.localStorage.getItem('hideReferences') === 'true',
-        openaiApiKey:
-            process.env.OPENAI_API_KEY ||
-            window.localStorage.getItem('openaiApiKey'),
-        googleApiKey:
-            process.env.GOOGLE_API_KEY ||
-            window.localStorage.getItem('googleApiKey'),
-        googleCseApiKey:
-            process.env.GOOGLE_CSE_ID ||
-            window.localStorage.getItem('googleCseApiKey'),
+        openaiApiKey: OPENAI_API_KEY
+            ? OPENAI_API_KEY
+            : window.localStorage.getItem('openaiApiKey'),
+        googleApiKey: GOOGLE_API_KEY
+            ? GOOGLE_API_KEY
+            : window.localStorage.getItem('googleApiKey'),
+        googleCseApiKey: GOOGLE_CSE_ID
+            ? GOOGLE_CSE_ID
+            : window.localStorage.getItem('googleCseApiKey'),
     };
 }
 

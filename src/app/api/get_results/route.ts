@@ -17,16 +17,41 @@ export async function POST(request: Request) {
     const {
         query,
         history,
-        key,
+        openaiKey,
+        googleApiKey,
+        googleCSEId,
     }: {
         query: string;
         history: string;
-        key: string;
+        openaiKey: string;
+        googleApiKey: string;
+        googleCSEId: string;
     } = res;
+
+    if (!query) {
+        return NextResponse.json({
+            error: 'No query provided',
+        });
+    }
+
+    if (!openaiKey) {
+        return NextResponse.json({
+            error: 'No OpenAI key provided',
+        });
+    }
+
+    if (!googleApiKey || !googleCSEId) {
+        return NextResponse.json({
+            error: 'No Google API key or CSE ID provided',
+        });
+    }
 
     try {
         if (query.length > 30) {
-            const chat = new ChatOpenAI({ temperature: 0, openAIApiKey: key });
+            const chat = new ChatOpenAI({
+                temperature: 0,
+                openAIApiKey: openaiKey,
+            });
             const queryBuilderPrompt = ChatPromptTemplate.fromPromptMessages([
                 SystemMessagePromptTemplate.fromTemplate(
                     'You translate messages, issues, and questions into 1 recommended search query for a search engine like google or bing. ' +
@@ -51,13 +76,21 @@ export async function POST(request: Request) {
                 input: `background info: ${history}\n\nUser Query: ${query}`,
             });
 
-            const searchResults = await searchGoogle(searchQuery.response);
+            const searchResults = await searchGoogle(
+                searchQuery.response,
+                googleApiKey,
+                googleCSEId
+            );
 
             return NextResponse.json({
                 searchResults,
             });
         } else {
-            const searchResults = await searchGoogle(query);
+            const searchResults = await searchGoogle(
+                query,
+                googleApiKey,
+                googleCSEId
+            );
 
             return NextResponse.json({
                 searchResults,

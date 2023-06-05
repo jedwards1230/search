@@ -26,6 +26,16 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 return;
             }
 
+            if (!config.googleApiKey) {
+                alert('Please add your Google API key in the config');
+                return;
+            }
+
+            if (!config.googleCseApiKey) {
+                alert('Please add your Google CSE API key in the config');
+                return;
+            }
+
             dispatch({ type: 'SET_LOADING', payload: true });
 
             if (updateUrl) {
@@ -53,7 +63,9 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 const searchResults = await getResults(
                     newQuery,
                     state.results,
-                    config.openaiApiKey
+                    config.openaiApiKey,
+                    config.googleApiKey,
+                    config.googleCseApiKey
                 );
 
                 dispatch({
@@ -67,11 +79,31 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     config.openaiApiKey
                 );
 
+                // update content from new object to searchResults. match results by url
+                const detailedSearchResults =
+                    searchResultsWithContent.length > 0
+                        ? searchResults.map((result) => {
+                              const detailedResult =
+                                  searchResultsWithContent.find(
+                                      (detailedResult) =>
+                                          detailedResult.url === result.url
+                                  );
+                              if (detailedResult) {
+                                  return {
+                                      ...result,
+                                      content: detailedResult.content,
+                                  };
+                              } else {
+                                  return result;
+                              }
+                          })
+                        : searchResultsWithContent;
+
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
                     payload: {
                         id,
-                        searchResults: searchResultsWithContent,
+                        searchResults: detailedSearchResults,
                         status: 'Summarizing',
                     },
                 });
@@ -104,7 +136,14 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 dispatch({ type: 'SET_LOADING', payload: false });
             }
         },
-        [config.openaiApiKey, config.model, state.results, router]
+        [
+            config.openaiApiKey,
+            config.googleApiKey,
+            config.googleCseApiKey,
+            config.model,
+            state.results,
+            router,
+        ]
     );
 
     const reset = () => {

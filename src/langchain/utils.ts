@@ -57,11 +57,15 @@ export class CustomHandler extends BaseCallbackHandler {
     }
 }
 
-export async function searchGoogle(input: string) {
-    const apiKey = process.env.GOOGLE_API_KEY;
-    const googleCSEId = process.env.GOOGLE_CSE_ID;
+export async function searchGoogle(
+    input: string,
+    googleApiKey: string,
+    googleCSEId: string
+) {
+    const apiKey = process.env.GOOGLE_API_KEY || googleApiKey;
+    const CSEId = process.env.GOOGLE_CSE_ID || googleCSEId;
 
-    if (!apiKey || !googleCSEId) {
+    if (!apiKey || !CSEId) {
         throw new Error(
             'Missing GOOGLE_API_KEY or GOOGLE_CSE_ID environment variables'
         );
@@ -69,7 +73,7 @@ export async function searchGoogle(input: string) {
 
     const url = new URL('https://www.googleapis.com/customsearch/v1');
     url.searchParams.set('key', apiKey);
-    url.searchParams.set('cx', googleCSEId);
+    url.searchParams.set('cx', CSEId);
     url.searchParams.set('q', input);
     url.searchParams.set('start', '1');
 
@@ -103,8 +107,8 @@ export function resultsToChatMessages(results: Result[]) {
     return messages;
 }
 
-export async function getDocs(docs: Document[], query: string) {
-    const embeddings = new OpenAIEmbeddings();
+export async function getDocs(docs: Document[], query: string, key: string) {
+    const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
     const vectorStore = new SupabaseVectorStore(embeddings, {
         client: supabase,
         tableName: 'documents',
