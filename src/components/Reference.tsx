@@ -28,6 +28,9 @@ export default function Reference({
             >
                 <a href={reference.url} target="_blank">
                     <div>{reference.title}</div>
+                    <div className="truncate pb-1 text-sm text-neutral-500">
+                        {reference.url}
+                    </div>
                     {reference.content ? (
                         <div className="text-sm text-neutral-700 dark:text-neutral-300">
                             {reference.content}

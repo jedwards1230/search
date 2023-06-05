@@ -83,7 +83,7 @@ export async function POST(request: Request) {
         );
 
         return NextResponse.json({
-            searchResults,
+            searchResults: searchResults.splice(0, 5),
         });
     } catch (e) {
         console.log('error: ', e);

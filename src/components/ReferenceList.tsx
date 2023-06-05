@@ -26,10 +26,7 @@ export default function ReferenceList({
     }, [references]);
 
     return (
-        <motion.div
-            layout
-            className="flex w-full flex-col justify-start gap-2 lg:w-auto lg:min-w-[40%] lg:max-w-[40%]"
-        >
+        <div className="flex w-full flex-col justify-start gap-2 lg:w-auto lg:min-w-[40%] lg:max-w-[40%]">
             <div
                 className={clsx(
                     'flex items-center',
@@ -61,6 +58,6 @@ export default function ReferenceList({
                     ))}
                 </div>
             )}
-        </motion.div>
+        </div>
     );
 }

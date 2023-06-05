@@ -10,7 +10,7 @@ export default function ResultsList() {
         return null;
     }
     return (
-        <div className="flex w-full flex-col gap-8 pb-16">
+        <div className="flex max-h-[90vh] w-full flex-col gap-8 overflow-y-scroll">
             {results.map((result, i) => {
                 if (!result) return null;
                 return <Results result={result} key={`result-${i}`} />;
