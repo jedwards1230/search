@@ -14,12 +14,19 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
     const res = await request.json();
-    const query = res.query;
-    const history = res.history;
+    const {
+        query,
+        history,
+        key,
+    }: {
+        query: string;
+        history: string;
+        key: string;
+    } = res;
 
     try {
         if (query.length > 30) {
-            const chat = new ChatOpenAI({ temperature: 0 });
+            const chat = new ChatOpenAI({ temperature: 0, openAIApiKey: key });
             const queryBuilderPrompt = ChatPromptTemplate.fromPromptMessages([
                 SystemMessagePromptTemplate.fromTemplate(
                     'You translate messages, issues, and questions into 1 recommended search query for a search engine like google or bing. ' +

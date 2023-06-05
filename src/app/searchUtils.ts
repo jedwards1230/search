@@ -1,7 +1,14 @@
 import { readStream } from '@/lib/stream';
 
+const timeout = (prom: Promise<any>, time: number | undefined) =>
+    Promise.race([prom, new Promise((_r, rej) => setTimeout(rej, time))]);
+
 // get search results based on query
-export const getResults = async (newQuery: string, results: Result[]) => {
+export const getResults = async (
+    newQuery: string,
+    results: Result[],
+    key: string
+) => {
     const history = results.map((result) => {
         return {
             query: result.query,
@@ -13,6 +20,7 @@ export const getResults = async (newQuery: string, results: Result[]) => {
         body: JSON.stringify({
             query: newQuery,
             history: JSON.stringify(history),
+            key,
         }),
     });
     const data = await res.json();
@@ -24,13 +32,15 @@ export const getResults = async (newQuery: string, results: Result[]) => {
 
 export const analyzeSingleResult = async (
     searchResult: SearchResult,
-    query: string
+    query: string,
+    key: string
 ) => {
     const res = await fetch('/api/analyze_results', {
         method: 'POST',
         body: JSON.stringify({
             searchResult,
             query,
+            key,
         }),
     });
     const data = await res.json();
@@ -42,17 +52,22 @@ export const analyzeSingleResult = async (
 
 export const analyzeResults = async (
     searchResults: SearchResult[],
-    query: string
+    query: string,
+    key: string
 ) => {
     const analyzedResultsPromises = searchResults.map((result) =>
-        analyzeSingleResult(result, query)
+        timeout(analyzeSingleResult(result, query, key), 10000)
     );
 
-    const analyzedResults: SearchResult[] = await Promise.all(
-        analyzedResultsPromises
-    );
+    try {
+        const analyzedResults: SearchResult[] = await Promise.all(
+            analyzedResultsPromises
+        );
 
-    return analyzedResults.filter((result) => !result);
+        return analyzedResults.filter((result) => !result);
+    } catch (err) {
+        return [];
+    }
 };
 
 // stream the summary of the results
@@ -62,18 +77,17 @@ export const summarizeResults = async (
     results: Result[],
     id: number,
     model: Model,
+    key: string,
     updateSummary: (id: number, summary: string) => void
 ) => {
     try {
-        const key = 'sk-1234******';
-        const encryptedKey = key; // encrypt this
         const response = await fetch('/api/summarize_results', {
             method: 'POST',
             body: JSON.stringify({
                 query: newQuery,
                 results,
                 searchResults,
-                encryptedKey,
+                key,
                 model,
             }),
         });

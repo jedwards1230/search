@@ -27,7 +27,10 @@ Built using:
 - Progressive web app (PWA)
 
 ### Planned Improvements
-- Save config to local storage
+- Improve time to first token
+  - Using the web scraper takes forever. Sometimes a minute or more
+  - Could use a timeout on the web scraper and return the results that are available, falling back to snippets
+  - Could add a langchain layer before the scraper to determine if more information is necessary
 - Integration with alternative search engines
 - Enhanced agent tools (web browser, calculator, code sandbox)
 - Improved chat history management

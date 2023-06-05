@@ -16,8 +16,15 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
     const res = await request.json();
-    const query = res.query;
-    const searchResult: SearchResult = res.searchResult;
+    const {
+        query,
+        searchResult,
+        key,
+    }: {
+        query: string;
+        searchResult: SearchResult;
+        key: string;
+    } = res;
 
     try {
         const loader = new CheerioWebBaseLoader(searchResult.url);
@@ -43,8 +50,8 @@ export async function POST(request: Request) {
                 })
         );
 
-        const chat = new OpenAIChat({ temperature: 0 });
-        const embeddings = new OpenAIEmbeddings();
+        const chat = new OpenAIChat({ temperature: 0, openAIApiKey: key });
+        const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
         const vectorStore = await MemoryVectorStore.fromDocuments(
             docs,
             embeddings

@@ -21,6 +21,11 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         async (newInput: string, updateUrl?: boolean) => {
             const newQuery = newInput.trim();
             if (newQuery === '') return;
+            if (!config.openaiApiKey) {
+                alert('Please add your OpenAI API key in the config');
+                return;
+            }
+
             dispatch({ type: 'SET_LOADING', payload: true });
 
             if (updateUrl) {
@@ -45,7 +50,11 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             });
 
             try {
-                const searchResults = await getResults(newQuery, state.results);
+                const searchResults = await getResults(
+                    newQuery,
+                    state.results,
+                    config.openaiApiKey
+                );
 
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
@@ -54,7 +63,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
                 const searchResultsWithContent = await analyzeResults(
                     searchResults,
-                    newQuery
+                    newQuery,
+                    config.openaiApiKey
                 );
 
                 dispatch({
@@ -79,6 +89,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     state.results,
                     id,
                     config.model,
+                    config.openaiApiKey,
                     updateSummary
                 );
 
@@ -93,7 +104,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 dispatch({ type: 'SET_LOADING', payload: false });
             }
         },
-        [state.results, router, config.model]
+        [config.openaiApiKey, config.model, state.results, router]
     );
 
     const reset = () => {

@@ -31,11 +31,13 @@ export async function POST(request: Request) {
         results,
         searchResults,
         model,
+        key,
     }: {
         query: string;
         results: Result[];
         searchResults: SearchResult[];
         model: Model;
+        key: string;
     } = res;
 
     if (!query) {
@@ -73,9 +75,10 @@ export async function POST(request: Request) {
             const pastMessages = resultsToChatMessages(results);
 
             const chat = new ChatOpenAI({
-                temperature: 0.1,
+                temperature: 0.2,
                 streaming: true,
                 modelName: model,
+                openAIApiKey: key,
                 callbacks: [
                     {
                         handleLLMNewToken(token: string) {

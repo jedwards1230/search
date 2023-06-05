@@ -17,9 +17,9 @@ export function getConfig(): Config {
         return {
             model: 'gpt-3.5-turbo',
             hideReferences: false,
-            openaiApiKey: null,
-            googleApiKey: null,
-            googleCseApiKey: null,
+            openaiApiKey: process.env.OPENAI_API_KEY || null,
+            googleApiKey: process.env.GOOGLE_API_KEY || null,
+            googleCseApiKey: process.env.GOOGLE_CSE_ID || null,
         };
     return {
         model: window.localStorage.getItem('model')
@@ -27,9 +27,15 @@ export function getConfig(): Config {
             : 'gpt-3.5-turbo',
         hideReferences:
             window.localStorage.getItem('hideReferences') === 'true',
-        openaiApiKey: window.localStorage.getItem('openaiApiKey'),
-        googleApiKey: window.localStorage.getItem('googleApiKey'),
-        googleCseApiKey: window.localStorage.getItem('googleCseApiKey'),
+        openaiApiKey:
+            process.env.OPENAI_API_KEY ||
+            window.localStorage.getItem('openaiApiKey'),
+        googleApiKey:
+            process.env.GOOGLE_API_KEY ||
+            window.localStorage.getItem('googleApiKey'),
+        googleCseApiKey:
+            process.env.GOOGLE_CSE_ID ||
+            window.localStorage.getItem('googleCseApiKey'),
     };
 }
 
