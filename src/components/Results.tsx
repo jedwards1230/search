@@ -46,10 +46,17 @@ export default function Results({ result }: { result: Result }) {
                                 </h2>
                             )}
                         </div>
-                        <h2 className="pl-2 font-medium">
-                            Result |{' '}
-                            <span className="font-light">{result.model}</span>
-                        </h2>
+                        <div className="flex w-full justify-between">
+                            <h2 className="pl-2 font-medium">
+                                Result |{' '}
+                                <span className="font-light">
+                                    {result.model}
+                                </span>
+                            </h2>
+                            <div className="rounded-lg p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900">
+                                {result.status}
+                            </div>
+                        </div>
                         {result.summary ? (
                             <Result result={result.summary} />
                         ) : (

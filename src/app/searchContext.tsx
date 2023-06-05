@@ -1,20 +1,19 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { createContext, useCallback, useReducer } from 'react';
+import { createContext, useCallback, useContext, useReducer } from 'react';
 
 import { analyzeResults, getResults, summarizeResults } from './searchUtils';
 import reducer from './searchReducer';
-import initialState from './initialState';
+import { initialState } from './config';
 
 const SearchContext = createContext<State>(initialState);
 
-export const useSearch = () => React.useContext(SearchContext);
+export const useSearch = () => useContext(SearchContext);
 
 export function SearchProvider({ children }: { children: React.ReactNode }) {
-    const router = useRouter();
-
     const [state, dispatch] = useReducer(reducer, initialState);
+    const router = useRouter();
 
     const processQuery = useCallback(
         async (newInput: string, updateUrl?: boolean) => {
@@ -39,6 +38,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     summary: '',
                     references: [],
                     finished: false,
+                    status: 'Getting links',
                 },
             });
 
@@ -46,7 +46,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 const searchResults = await getResults(newQuery, state.results);
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
-                    payload: { id: id, searchResults },
+                    payload: { id, searchResults, status: 'Scraping links' },
                 });
 
                 const searchResultsWithContent = await analyzeResults(
@@ -56,8 +56,9 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
                     payload: {
-                        id: id,
+                        id,
                         searchResults: searchResultsWithContent,
+                        status: 'Summarizing',
                     },
                 });
 

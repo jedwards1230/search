@@ -1,4 +1,4 @@
-import initialState from './initialState';
+import { initialState } from './config';
 
 export default function reducer(state: State, action: Action): State {
     switch (action.type) {
@@ -13,6 +13,7 @@ export default function reducer(state: State, action: Action): State {
                               ...result,
                               loading: false,
                               finished: true,
+                              status: 'Done',
                           }
                         : result
                 ),
@@ -36,6 +37,7 @@ export default function reducer(state: State, action: Action): State {
                         ? {
                               ...result,
                               references: action.payload.searchResults,
+                              status: action.payload.status,
                           }
                         : result
                 ),

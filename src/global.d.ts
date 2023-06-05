@@ -17,6 +17,8 @@ interface SearchResult {
 
 type Model = 'gpt-3.5-turbo' | 'gpt-4';
 
+type ResultStatus = 'Getting links' | 'Scraping links' | 'Summarizing' | 'Done';
+
 type Result = {
     id: number;
     query: string;
@@ -24,6 +26,7 @@ type Result = {
     references: SearchResult[];
     model: Model;
     finished: boolean;
+    status: ResultStatus;
 };
 
 type Action =
@@ -35,9 +38,16 @@ type Action =
     | { type: 'UPDATE_MODEL'; payload: Model }
     | {
           type: 'UPDATE_SEARCH_RESULTS';
-          payload: { id: number; searchResults: SearchResult[] };
+          payload: {
+              id: number;
+              searchResults: SearchResult[];
+              status: ResultStatus;
+          };
       }
-    | { type: 'UPDATE_SUMMARY'; payload: { id: number; summary: string } };
+    | {
+          type: 'UPDATE_SUMMARY';
+          payload: { id: number; summary: string };
+      };
 
 type State = {
     loading: boolean;
