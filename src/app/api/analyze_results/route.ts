@@ -14,6 +14,13 @@ import {
 
 export const runtime = 'edge';
 
+const prompt = ChatPromptTemplate.fromPromptMessages([
+    SystemMessagePromptTemplate.fromTemplate(
+        'You generate a summary based on the provided data in order to satisfy the query.'
+    ),
+    HumanMessagePromptTemplate.fromTemplate('{input}'),
+]);
+
 export async function POST(request: Request) {
     const res = await request.json();
     const {
@@ -50,37 +57,54 @@ export async function POST(request: Request) {
                 })
         );
 
-        const chat = new OpenAIChat({ temperature: 0, openAIApiKey: key });
-        const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
         const vectorStore = await MemoryVectorStore.fromDocuments(
             docs,
-            embeddings
+            new OpenAIEmbeddings({ openAIApiKey: key })
         );
         const results = await vectorStore.similaritySearch(query, 4);
         const context = results.map((res) => res.pageContent).join('\n');
 
-        const resolvePrompt = ChatPromptTemplate.fromPromptMessages([
-            SystemMessagePromptTemplate.fromTemplate(
-                'You generate a summary based on the provided data in order to satisfy the query.'
-            ),
-            HumanMessagePromptTemplate.fromTemplate('{input}'),
-        ]);
+        const stream = new ReadableStream({
+            async start(controller) {
+                const encoder = new TextEncoder();
 
-        const summaryChain = new ConversationChain({
-            prompt: resolvePrompt,
-            llm: chat,
+                const callback = (token: string) => {
+                    const queue = encoder.encode(token);
+                    controller.enqueue(queue);
+                };
+
+                const summaryChain = new ConversationChain({
+                    prompt,
+                    llm: new OpenAIChat({
+                        temperature: 0,
+                        openAIApiKey: key,
+                        streaming: true,
+                        callbacks: [
+                            {
+                                handleLLMNewToken(token: string) {
+                                    callback(token);
+                                },
+                            },
+                        ],
+                    }),
+                });
+                const content = await summaryChain.call({
+                    input: `data: ${context}\n\nquery: ${query}`,
+                });
+
+                /* const searchResultWithContent: SearchResult = {
+                    ...searchResult,
+                    content: content.response,
+                }; */
+
+                controller.close();
+            },
         });
-        const content = await summaryChain.call({
-            input: `data: ${context}\n\nquery: ${query}`,
-        });
 
-        const searchResultWithContent: SearchResult = {
-            ...searchResult,
-            content: content.response,
-        };
-
-        return NextResponse.json({
-            searchResult: searchResultWithContent,
+        return new Response(stream, {
+            headers: {
+                'content-type': 'text/event-stream',
+            },
         });
     } catch (e) {
         return NextResponse.json({

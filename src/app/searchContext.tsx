@@ -73,40 +73,26 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     payload: { id, searchResults, status: 'Scraping links' },
                 });
 
+                const updateSearchResults = (
+                    id: number,
+                    reference: SearchResult
+                ) => {
+                    dispatch({
+                        type: 'UPDATE_SEARCH_REFERENCE',
+                        payload: {
+                            id,
+                            reference,
+                        },
+                    });
+                };
+
                 const searchResultsWithContent = await analyzeResults(
+                    id,
                     searchResults,
                     newQuery,
-                    config.openaiApiKey
+                    config.openaiApiKey,
+                    updateSearchResults
                 );
-
-                // update content from new object to searchResults. match results by url
-                const detailedSearchResults =
-                    searchResultsWithContent.length > 0
-                        ? searchResults.map((result) => {
-                              const detailedResult =
-                                  searchResultsWithContent.find(
-                                      (detailedResult) =>
-                                          detailedResult.url === result.url
-                                  );
-                              if (detailedResult) {
-                                  return {
-                                      ...result,
-                                      content: detailedResult.content,
-                                  };
-                              } else {
-                                  return result;
-                              }
-                          })
-                        : searchResultsWithContent;
-
-                dispatch({
-                    type: 'UPDATE_SEARCH_RESULTS',
-                    payload: {
-                        id,
-                        searchResults: detailedSearchResults,
-                        status: 'Summarizing',
-                    },
-                });
 
                 const updateSummary = (id: number, summary: string) => {
                     dispatch({

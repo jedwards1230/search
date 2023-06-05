@@ -11,7 +11,7 @@ import {
 
 export const runtime = 'edge';
 
-const summaryPrompt = ChatPromptTemplate.fromPromptMessages([
+const prompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are a helpful assistant.' +
             'You use internet search results to inform your conversation with the user.' +
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
 
             const resolveChain = new ConversationChain({
                 memory: chatMemory,
-                prompt: summaryPrompt,
+                prompt: prompt,
                 llm: chat,
             });
             try {

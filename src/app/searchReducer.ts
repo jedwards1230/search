@@ -35,6 +35,22 @@ export default function reducer(state: State, action: Action): State {
                         : result
                 ),
             };
+        case 'UPDATE_SEARCH_REFERENCE':
+            return {
+                ...state,
+                results: state.results.map((result) =>
+                    result.id === action.payload.id
+                        ? {
+                              ...result,
+                              references: result.references.map((reference) =>
+                                  reference.url === action.payload.reference.url
+                                      ? action.payload.reference
+                                      : reference
+                              ),
+                          }
+                        : result
+                ),
+            };
         case 'UPDATE_SUMMARY':
             return {
                 ...state,

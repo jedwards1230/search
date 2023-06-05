@@ -3,7 +3,7 @@ import LinkIcon from './LinkIcon';
 import LoadIcon from './LoadIcon';
 import Header from './Header';
 import Pagination from './Pagination';
-import References from './References';
+import References from './ReferenceList';
 import Results from './Results';
 import ResultsList from './ResultsList';
 import SearchIcon from './SearchIcon';

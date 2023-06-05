@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 
 import LoadIcon from './LoadIcon';
-import References from './References';
+import References from './ReferenceList';
 import Result from './Result';
 import Input from './Input';
 import { useEffect, useRef, useState } from 'react';

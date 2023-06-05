@@ -1,8 +1,5 @@
 import { readStream } from '@/lib/stream';
 
-const timeout = (prom: Promise<any>, time: number | undefined) =>
-    Promise.race([prom, new Promise((_r, rej) => setTimeout(rej, time))]);
-
 // get search results based on query
 export const getResults = async (
     newQuery: string,
@@ -37,7 +34,8 @@ export const getResults = async (
 export const analyzeSingleResult = async (
     searchResult: SearchResult,
     query: string,
-    key: string
+    key: string,
+    updateReference: (reference: string) => void
 ) => {
     const res = await fetch('/api/analyze_results', {
         method: 'POST',
@@ -47,24 +45,30 @@ export const analyzeSingleResult = async (
             key,
         }),
     });
-    const data = await res.json();
+    if (!res.body) {
+        throw new Error('No response body');
+    }
 
-    const analyzedResult: SearchResult = data.searchResult;
-
-    return analyzedResult;
+    readStream(res.body, (chunk: string) => updateReference(chunk));
 };
 
 export const analyzeResults = async (
+    id: number,
     searchResults: SearchResult[],
     query: string,
-    key: string
+    key: string,
+    callback: (id: number, reference: SearchResult) => void
 ) => {
-    const analyzedResultsPromises: Promise<SearchResult>[] = searchResults.map(
-        (result) => {
-            // return timeout(analyzeSingleResult(result, query, key), 10000)
-            return analyzeSingleResult(result, query, key);
-        }
-    );
+    const analyzedResultsPromises = searchResults.map(async (result) => {
+        const updateResult = (content: string) => {
+            callback(id, {
+                ...result,
+                content,
+            });
+        };
+        await analyzeSingleResult(result, query, key, updateResult);
+        return result;
+    });
 
     try {
         const analyzedResults: SearchResult[] = await Promise.all(

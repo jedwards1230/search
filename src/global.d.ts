@@ -43,6 +43,10 @@ type Action =
           };
       }
     | {
+          type: 'UPDATE_SEARCH_REFERENCE';
+          payload: { id: number; reference: SearchResult };
+      }
+    | {
           type: 'UPDATE_SUMMARY';
           payload: { id: number; summary: string };
       };
