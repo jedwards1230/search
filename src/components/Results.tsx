@@ -54,7 +54,7 @@ export default function Results({ result }: { result: Result }) {
                                 </span>
                             </h2>
                             {result.status !== 'Done' && (
-                                <div className="rounded-lg p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900">
+                                <div className="rounded-lg p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900 dark:selection:bg-neutral-200">
                                     {result.status}
                                 </div>
                             )}
