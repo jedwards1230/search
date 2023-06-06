@@ -18,23 +18,15 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
     const processQuery = useCallback(
-        async (newInput: string, updateUrl?: boolean) => {
+        async (newInput: string, context?: string, updateUrl?: boolean) => {
             const newQuery = newInput.trim();
             if (newQuery === '') return;
-            if (!config.openaiApiKey) {
-                alert('Please add your OpenAI API key in the config');
-                return;
-            }
+            const newContext = context?.trim() || undefined;
 
-            if (!config.googleApiKey) {
-                alert('Please add your Google API key in the config');
-                return;
-            }
+            console.log({ newQuery, newContext });
 
-            if (!config.googleCseApiKey) {
-                alert('Please add your Google CSE API key in the config');
-                return;
-            }
+            const { openaiApiKey, googleApiKey, googleCseApiKey } =
+                checkKeys(config);
 
             dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -51,6 +43,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 payload: {
                     id,
                     query: newQuery,
+                    context: newContext || undefined,
                     model: config.model,
                     summary: '',
                     references: [],
@@ -60,12 +53,16 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             });
 
             try {
+                const finalQuery = newContext
+                    ? `User provided context: ${newContext}\n\nUser query: ${newQuery}`
+                    : newQuery;
+
                 const searchResults = await getResults(
-                    newQuery,
+                    finalQuery,
                     state.results,
-                    config.openaiApiKey,
-                    config.googleApiKey,
-                    config.googleCseApiKey
+                    openaiApiKey,
+                    googleApiKey,
+                    googleCseApiKey
                 );
 
                 dispatch({
@@ -89,8 +86,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 const searchResultsWithContent = await analyzeResults(
                     id,
                     searchResults,
-                    newQuery,
-                    config.openaiApiKey,
+                    finalQuery,
+                    openaiApiKey,
                     updateSearchResults
                 );
 
@@ -102,12 +99,12 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 };
 
                 await summarizeResults(
-                    newQuery,
+                    finalQuery,
                     searchResultsWithContent,
                     state.results,
                     id,
                     config.model,
-                    config.openaiApiKey,
+                    openaiApiKey,
                     updateSummary
                 );
 
@@ -122,14 +119,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 dispatch({ type: 'SET_LOADING', payload: false });
             }
         },
-        [
-            config.openaiApiKey,
-            config.googleApiKey,
-            config.googleCseApiKey,
-            config.model,
-            state.results,
-            router,
-        ]
+        [config, state.results, router]
     );
 
     const reset = () => {
@@ -148,6 +138,29 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             {children}
         </SearchContext.Provider>
     );
+}
+
+function checkKeys(config: Config) {
+    if (!config.openaiApiKey) {
+        alert('Please add your OpenAI API key in the config');
+        throw new Error('OpenAI API key not found');
+    }
+
+    if (!config.googleApiKey) {
+        alert('Please add your Google API key in the config');
+        throw new Error('Google API key not found');
+    }
+
+    if (!config.googleCseApiKey) {
+        alert('Please add your Google CSE API key in the config');
+        throw new Error('Google CSE API key not found');
+    }
+
+    return {
+        openaiApiKey: config.openaiApiKey,
+        googleApiKey: config.googleApiKey,
+        googleCseApiKey: config.googleCseApiKey,
+    };
 }
 
 export default SearchContext;

@@ -23,6 +23,7 @@ type ResultStatus = 'Getting links' | 'Scraping links' | 'Summarizing' | 'Done';
 type Result = {
     id: number;
     query: string;
+    context?: string;
     summary: string;
     references: SearchResult[];
     model: Model;
@@ -63,6 +64,10 @@ type Config = {
 type State = {
     loading: boolean;
     results: Result[];
-    processQuery: (newInput: string, updateUrl?: boolean) => void;
+    processQuery: (
+        newInput: string,
+        context?: string,
+        updateUrl?: boolean
+    ) => void;
     reset: () => void;
 };
