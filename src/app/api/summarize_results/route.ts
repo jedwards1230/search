@@ -14,6 +14,7 @@ export const runtime = 'edge';
 const prompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are a helpful assistant.' +
+            `Todays date is ${new Date().toLocaleDateString()}.` +
             'You use internet search results to inform your conversation with the user.' +
             'Provide responses as an in-depth explanation' +
             'Use the basic form of 1. summarizing what the user asked for. 2. explaining/demonstrating. 3. summarizing everything briefly. ' +
