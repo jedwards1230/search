@@ -14,10 +14,17 @@ export default function SettingsButton({
 }) {
     return (
         <AnimatePresence>
-            <motion.div layout onClick={openDialog} className="cursor-pointer">
+            <motion.div
+                key="settings-icon"
+                layout
+                onClick={openDialog}
+                className="cursor-pointer"
+            >
                 <SettingsIcon />
             </motion.div>
-            {open && <SettingsDialog close={closeDialog} />}
+            {open && (
+                <SettingsDialog key="settings-dialog" close={closeDialog} />
+            )}
         </AnimatePresence>
     );
 }

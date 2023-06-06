@@ -25,7 +25,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
             console.log({ newQuery, newContext });
 
-            const { openaiApiKey, googleApiKey, googleCseApiKey } =
+            const { openAIApiKey, googleApiKey, googleCseApiKey } =
                 checkKeys(config);
 
             dispatch({ type: 'SET_LOADING', payload: true });
@@ -60,7 +60,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 const searchResults = await getResults(
                     finalQuery,
                     state.results,
-                    openaiApiKey,
+                    openAIApiKey,
                     googleApiKey,
                     googleCseApiKey
                 );
@@ -87,7 +87,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     id,
                     searchResults,
                     finalQuery,
-                    openaiApiKey,
+                    openAIApiKey,
                     updateSearchResults
                 );
 
@@ -104,7 +104,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     state.results,
                     id,
                     config.model,
-                    openaiApiKey,
+                    openAIApiKey,
                     updateSummary
                 );
 
@@ -157,7 +157,7 @@ function checkKeys(config: Config) {
     }
 
     return {
-        openaiApiKey: config.openaiApiKey,
+        openAIApiKey: config.openaiApiKey,
         googleApiKey: config.googleApiKey,
         googleCseApiKey: config.googleCseApiKey,
     };

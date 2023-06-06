@@ -4,7 +4,7 @@ import { readStream } from '@/lib/stream';
 export const getResults = async (
     newQuery: string,
     results: Result[],
-    openaiKey: string,
+    openAIApiKey: string,
     googleApiKey: string,
     googleCSEId: string
 ) => {
@@ -14,21 +14,27 @@ export const getResults = async (
             summary: result.summary,
         };
     });
-    const res = await fetch('/api/get_results', {
-        method: 'POST',
-        body: JSON.stringify({
-            query: newQuery,
-            history: JSON.stringify(history),
-            openaiKey,
-            googleApiKey,
-            googleCSEId,
-        }),
-    });
-    const data = await res.json();
+    try {
+        const res = await fetch('/api/get_results', {
+            method: 'POST',
+            body: JSON.stringify({
+                query: newQuery,
+                history: JSON.stringify(history),
+                openAIApiKey,
+                googleApiKey,
+                googleCSEId,
+            }),
+        });
+        const data = await res.json();
+        console.log({ data });
 
-    const searchResults: SearchResult[] = data.searchResults;
+        const searchResults: SearchResult[] = data.searchResults;
 
-    return searchResults;
+        return searchResults;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
 };
 
 export const analyzeSingleResult = async (
