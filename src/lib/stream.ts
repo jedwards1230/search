@@ -19,4 +19,6 @@ export async function readStream(
             }
         }
     }
+
+    return accumulatedResponse;
 }

@@ -67,7 +67,8 @@ type State = {
     processQuery: (
         newInput: string,
         context?: string,
-        updateUrl?: boolean
+        updateUrl?: boolean,
+        quickSearch?: boolean
     ) => void;
     reset: () => void;
 };

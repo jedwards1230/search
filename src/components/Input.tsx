@@ -23,6 +23,7 @@ export default function Input({
     const [query, setQuery] = useState(search || '');
     const [context, setContext] = useState('');
     const [showContext, setShowContext] = useState(false);
+    const [quickSearch, setQuickSearch] = useState(true);
 
     useEffect(() => {
         if (search) setQuery(search);
@@ -31,7 +32,7 @@ export default function Input({
     const submit = (update?: boolean) => {
         if (context === '') setShowContext(false);
         if (topLevel) reset();
-        processQuery(query, context, update);
+        processQuery(query, context, update, quickSearch);
     };
 
     const onKeyDownHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -84,7 +85,7 @@ export default function Input({
                             <div
                                 onClick={close}
                                 title="Hide Input"
-                                className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                                className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-200 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
                             >
                                 <HideIcon />
                             </div>
@@ -93,12 +94,39 @@ export default function Input({
                             disabled={loading}
                             type="submit"
                             title="Search"
-                            className="border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                            className="border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-200 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
                         >
                             <SearchIcon />
                         </button>
                     </div>
                     <RGB />
+                    <div className="flex justify-end pt-2">
+                        {/* <label className="relative inline-flex cursor-pointer items-center">
+                            <input
+                                type="checkbox"
+                                value=""
+                                className="peer sr-only"
+                            />
+                            <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
+                            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                Model
+                            </span>
+                        </label> */}
+                        <label className="relative inline-flex cursor-pointer items-center">
+                            <input
+                                type="checkbox"
+                                checked={quickSearch}
+                                onChange={(e) =>
+                                    setQuickSearch(e.target.checked)
+                                }
+                                className="peer sr-only"
+                            />
+                            <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
+                            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                Quick Search
+                            </span>
+                        </label>
+                    </div>
                 </div>
                 {showContext && (
                     <TextareaAutosize

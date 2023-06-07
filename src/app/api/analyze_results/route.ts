@@ -27,42 +27,50 @@ export async function POST(request: Request) {
         query,
         searchResult,
         key,
+        quickSearch,
     }: {
         query: string;
         searchResult: SearchResult;
         key: string;
+        quickSearch?: boolean;
     } = res;
 
     try {
-        const loader = new CheerioWebBaseLoader(searchResult.url);
-        const pages = await loader.load();
+        let context: string;
 
-        const textSplitter = new RecursiveCharacterTextSplitter({
-            chunkSize: 2000,
-            chunkOverlap: 200,
-        });
-        const texts = await textSplitter.splitText(
-            pages.map((doc) => doc.pageContent).join(' ')
-        );
+        if (quickSearch) {
+            context = searchResult.snippet;
+        } else {
+            const loader = new CheerioWebBaseLoader(searchResult.url);
+            const pages = await loader.load();
 
-        const docs: Document[] = texts.map(
-            (pageContent) =>
-                new Document({
-                    pageContent,
-                    metadata: {
-                        url: searchResult.url,
-                        title: searchResult.title,
-                        snippet: searchResult.snippet,
-                    },
-                })
-        );
+            const textSplitter = new RecursiveCharacterTextSplitter({
+                chunkSize: 2000,
+                chunkOverlap: 200,
+            });
+            const texts = await textSplitter.splitText(
+                pages.map((doc) => doc.pageContent).join(' ')
+            );
 
-        const vectorStore = await MemoryVectorStore.fromDocuments(
-            docs,
-            new OpenAIEmbeddings({ openAIApiKey: key })
-        );
-        const results = await vectorStore.similaritySearch(query, 4);
-        const context = results.map((res) => res.pageContent).join('\n');
+            const docs: Document[] = texts.map(
+                (pageContent) =>
+                    new Document({
+                        pageContent,
+                        metadata: {
+                            url: searchResult.url,
+                            title: searchResult.title,
+                            snippet: searchResult.snippet,
+                        },
+                    })
+            );
+
+            const vectorStore = await MemoryVectorStore.fromDocuments(
+                docs,
+                new OpenAIEmbeddings({ openAIApiKey: key })
+            );
+            const results = await vectorStore.similaritySearch(query, 4);
+            context = results.map((res) => res.pageContent).join('\n');
+        }
 
         const stream = new ReadableStream({
             async start(controller) {

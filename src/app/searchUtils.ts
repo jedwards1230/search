@@ -26,7 +26,6 @@ export const getResults = async (
             }),
         });
         const data = await res.json();
-        console.log({ data });
 
         const searchResults: SearchResult[] = data.searchResults;
 
@@ -42,7 +41,8 @@ export const analyzeSingleResult = async (
     query: string,
     key: string,
     updateReference: (reference: string) => void,
-    onFinish: (content: string) => void
+    onFinish: (content: string) => void,
+    quickSearch?: boolean
 ) => {
     const res = await fetch('/api/analyze_results', {
         method: 'POST',
@@ -50,17 +50,19 @@ export const analyzeSingleResult = async (
             searchResult,
             query,
             key,
+            quickSearch,
         }),
     });
     if (!res.body) {
         throw new Error('No response body');
     }
 
-    await readStream(
+    const content = await readStream(
         res.body,
         (token: string) => updateReference(token),
         (content: string) => onFinish(content)
     );
+    return content;
 };
 
 export const analyzeResults = async (
@@ -68,7 +70,8 @@ export const analyzeResults = async (
     searchResults: SearchResult[],
     query: string,
     key: string,
-    callback: (id: number, reference: SearchResult) => void
+    callback: (id: number, reference: SearchResult) => void,
+    quickSearch?: boolean
 ) => {
     const analyzedResultsPromises = searchResults.map(async (result) => {
         const updateResult = (content: string) => {
@@ -78,21 +81,25 @@ export const analyzeResults = async (
             });
         };
         const finishResult = (content: string) => {
-            console.log(`finished llm stream for ${result.title}`);
             callback(id, {
                 ...result,
                 content,
                 reviewed: true,
             });
         };
-        await analyzeSingleResult(
+        const content = await analyzeSingleResult(
             result,
             query,
             key,
             updateResult,
-            finishResult
+            finishResult,
+            quickSearch
         );
-        return result;
+        return {
+            ...result,
+            content,
+            reviewed: true,
+        };
     });
 
     try {

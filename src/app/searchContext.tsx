@@ -18,12 +18,15 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
     const processQuery = useCallback(
-        async (newInput: string, context?: string, updateUrl?: boolean) => {
+        async (
+            newInput: string,
+            context?: string,
+            updateUrl?: boolean,
+            quickSearch?: boolean
+        ) => {
             const newQuery = newInput.trim();
             if (newQuery === '') return;
             const newContext = context?.trim() || undefined;
-
-            console.log({ newQuery, newContext });
 
             const { openAIApiKey, googleApiKey, googleCseApiKey } =
                 checkKeys(config);
@@ -88,7 +91,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     searchResults,
                     finalQuery,
                     openAIApiKey,
-                    updateSearchResults
+                    updateSearchResults,
+                    quickSearch
                 );
 
                 const updateSummary = (id: number, summary: string) => {
