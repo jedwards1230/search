@@ -1,14 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-
-import SearchIcon from './SearchIcon';
-import { useSearch } from '@/app/searchContext';
-import HideIcon from './HideIcon';
-import RGB from './RGB';
 import clsx from 'clsx';
+
+import { ChevronIcon, HideIcon, SearchIcon } from './icons';
+import { useSearch } from '@/app/searchContext';
+import RGB from './RGB';
 
 export default function Input({
     search,
@@ -51,9 +49,9 @@ export default function Input({
         <>
             <form
                 onSubmit={onSubmit}
-                className="flex w-full flex-col items-center justify-center gap-4"
+                className="flex w-full flex-col items-center justify-center gap-2"
             >
-                <div className="relative flex h-full w-full flex-col">
+                <div className="relative flex h-full w-full flex-col pb-2">
                     <div className="flex h-full w-full">
                         <TextareaAutosize
                             value={query}
@@ -77,7 +75,7 @@ export default function Input({
                                         showContext ? 'rotate-180' : '',
                                     ])}
                                 >
-                                    v
+                                    <ChevronIcon />
                                 </div>
                             </div>
                         )}
@@ -100,33 +98,6 @@ export default function Input({
                         </button>
                     </div>
                     <RGB />
-                    <div className="flex justify-end pt-2">
-                        {/* <label className="relative inline-flex cursor-pointer items-center">
-                            <input
-                                type="checkbox"
-                                value=""
-                                className="peer sr-only"
-                            />
-                            <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
-                            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                Model
-                            </span>
-                        </label> */}
-                        <label className="relative inline-flex cursor-pointer items-center">
-                            <input
-                                type="checkbox"
-                                checked={quickSearch}
-                                onChange={(e) =>
-                                    setQuickSearch(e.target.checked)
-                                }
-                                className="peer sr-only"
-                            />
-                            <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
-                            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                Quick Search
-                            </span>
-                        </label>
-                    </div>
                 </div>
                 {showContext && (
                     <TextareaAutosize
@@ -140,6 +111,20 @@ export default function Input({
                         placeholder="Add context..."
                     />
                 )}
+                <div className="flex w-full justify-end">
+                    <label className="relative inline-flex cursor-pointer items-center">
+                        <input
+                            type="checkbox"
+                            checked={quickSearch}
+                            onChange={(e) => setQuickSearch(e.target.checked)}
+                            className="peer sr-only"
+                        />
+                        <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
+                        <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            Quick Search
+                        </span>
+                    </label>
+                </div>
             </form>
         </>
     );

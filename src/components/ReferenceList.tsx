@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import LinkIcon from './LinkIcon';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+
+import { LinkIcon } from './icons';
 import { useConfig } from '@/app/config';
 import Reference from './Reference';
 

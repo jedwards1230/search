@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
-import SettingsIcon from './SettingsIcon';
+import { SettingsIcon } from './icons';
 import SettingsDialog from './SettingsDialog';
 
 export default function SettingsButton({
