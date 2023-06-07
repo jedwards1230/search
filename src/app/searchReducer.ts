@@ -8,12 +8,13 @@ export default function reducer(state: State, action: Action): State {
             return {
                 ...state,
                 results: state.results.map((result) =>
-                    result.id === action.payload
+                    result.id === action.payload.id
                         ? {
                               ...result,
                               loading: false,
                               finished: true,
                               status: 'Done',
+                              timeToComplete: action.payload.time,
                           }
                         : result
                 ),

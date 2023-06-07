@@ -7,6 +7,7 @@ import ReferenceList from './ReferenceList';
 import Result from './Result';
 import Input from './Input';
 import { useEffect, useRef, useState } from 'react';
+import { formatTime } from '@/lib/utils';
 
 export default function Results({ result }: { result: Result }) {
     const [edit, setEdit] = useState(false);
@@ -49,9 +50,24 @@ export default function Results({ result }: { result: Result }) {
                         <div className="flex w-full justify-between">
                             <h2 className="pl-2 font-medium">
                                 Result |{' '}
-                                <span className="font-light">
+                                <span
+                                    title="Model used for search"
+                                    className="font-light"
+                                >
                                     {result.model}
                                 </span>
+                                {result.timeToComplete && (
+                                    <>
+                                        {' '}
+                                        |{' '}
+                                        <span
+                                            title="Time to complete search"
+                                            className="font-light"
+                                        >
+                                            {formatTime(result.timeToComplete)}
+                                        </span>
+                                    </>
+                                )}
                             </h2>
                             {result.status !== 'Done' && (
                                 <div className="rounded-lg bg-neutral-200 p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900 dark:selection:bg-neutral-200">

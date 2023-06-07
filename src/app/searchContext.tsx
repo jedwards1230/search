@@ -32,6 +32,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 checkKeys(config);
 
             dispatch({ type: 'SET_LOADING', payload: true });
+            const startTime = Date.now();
 
             if (updateUrl) {
                 const url = new URL(window.location.href);
@@ -112,7 +113,10 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     updateSummary
                 );
 
-                dispatch({ type: 'FINISH', payload: id });
+                dispatch({
+                    type: 'FINISH',
+                    payload: { id, time: Date.now() - startTime },
+                });
             } catch (error) {
                 console.error(error);
                 dispatch({

@@ -14,6 +14,7 @@ interface SearchResult {
     content?: string;
     error?: string;
     reviewed?: boolean;
+    timeToComplete?: number;
 }
 
 type Model = 'gpt-3.5-turbo' | 'gpt-4';
@@ -29,11 +30,18 @@ type Result = {
     model: Model;
     finished: boolean;
     status: ResultStatus;
+    timeToComplete?: number;
 };
 
 type Action =
     | { type: 'ADD_RESULT'; payload: Result }
-    | { type: 'FINISH'; payload: number }
+    | {
+          type: 'FINISH';
+          payload: {
+              id: number;
+              time: number;
+          };
+      }
     | { type: 'RESET' }
     | { type: 'SET_LOADING'; payload: boolean }
     | {
