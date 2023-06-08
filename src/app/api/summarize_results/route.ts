@@ -1,4 +1,4 @@
-import { resultsToChatMessages } from '@/langchain/utils';
+import { resultsToChatMessages } from '@/lib/langchain';
 import supabase from '@/lib/supabase';
 import { ConversationChain } from 'langchain/chains';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
