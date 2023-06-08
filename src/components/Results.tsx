@@ -30,7 +30,7 @@ export default function Results({ result }: { result: Result }) {
         <>
             <div
                 ref={scrollRef}
-                className="mt-4 flex w-full flex-col gap-8 py-2 first:mt-0 lg:flex-row"
+                className="mt-4 flex w-full flex-col gap-4 py-2 first:mt-0 md:gap-6 lg:flex-row lg:gap-8"
             >
                 <div className="relative flex h-full flex-1 flex-col items-center justify-between gap-8 pb-6">
                     <div className="sticky bottom-4 top-4 flex w-full flex-col gap-4">
@@ -46,7 +46,7 @@ export default function Results({ result }: { result: Result }) {
                                     ) : (
                                         <h2
                                             onClick={() => setEdit(!edit)}
-                                            className="line-clamp-4 max-h-48 cursor-pointer rounded px-3 py-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                            className="line-clamp-4 max-h-48 cursor-pointer rounded p-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                                         >
                                             {result.query}
                                         </h2>
@@ -108,7 +108,7 @@ export default function Results({ result }: { result: Result }) {
             </div>
 
             {result.finished && result.id === results.length - 1 && (
-                <div className="sticky bottom-2 w-auto max-w-full md:max-w-[60%] md:pr-6">
+                <div className="sticky bottom-6 w-auto max-w-full md:bottom-4 md:max-w-[60%] md:pr-6 lg:bottom-2">
                     <Input
                         placeholder="Ask a follow-up..."
                         hideToggles={true}

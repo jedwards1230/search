@@ -33,21 +33,18 @@ export default function ReferenceList({
                 open ? 'lg:min-w-[40%] lg:max-w-[40%]' : ''
             )}
         >
-            <div
-                className={clsx(
-                    'flex w-auto items-center',
-                    open ? 'justify-between' : 'justify-center'
-                )}
-            >
-                {open && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-lg font-medium"
-                    >
-                        References
-                    </motion.div>
-                )}
+            <div className="flex w-auto items-center justify-between">
+                <motion.div
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className={clsx(
+                        'text-lg font-medium',
+                        !open && 'lg:hidden'
+                    )}
+                >
+                    References
+                </motion.div>
                 <motion.div
                     layout
                     title="Toggle references"
