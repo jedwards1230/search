@@ -70,9 +70,9 @@ export default function Input({
                     <div className="flex h-full w-full rounded-lg shadow-lg">
                         <motion.textarea
                             value={query}
-                            initial={{ padding: '0.5rem', opacity: 0 }}
-                            whileFocus={{ padding: '0.7rem', opacity: 1 }}
-                            animate={{ padding: '0.5rem', opacity: 1 }}
+                            initial={{ padding: '0.75rem', opacity: 0 }}
+                            whileFocus={{ padding: '1rem', opacity: 1 }}
+                            animate={{ padding: '0.75rem', opacity: 1 }}
                             transition={{
                                 duration: 0.2,
                             }}
@@ -125,9 +125,9 @@ export default function Input({
                 {showContext && (
                     <motion.textarea
                         value={context}
-                        initial={{ padding: '0.5rem', opacity: 0 }}
+                        initial={{ padding: '0.75rem', opacity: 0 }}
                         whileFocus={{ padding: '1rem', opacity: 1 }}
-                        animate={{ padding: '0.5rem', opacity: 1 }}
+                        animate={{ padding: '0.75rem', opacity: 1 }}
                         transition={{
                             duration: 0.2,
                         }}

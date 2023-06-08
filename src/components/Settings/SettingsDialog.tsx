@@ -50,15 +50,15 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         </select>
                     </div>
                     <div className="flex w-full items-center justify-between gap-2">
-                        <div>Hide References:</div>
+                        <div>Show References:</div>
                         <input
                             type="checkbox"
                             className="cursor-pointer bg-inherit"
-                            checked={hideReferences}
+                            checked={!hideReferences}
                             onChange={(e) =>
                                 setConfigState((s) => ({
                                     ...s,
-                                    hideReferences: e.target.checked,
+                                    hideReferences: !e.target.checked,
                                 }))
                             }
                         />

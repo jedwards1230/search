@@ -1,13 +1,13 @@
 import { readStream } from '@/lib/stream';
 
 // get search results based on query
-export const getResults = async (
+export async function getResults(
     newQuery: string,
     results: Result[],
     openAIApiKey: string,
     googleApiKey: string,
     googleCSEId: string
-) => {
+) {
     const history = results.map((result) => {
         return {
             query: result.query,
@@ -34,14 +34,14 @@ export const getResults = async (
         console.error(error);
         return [];
     }
-};
+}
 
-export const analyzeSingleResult = async (
+export async function analyzeSingleResult(
     searchResult: SearchResult,
     query: string,
     key: string,
     quickSearch?: boolean
-) => {
+) {
     const res = await fetch('/api/analyze_result', {
         method: 'POST',
         body: JSON.stringify({
@@ -57,7 +57,7 @@ export const analyzeSingleResult = async (
     const context: string = await res.json();
 
     return context;
-};
+}
 
 export async function summarizeResult(context: string, key: string) {
     const res = await fetch('/api/summarize_result', {
@@ -76,14 +76,14 @@ export async function summarizeResult(context: string, key: string) {
 }
 
 // stream the summary of the results
-export const summarizeResults = async (
+export async function summarizeResults(
     query: string,
     results: Result[],
     id: number,
     model: Model,
     key: string,
     updateSummary: (id: number, summary: string) => void
-) => {
+) {
     try {
         const response = await fetch('/api/summarize_results', {
             method: 'POST',
@@ -104,7 +104,7 @@ export const summarizeResults = async (
         console.error('Fetch error:', err);
         updateSummary(id, `Error summarizing results: ${err}`);
     }
-};
+}
 
 export async function searchGoogle(
     input: string,

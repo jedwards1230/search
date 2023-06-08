@@ -108,7 +108,7 @@ export default function Results({ result }: { result: Result }) {
             </div>
 
             {result.finished && result.id === results.length - 1 && (
-                <div className="sticky bottom-6 w-auto max-w-full md:bottom-4 md:max-w-[60%] md:pr-6 lg:bottom-2">
+                <div className="sticky bottom-6 w-full max-w-full md:bottom-4 lg:bottom-2 lg:min-w-[60%] lg:max-w-[60%] lg:pr-6">
                     <Input
                         placeholder="Ask a follow-up..."
                         hideToggles={true}
