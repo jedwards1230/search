@@ -84,27 +84,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     payload: { id, searchResults, status: 'Scraping links' },
                 });
 
-                const updateSummary = async () => {
-                    await summarizeResults(
-                        finalQuery,
-                        state.results,
-                        id,
-                        config.model,
-                        openAIApiKey,
-                        (id: number, summary: string) => {
-                            dispatch({
-                                type: 'UPDATE_SUMMARY',
-                                payload: { id, summary },
-                            });
-                        }
-                    );
-
-                    dispatch({
-                        type: 'FINISH',
-                        payload: { id, time: Date.now() - startTime },
-                    });
-                };
-
                 const analyzedResultsPromises = searchResults.map(
                     async (result) => {
                         const context = await analyzeSingleResult(
@@ -114,31 +93,32 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                             quickSearch
                         );
 
-                        const summarize = async () => {
-                            const updateResult = (content: string) => {
-                                dispatch({
-                                    type: 'UPDATE_SEARCH_REFERENCE',
-                                    payload: {
-                                        id,
-                                        reference: {
-                                            ...result,
-                                            content,
+                        if (config.summarizeReferences) {
+                            const summarize = async () => {
+                                const updateResult = (content: string) => {
+                                    dispatch({
+                                        type: 'UPDATE_SEARCH_REFERENCE',
+                                        payload: {
+                                            id,
+                                            reference: {
+                                                ...result,
+                                                content,
+                                            },
                                         },
-                                    },
-                                });
+                                    });
+                                };
+
+                                const stream = await summarizeResult(
+                                    context,
+                                    openAIApiKey
+                                );
+                                const res = await readStream(
+                                    stream,
+                                    (token: string) => updateResult(token)
+                                );
                             };
-
-                            const stream = await summarizeResult(
-                                context,
-                                openAIApiKey
-                            );
-                            const res = await readStream(
-                                stream,
-                                (token: string) => updateResult(token)
-                            );
-                        };
-
-                        summarize();
+                            summarize();
+                        }
 
                         return context;
                     }
@@ -146,7 +126,24 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
                 await Promise.all(analyzedResultsPromises);
 
-                updateSummary();
+                await summarizeResults(
+                    finalQuery,
+                    state.results,
+                    id,
+                    config.model,
+                    openAIApiKey,
+                    (id: number, summary: string) => {
+                        dispatch({
+                            type: 'UPDATE_SUMMARY',
+                            payload: { id, summary },
+                        });
+                    }
+                );
+
+                dispatch({
+                    type: 'FINISH',
+                    payload: { id, time: Date.now() - startTime },
+                });
             } catch (error) {
                 console.error(error);
                 dispatch({

@@ -23,7 +23,7 @@ export default function Header({ search }: { search: string }) {
             >
                 <div
                     className={clsx(
-                        'relative flex w-full justify-center md:w-auto md:pt-2',
+                        'relative flex w-full justify-center md:w-auto',
                         results.length > 0
                             ? 'h-full items-center md:items-start'
                             : 'items-center'
@@ -47,6 +47,7 @@ export default function Header({ search }: { search: string }) {
                     topLevel={true}
                     search={search}
                     close={() => setSettingsOpen(true)}
+                    placeholder="Ask anything..."
                 />
                 <div
                     className={clsx([

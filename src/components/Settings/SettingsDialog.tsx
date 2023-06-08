@@ -8,6 +8,7 @@ export default function SettingsDialog({ close }: { close: () => void }) {
     const {
         config: {
             hideReferences,
+            summarizeReferences,
             model,
             openaiApiKey,
             googleApiKey,
@@ -58,6 +59,20 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                                 setConfigState((s) => ({
                                     ...s,
                                     hideReferences: e.target.checked,
+                                }))
+                            }
+                        />
+                    </div>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div>Summarize References:</div>
+                        <input
+                            type="checkbox"
+                            className="cursor-pointer bg-inherit"
+                            checked={summarizeReferences}
+                            onChange={(e) =>
+                                setConfigState((s) => ({
+                                    ...s,
+                                    summarizeReferences: e.target.checked,
                                 }))
                             }
                         />

@@ -1,3 +1,4 @@
+import { useConfig } from '@/app/config';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
@@ -8,6 +9,10 @@ export default function Reference({
     reference: SearchResult;
     i: number;
 }) {
+    const {
+        config: { summarizeReferences },
+    } = useConfig();
+
     if (!reference) return null;
     return (
         <motion.div
@@ -15,14 +20,22 @@ export default function Reference({
             animate={{ opacity: 1, translateX: 0 }}
             transition={{ delay: i * 0.1 }}
             key={reference.url + i}
-            title={!reference.content ? 'Unable to process page' : undefined}
+            title={
+                !reference.content
+                    ? summarizeReferences
+                        ? 'Unable to process page'
+                        : reference.url
+                    : undefined
+            }
             className="flex flex-col gap-1 pb-2"
         >
             <div
                 className={clsx(
                     'rounded-xl p-2 transition-colors duration-300 hover:bg-neutral-200/75 dark:hover:bg-neutral-600/50',
                     !reference.content
-                        ? 'text-neutral-500/80 hover:text-neutral-500 dark:text-neutral-500'
+                        ? summarizeReferences
+                            ? 'text-neutral-500/80 hover:text-neutral-500 dark:text-neutral-500'
+                            : ''
                         : ''
                     // reference.reviewed ? 'bg-green-200 dark:bg-green-700' : ''
                 )}

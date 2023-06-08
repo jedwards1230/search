@@ -67,6 +67,7 @@ type Config = {
     openaiApiKey: string | null;
     googleApiKey: string | null;
     googleCseApiKey: string | null;
+    summarizeReferences: boolean;
 };
 
 type State = {

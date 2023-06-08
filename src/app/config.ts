@@ -22,6 +22,7 @@ export function getConfig(): Config {
         res = {
             model: 'gpt-3.5-turbo',
             hideReferences: false,
+            summarizeReferences: true,
             openaiApiKey: OPENAI_API_KEY ? OPENAI_API_KEY : null,
             googleApiKey: GOOGLE_API_KEY ? GOOGLE_API_KEY : null,
             googleCseApiKey: GOOGLE_CSE_ID ? GOOGLE_CSE_ID : null,
@@ -33,6 +34,8 @@ export function getConfig(): Config {
                 : 'gpt-3.5-turbo',
             hideReferences:
                 window.localStorage.getItem('hideReferences') === 'true',
+            summarizeReferences:
+                window.localStorage.getItem('summarizeReferences') !== 'false',
             openaiApiKey: OPENAI_API_KEY
                 ? OPENAI_API_KEY
                 : window.localStorage.getItem('openaiApiKey'),
@@ -52,6 +55,10 @@ export function setConfig(config: Config) {
     window.localStorage.setItem(
         'hideReferences',
         config.hideReferences.toString()
+    );
+    window.localStorage.setItem(
+        'summarizeReferences',
+        config.summarizeReferences.toString()
     );
     window.localStorage.setItem('openaiApiKey', config.openaiApiKey || '');
     window.localStorage.setItem('googleApiKey', config.googleApiKey || '');

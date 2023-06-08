@@ -13,10 +13,12 @@ export default function Input({
     search,
     topLevel,
     close,
+    placeholder,
 }: {
     search?: string | null;
     topLevel?: boolean;
     close?: () => void;
+    placeholder?: string;
 }) {
     const { loading, processQuery, reset } = useSearch();
     const [query, setQuery] = useState(search || '');
@@ -58,14 +60,14 @@ export default function Input({
                     duration: 0.1,
                 }}
                 onSubmit={onSubmit}
-                className="flex w-full flex-col items-center justify-center gap-2"
+                className="flex w-full flex-col items-center justify-center gap-2 pr-6"
             >
                 <div className="relative flex h-full w-full flex-col pb-2">
                     <div className="flex h-full w-full rounded-lg shadow-lg">
                         <motion.textarea
                             value={query}
                             initial={{ padding: '0.5rem', opacity: 0 }}
-                            whileFocus={{ padding: '1rem', opacity: 1 }}
+                            whileFocus={{ padding: '0.7rem', opacity: 1 }}
                             animate={{ padding: '0.5rem', opacity: 1 }}
                             transition={{
                                 duration: 0.2,
@@ -74,7 +76,7 @@ export default function Input({
                             onKeyDown={onKeyDownHandler}
                             rows={queryRows > 15 ? 15 : queryRows}
                             className="w-full rounded-r-none rounded-tl-lg border border-b-0 border-neutral-400 p-2 shadow shadow-neutral-400 transition-colors focus:p-3 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700 dark:hover:bg-neutral-700 dark:disabled:bg-neutral-700"
-                            placeholder="Ask anything..."
+                            placeholder={placeholder}
                         />
                         <button
                             onClick={(e) => {
