@@ -31,7 +31,7 @@ export default function SettingsDialog({ close }: { close: () => void }) {
             transition={{
                 duration: 0.2,
             }}
-            className="fixed bottom-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-neutral-200/75 dark:bg-neutral-950/80"
+            className="fixed bottom-0 left-0 z-50 flex h-screen w-screen items-start justify-center bg-neutral-200/75 dark:bg-neutral-950/80 md:items-center"
         >
             <div className="relative flex w-full flex-col rounded-md border border-neutral-100 bg-neutral-50 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 md:w-auto">
                 <div className="flex justify-center pb-4 text-lg">Config</div>
@@ -68,9 +68,16 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     </div>
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>OpenAI API Key:</div>
-                        <input
-                            type="text"
+                        <motion.input
+                            type={openaiApiKey ? 'password' : 'text'}
                             value={openaiApiKey || ''}
+                            onFocus={(e) => {
+                                e.target.type = 'text';
+                                e.target.selectionStart =
+                                    e.target.selectionEnd =
+                                        e.target.value.length;
+                            }}
+                            onBlur={(e) => (e.target.type = 'password')}
                             onChange={(e) =>
                                 setConfigState((s) => ({
                                     ...s,
@@ -84,8 +91,15 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>Google API Key:</div>
                         <input
-                            type="text"
+                            type={googleApiKey ? 'password' : 'text'}
                             value={googleApiKey || ''}
+                            onFocus={(e) => {
+                                e.target.type = 'text';
+                                e.target.selectionStart =
+                                    e.target.selectionEnd =
+                                        e.target.value.length;
+                            }}
+                            onBlur={(e) => (e.target.type = 'password')}
                             onChange={(e) =>
                                 setConfigState((s) => ({
                                     ...s,
@@ -99,8 +113,15 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>Google CSE API Key:</div>
                         <input
-                            type="text"
+                            type={googleCseApiKey ? 'password' : 'text'}
                             value={googleCseApiKey || ''}
+                            onFocus={(e) => {
+                                e.target.type = 'text';
+                                e.target.selectionStart =
+                                    e.target.selectionEnd =
+                                        e.target.value.length;
+                            }}
+                            onBlur={(e) => (e.target.type = 'password')}
                             onChange={(e) =>
                                 setConfigState((s) => ({
                                     ...s,

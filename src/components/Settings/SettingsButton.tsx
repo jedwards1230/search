@@ -15,6 +15,9 @@ export default function SettingsButton({
             <motion.div
                 key="settings-icon"
                 layout
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.1 }}
                 onClick={() => setOpen(true)}
                 className="cursor-pointer rounded-full p-1 hover:bg-neutral-200 hover:dark:bg-neutral-600"
             >
