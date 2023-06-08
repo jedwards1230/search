@@ -85,6 +85,9 @@ export async function POST(request: Request) {
         }
     }
 
+    // strip any quotes from the generated query
+    generatedQuery = generatedQuery.replace(/"/g, '');
+
     try {
         const searchResults = await searchGoogle(
             generatedQuery,

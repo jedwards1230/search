@@ -75,14 +75,16 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     googleCseApiKey
                 );
 
+                if (searchResults.length === 0) {
+                    throw new Error('No results found');
+                }
+
                 dispatch({
                     type: 'UPDATE_SEARCH_RESULTS',
                     payload: { id, searchResults, status: 'Scraping links' },
                 });
 
-                // update primary summary
                 const updateSummary = async () => {
-                    console.log('starting primary summary');
                     await summarizeResults(
                         finalQuery,
                         state.results,

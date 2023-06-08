@@ -27,26 +27,31 @@ export default function ReferenceList({
     }, [references]);
 
     return (
-        <div className="flex w-full flex-col justify-start gap-2 lg:w-auto lg:min-w-[40%] lg:max-w-[40%]">
+        <div
+            className={clsx(
+                'flex w-full flex-col justify-start gap-2 lg:w-auto',
+                open ? 'lg:min-w-[40%] lg:max-w-[40%]' : ''
+            )}
+        >
             <div
                 className={clsx(
-                    'flex items-center',
+                    'flex w-auto items-center',
                     open ? 'justify-between' : 'justify-center'
                 )}
             >
                 {open && <div className="text-lg font-medium">References</div>}
-                <motion.button
+                <motion.div
                     layout
                     title="Toggle references"
                     className={clsx(
-                        'cursor-pointer',
+                        'cursor-pointer rounded-full p-2 hover:bg-neutral-200 hover:dark:bg-neutral-600',
                         !open &&
-                            'pt-0.5 text-neutral-500 transition-colors dark:text-neutral-500'
+                            'pt-2 text-neutral-500 transition-colors dark:text-neutral-500'
                     )}
                     onClick={() => setOpen(!open)}
                 >
                     <LinkIcon />
-                </motion.button>
+                </motion.div>
             </div>
             {open && (
                 <div className="w-full overflow-y-auto">

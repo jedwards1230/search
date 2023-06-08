@@ -5,7 +5,7 @@ export default function RGB({ size = 'lg' }: { size?: 'sm' | 'lg' }) {
         <div className="flex">
             <div
                 className={clsx(
-                    'w-1/3 border-solid border-red-500 transition-all',
+                    'w-1/3 rounded-bl border-solid border-red-500 transition-all',
                     size === 'sm' ? 'border' : 'border-4'
                 )}
             />
@@ -17,7 +17,7 @@ export default function RGB({ size = 'lg' }: { size?: 'sm' | 'lg' }) {
             />
             <div
                 className={clsx(
-                    'w-1/3 border-solid border-blue-500 transition-all',
+                    'w-1/3 rounded-br border-solid border-blue-500 transition-all',
                     size === 'sm' ? 'border' : 'border-4'
                 )}
             />

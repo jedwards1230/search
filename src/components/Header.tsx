@@ -23,7 +23,7 @@ export default function Header({ search }: { search: string }) {
             >
                 <div
                     className={clsx(
-                        'relative flex w-full justify-center md:w-auto',
+                        'relative flex w-full justify-center md:w-auto md:pt-2',
                         results.length > 0
                             ? 'h-full items-center md:items-start'
                             : 'items-center'

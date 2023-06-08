@@ -42,7 +42,7 @@ export default function Input({
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        submit();
+        submit(topLevel);
     };
 
     return (
@@ -52,7 +52,7 @@ export default function Input({
                 className="flex w-full flex-col items-center justify-center gap-2"
             >
                 <div className="relative flex h-full w-full flex-col pb-2">
-                    <div className="flex h-full w-full">
+                    <div className="flex h-full w-full rounded-lg shadow-lg">
                         <TextareaAutosize
                             value={query}
                             autoFocus={true}
@@ -60,30 +60,28 @@ export default function Input({
                             onKeyDown={onKeyDownHandler}
                             rows={1}
                             maxRows={25}
-                            className="h-full w-full rounded-r-none border border-neutral-500 p-4 shadow transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:disabled:bg-neutral-700/50"
+                            className="h-full w-full rounded-r-none rounded-tl-lg border border-b-0 border-neutral-400 p-4 shadow shadow-neutral-400 transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700 dark:hover:bg-neutral-700 dark:disabled:bg-neutral-700"
                             placeholder="Ask anything..."
                         />
-                        {topLevel && (
+                        <div
+                            onClick={() => setShowContext(!showContext)}
+                            title="Hide Input"
+                            className="flex cursor-pointer items-center border border-b-0 border-neutral-400 bg-white px-2 transition-all hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                        >
                             <div
-                                onClick={() => setShowContext(!showContext)}
-                                title="Hide Input"
-                                className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-100 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                                className={clsx([
+                                    'h-6 w-6 text-center',
+                                    showContext ? 'rotate-180' : '',
+                                ])}
                             >
-                                <div
-                                    className={clsx([
-                                        'h-6 w-6 text-center',
-                                        showContext ? 'rotate-180' : '',
-                                    ])}
-                                >
-                                    <ChevronIcon />
-                                </div>
+                                <ChevronIcon />
                             </div>
-                        )}
+                        </div>
                         {close && !topLevel && (
                             <div
                                 onClick={close}
                                 title="Hide Input"
-                                className="flex cursor-pointer items-center border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-200 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                                className="flex cursor-pointer items-center border border-b-0 border-neutral-400 bg-white px-2 transition-all hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
                             >
                                 <HideIcon />
                             </div>
@@ -92,7 +90,7 @@ export default function Input({
                             disabled={loading}
                             type="submit"
                             title="Search"
-                            className="border border-neutral-500 bg-white stroke-blue-500 px-2 transition-all hover:bg-neutral-200 hover:stroke-2 dark:border-none dark:bg-neutral-700 dark:stroke-blue-400 dark:hover:bg-neutral-700/50"
+                            className="rounded-tr-lg border border-b-0 border-neutral-400 bg-white px-2 transition-all hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                             <SearchIcon />
                         </button>
@@ -107,7 +105,7 @@ export default function Input({
                         onKeyDown={onKeyDownHandler}
                         rows={1}
                         maxRows={25}
-                        className="h-full w-full rounded-r-none border border-neutral-500 p-4 shadow transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:disabled:bg-neutral-700/50"
+                        className="h-full w-full rounded-lg border border-neutral-400 p-4 shadow-md shadow-neutral-400 transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-800 dark:hover:bg-neutral-700 dark:disabled:bg-neutral-700/50"
                         placeholder="Add context..."
                     />
                 )}
@@ -119,8 +117,8 @@ export default function Input({
                             onChange={(e) => setQuickSearch(e.target.checked)}
                             className="peer sr-only"
                         />
-                        <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
-                        <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        <div className="peer h-6 w-11 rounded-full bg-neutral-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-neutral-300 after:bg-neutral-50 after:transition-all after:content-[''] hover:bg-neutral-300 peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-neutral-50 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-neutral-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:peer-focus:ring-blue-800"></div>
+                        <span className="ml-3 text-sm font-medium">
                             Quick Search
                         </span>
                     </label>

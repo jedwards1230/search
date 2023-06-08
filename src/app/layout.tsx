@@ -56,7 +56,7 @@ export default function RootLayout({
 }) {
     return (
         <html
-            className="mx-auto flex h-full w-full bg-neutral-50 p-2 text-neutral-900 transition-colors dark:bg-neutral-800 dark:text-neutral-100 lg:max-w-[90%]"
+            className="mx-auto flex h-full w-full bg-neutral-50 p-2 text-neutral-900 transition-colors dark:bg-neutral-900 dark:text-neutral-100 lg:max-w-[90%]"
             lang="en"
             suppressHydrationWarning={true}
         >

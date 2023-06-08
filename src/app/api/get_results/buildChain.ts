@@ -14,9 +14,9 @@ export default function buildChain(openAIApiKey: string) {
             'You produce search queries based on user text. ' +
                 'Reduce the user input into 1 recommended search query for a search engine like google or bing. ' +
                 '- If the user input is already a good search query, simply respond with that as if it were your own answer. ' +
-                '- Do not provide any information that can be used to identify the user. ' +
-                '- Do not provide any text other than the search query. ' +
-                '- Do not use any special characters unless necessary. Avoid quotes. ' +
+                '- Do NOT provide any information that can be used to identify the user. ' +
+                '- Do NOT provide any text other than the search query. ' +
+                '- Do NOT use any special characters. ' +
                 '- Only output the plaintext query suggestion.'
         ),
         new MessagesPlaceholder('queryBuilderHistory'),

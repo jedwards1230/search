@@ -1,46 +1,42 @@
 # AI Assisted Search Engine
 
-![home.png](./home.png) 
+![home.png](./home.png)
 
 A next-generation AI-assisted search engine designed for discussing topics, asking questions, troubleshooting code, and engaging with AI chat while receiving relevant contextual information.
 
-![results.png](./results.png) 
+![results.png](./results.png)
 
 Built using:
-- Next.js 13 (Edge functions)
-- Streaming
-- TailwindCSS
-- TypeScript
-- LangChain
-- Framer Motion
-- OpenAI GPT
 
-## Overview
-
-![chart.excalidraw.png](./chart.excalidraw.png) 
+-   Next.js 13 (Edge functions)
+-   Streaming
+-   TailwindCSS
+-   TypeScript
+-   LangChain
+-   Framer Motion
+-   OpenAI GPT
 
 ## Features
 
-- Scrapes and analyzes the top 5 Google search results
-- Provides basic explanations
-- Stores basic chat history
-- Progressive web app (PWA)
+-   Scrapes, vectorizes, and summarizes the top 5 Google search results
+-   Quick search
+    -   Enabled: Summarize results based on google snippets
+    -   Disabled: Summarize results based on scraped pages
+-   Stores basic chat history
+-   Progressive web app (PWA)
 
 ### Planned Improvements
-- Improve time to first token
-  - Using the web scraper takes forever. Sometimes a minute or more
-  - Could use a timeout on the web scraper and return the results that are available, falling back to snippets
-  - Could add a langchain layer before the scraper to determine if more information is necessary
-- Integration with alternative search engines
-- Enhanced agent tools (web browser, calculator, code sandbox)
-- Improved chat history management
-  - Store chat history in a database
-  - Vectorize scraped pages and chat history
-- Caching
-- Advanced chat editing
-  - Consider the impact of chat history
-  - Adjust vectorized chat chunks if the conversation is edited
-- Optimized prompting
+
+-   Integration with alternative search engines
+-   Enhanced agent tools (web browser, calculator, code sandbox)
+-   Improved chat history management
+    -   Store chat history in a database
+    -   Vectorize scraped pages and chat history
+-   Caching
+-   Advanced chat editing
+    -   Consider the impact of chat history
+    -   Adjust vectorized chat chunks if the conversation is edited
+-   Optimized prompting
 
 ## Installation
 
@@ -51,12 +47,14 @@ git clone https://github.com/jedwards1230/search.git
 ```
 
 2. Navigate to the project directory and install dependencies.
+
 ```
 cd search
 npm install
 ```
 
 3. Obtain API keys for OpenAI and Google and add them to the `.env.local` file.
+
 ```
 OPENAI_API_KEY=your_openai_api_key
 GOOGLE_CSE_ID=your google cse id
@@ -64,6 +62,7 @@ GOOGLE_API_KEY=your google api key
 ```
 
 4. Build and run the project locally.
+
 ```
 npm run build
 npm run dev
