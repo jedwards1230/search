@@ -23,6 +23,20 @@ export default function reducer(state: State, action: Action): State {
             return initialState;
         case 'SET_LOADING':
             return { ...state, loading: action.payload };
+        case 'REVERT_TO_RESULT':
+            return {
+                ...state,
+                results: state.results
+                    .map((result) => {
+                        if (result.id === action.payload.id) {
+                            return action.payload;
+                        } else {
+                            return result;
+                        }
+                    })
+                    .filter((result) => result.id <= action.payload.id),
+            };
+
         case 'UPDATE_SEARCH_RESULTS':
             return {
                 ...state,

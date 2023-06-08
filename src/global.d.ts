@@ -44,6 +44,7 @@ type Action =
       }
     | { type: 'RESET' }
     | { type: 'SET_LOADING'; payload: boolean }
+    | { type: 'REVERT_TO_RESULT'; payload: Result }
     | {
           type: 'UPDATE_SEARCH_RESULTS';
           payload: {
@@ -77,7 +78,8 @@ type State = {
         newInput: string,
         context?: string,
         updateUrl?: boolean,
-        quickSearch?: boolean
+        quickSearch?: boolean,
+        idToUpdate?: number
     ) => void;
     reset: () => void;
 };

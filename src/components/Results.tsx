@@ -40,6 +40,7 @@ export default function Results({ result }: { result: Result }) {
                                     <Input
                                         search={result.query}
                                         close={() => setEdit(false)}
+                                        id={result.id}
                                     />
                                 ) : (
                                     <h2

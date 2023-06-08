@@ -28,7 +28,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             newInput: string,
             context?: string,
             updateUrl?: boolean,
-            quickSearch?: boolean
+            quickSearch?: boolean,
+            idToUpdate?: number
         ) => {
             const newQuery = newInput.trim();
             if (newQuery === '') return;
@@ -46,21 +47,37 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 router.replace(url.toString());
             }
 
-            const id = state.results.length;
+            let id: number;
 
-            dispatch({
-                type: 'ADD_RESULT',
-                payload: {
-                    id,
-                    query: newQuery,
-                    context: newContext || undefined,
-                    model: config.model,
-                    summary: '',
-                    references: [],
-                    finished: false,
-                    status: 'Getting links',
-                },
-            });
+            if (idToUpdate !== undefined) {
+                id = idToUpdate;
+                dispatch({
+                    type: 'REVERT_TO_RESULT',
+                    payload: {
+                        ...state.results[idToUpdate],
+                        query: newQuery,
+                        context: newContext || undefined,
+                        model: config.model,
+                        summary: '',
+                        timeToComplete: undefined,
+                    },
+                });
+            } else {
+                id = state.results.length;
+                dispatch({
+                    type: 'ADD_RESULT',
+                    payload: {
+                        id,
+                        query: newQuery,
+                        context: newContext || undefined,
+                        model: config.model,
+                        summary: '',
+                        references: [],
+                        finished: false,
+                        status: 'Getting links',
+                    },
+                });
+            }
 
             try {
                 const finalQuery = newContext

@@ -14,11 +14,13 @@ export default function Input({
     topLevel,
     close,
     placeholder,
+    id,
 }: {
     search?: string | null;
     topLevel?: boolean;
     close?: () => void;
     placeholder?: string;
+    id?: number;
 }) {
     const { loading, processQuery, reset } = useSearch();
     const [query, setQuery] = useState(search || '');
@@ -33,7 +35,7 @@ export default function Input({
     const submit = (update?: boolean) => {
         if (context === '') setShowContext(false);
         if (topLevel) reset();
-        processQuery(query, context, update, quickSearch);
+        processQuery(query, context, update, quickSearch, id);
     };
 
     const onKeyDownHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
