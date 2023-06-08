@@ -18,7 +18,7 @@ export default function Title() {
             className={clsx(
                 results.length === 0
                     ? 'text-5xl underline decoration-neutral-900/50 hover:decoration-neutral-950 dark:decoration-white/50 dark:hover:decoration-white md:text-7xl'
-                    : 'text-3xl hover:bg-neutral-200 dark:hover:bg-neutral-600',
+                    : 'text-3xl hover:bg-neutral-200 dark:hover:bg-neutral-700',
                 'cursor-pointer rounded p-1 font-medium tracking-wide transition-all'
             )}
         >

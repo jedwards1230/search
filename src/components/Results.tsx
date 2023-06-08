@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
-import LoadIcon from './LoadIcon';
-import ReferenceList from './ReferenceList';
+import { LoadIcon } from './icons';
+import ReferenceList from './ReferencesList';
 import Result from './Result';
 import Input from './Input';
-import { useEffect, useRef, useState } from 'react';
 import { formatTime } from '@/lib/utils';
 
 export default function Results({ result }: { result: Result }) {

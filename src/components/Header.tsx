@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import { Input, Title } from '@/components';
 import { useSearch } from '../app/searchContext';
-import SettingsButton from './SettingsButton';
+import Settings from './Settings';
 
 export default function Header({ search }: { search: string }) {
     const [settingsOpen, setSettingsOpen] = useState(false);
@@ -37,10 +37,9 @@ export default function Header({ search }: { search: string }) {
                                 : 'fixed right-4 top-4',
                         ])}
                     >
-                        <SettingsButton
+                        <Settings
                             open={settingsOpen}
-                            openDialog={() => setSettingsOpen(true)}
-                            closeDialog={() => setSettingsOpen(false)}
+                            setOpen={setSettingsOpen}
                         />
                     </div>
                 </div>
@@ -56,11 +55,7 @@ export default function Header({ search }: { search: string }) {
                             : 'fixed right-4 top-4',
                     ])}
                 >
-                    <SettingsButton
-                        open={settingsOpen}
-                        openDialog={() => setSettingsOpen(true)}
-                        closeDialog={() => setSettingsOpen(false)}
-                    />
+                    <Settings open={settingsOpen} setOpen={setSettingsOpen} />
                 </div>
             </div>
         </>

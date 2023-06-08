@@ -11,8 +11,8 @@ export default function Reference({
     if (!reference) return null;
     return (
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, translateX: 150 }}
+            animate={{ opacity: 1, translateX: 0 }}
             transition={{ delay: i * 0.1 }}
             key={reference.url + i}
             title={!reference.content ? 'Unable to process page' : undefined}

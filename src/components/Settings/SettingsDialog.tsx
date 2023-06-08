@@ -2,6 +2,7 @@
 
 import { useConfig } from '@/app/config';
 import { motion } from 'framer-motion';
+import { CloseIcon } from '../icons';
 
 export default function SettingsDialog({ close }: { close: () => void }) {
     const {
@@ -30,11 +31,11 @@ export default function SettingsDialog({ close }: { close: () => void }) {
             transition={{
                 duration: 0.2,
             }}
-            className="fixed bottom-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-neutral-200/75 dark:bg-neutral-800/75"
+            className="fixed bottom-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-neutral-200/75 dark:bg-neutral-950/80"
         >
-            <div className="relative flex w-full flex-col rounded-md border border-neutral-100 bg-neutral-50 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100 md:w-auto">
-                <div className="flex justify-center pb-2 text-lg">Config</div>
-                <div className="flex flex-col gap-4 rounded p-2 dark:bg-neutral-800">
+            <div className="relative flex w-full flex-col rounded-md border border-neutral-100 bg-neutral-50 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 md:w-auto">
+                <div className="flex justify-center pb-4 text-lg">Config</div>
+                <div className="flex flex-col gap-4 rounded p-2">
                     <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>Model:</div>
                         <select
@@ -112,9 +113,11 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     </div>
                 </div>
                 <div
-                    className="absolute right-5 top-5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-red-600 bg-red-500 text-center hover:border-red-400/75 hover:bg-red-300 dark:bg-neutral-600 dark:hover:bg-neutral-500 md:h-5 md:w-5"
+                    className="absolute right-6 top-4 flex cursor-pointer items-center justify-center rounded-full p-2 text-center hover:bg-neutral-200 dark:hover:bg-neutral-700"
                     onClick={close}
-                />
+                >
+                    <CloseIcon />
+                </div>
             </div>
         </motion.dialog>
     );

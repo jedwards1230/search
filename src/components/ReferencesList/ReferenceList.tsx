@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
-import { LinkIcon } from './icons';
+import { LinkIcon } from '../icons';
 import { useConfig } from '@/app/config';
 import Reference from './Reference';
 
@@ -39,7 +39,15 @@ export default function ReferenceList({
                     open ? 'justify-between' : 'justify-center'
                 )}
             >
-                {open && <div className="text-lg font-medium">References</div>}
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-lg font-medium"
+                    >
+                        References
+                    </motion.div>
+                )}
                 <motion.div
                     layout
                     title="Toggle references"
