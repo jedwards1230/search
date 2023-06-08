@@ -41,7 +41,7 @@ export default function Reference({
                 )}
             >
                 <a href={reference.url} target="_blank">
-                    <div>{reference.title}</div>
+                    <div className="line-clamp-1">{reference.title}</div>
                     <div className="truncate pb-1 text-sm text-neutral-500">
                         {reference.url}
                     </div>

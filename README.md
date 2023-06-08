@@ -31,11 +31,8 @@ Built using:
 -   Enhanced agent tools (web browser, calculator, code sandbox)
 -   Improved chat history management
     -   Store chat history in a database
-    -   Vectorize scraped pages and chat history
+    -   Vectorize chat history
 -   Caching
--   Advanced chat editing
-    -   Consider the impact of chat history
-    -   Adjust vectorized chat chunks if the conversation is edited
 -   Optimized prompting
 
 ## Installation
