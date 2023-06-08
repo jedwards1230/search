@@ -62,7 +62,7 @@ export default function Input({
                     duration: 0.1,
                 }}
                 onSubmit={onSubmit}
-                className="flex w-full flex-col items-center justify-center gap-2 pr-6"
+                className="flex w-full flex-col items-center justify-center gap-2"
             >
                 <div className="relative flex h-full w-full flex-col pb-2">
                     <div className="flex h-full w-full rounded-lg shadow-lg">

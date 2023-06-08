@@ -106,7 +106,7 @@ export default function Results({ result }: { result: Result }) {
             </div>
 
             {result.finished && result.id === results.length - 1 && (
-                <div className="sticky bottom-4 w-auto max-w-[60%]">
+                <div className="sticky bottom-4 w-auto max-w-full md:max-w-[60%] md:pr-6">
                     <Input placeholder="Ask a follow-up..." />
                 </div>
             )}
