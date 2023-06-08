@@ -36,50 +36,52 @@ export default function Results({ result }: { result: Result }) {
                     <div className="sticky bottom-4 top-4 flex w-full flex-col gap-4">
                         <div className="flex w-full flex-col justify-start gap-2 lg:gap-4">
                             <div>
-                                {edit ? (
-                                    <Input
-                                        search={result.query}
-                                        close={() => setEdit(false)}
-                                        id={result.id}
-                                    />
-                                ) : (
-                                    <h2
-                                        onClick={() => setEdit(!edit)}
-                                        className="line-clamp-4 max-h-48 cursor-pointer rounded px-3 py-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
-                                    >
-                                        {result.query}
-                                    </h2>
-                                )}
-                            </div>
-                            <div className="flex w-full justify-between">
-                                <h2 className="pl-2 font-medium">
-                                    Result |{' '}
-                                    <span
-                                        title="Model used for search"
-                                        className="font-light"
-                                    >
-                                        {result.model}
-                                    </span>
-                                    {result.timeToComplete && (
-                                        <>
-                                            {' '}
-                                            |{' '}
-                                            <span
-                                                title="Time to complete search"
-                                                className="font-light"
-                                            >
-                                                {formatTime(
-                                                    result.timeToComplete
-                                                )}
-                                            </span>
-                                        </>
+                                <div>
+                                    {edit ? (
+                                        <Input
+                                            search={result.query}
+                                            close={() => setEdit(false)}
+                                            id={result.id}
+                                        />
+                                    ) : (
+                                        <h2
+                                            onClick={() => setEdit(!edit)}
+                                            className="line-clamp-4 max-h-48 cursor-pointer rounded px-3 py-2 text-xl font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                        >
+                                            {result.query}
+                                        </h2>
                                     )}
-                                </h2>
-                                {result.status !== 'Done' && (
-                                    <div className="rounded-lg bg-neutral-200 p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900 dark:selection:bg-neutral-200">
-                                        {result.status}
-                                    </div>
-                                )}
+                                </div>
+                                <div className="flex w-full justify-between">
+                                    <h2 className="pl-2 font-medium">
+                                        Result |{' '}
+                                        <span
+                                            title="Model used for search"
+                                            className="font-light"
+                                        >
+                                            {result.model}
+                                        </span>
+                                        {result.timeToComplete && (
+                                            <>
+                                                {' '}
+                                                |{' '}
+                                                <span
+                                                    title="Time to complete search"
+                                                    className="font-light"
+                                                >
+                                                    {formatTime(
+                                                        result.timeToComplete
+                                                    )}
+                                                </span>
+                                            </>
+                                        )}
+                                    </h2>
+                                    {result.status !== 'Done' && (
+                                        <div className="rounded-lg bg-neutral-200 p-1 text-sm transition-all dark:bg-neutral-200 dark:text-neutral-900 dark:selection:bg-neutral-200">
+                                            {result.status}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             {result.summary ? (
                                 <Result result={result.summary} />
@@ -106,8 +108,11 @@ export default function Results({ result }: { result: Result }) {
             </div>
 
             {result.finished && result.id === results.length - 1 && (
-                <div className="sticky bottom-4 w-auto max-w-full md:max-w-[60%] md:pr-6">
-                    <Input placeholder="Ask a follow-up..." />
+                <div className="sticky bottom-2 w-auto max-w-full md:max-w-[60%] md:pr-6">
+                    <Input
+                        placeholder="Ask a follow-up..."
+                        hideToggles={true}
+                    />
                 </div>
             )}
         </>

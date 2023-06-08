@@ -15,12 +15,14 @@ export default function Input({
     close,
     placeholder,
     id,
+    hideToggles,
 }: {
     search?: string | null;
     topLevel?: boolean;
     close?: () => void;
     placeholder?: string;
     id?: number;
+    hideToggles?: boolean;
 }) {
     const { loading, processQuery, reset } = useSearch();
     const [query, setQuery] = useState(search || '');
@@ -136,20 +138,24 @@ export default function Input({
                         placeholder="Add context..."
                     />
                 )}
-                <div className="flex w-full justify-end">
-                    <label className="relative inline-flex cursor-pointer items-center">
-                        <input
-                            type="checkbox"
-                            checked={quickSearch}
-                            onChange={(e) => setQuickSearch(e.target.checked)}
-                            className="peer sr-only"
-                        />
-                        <div className="peer h-6 w-11 rounded-full bg-neutral-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-neutral-300 after:bg-neutral-50 after:transition-all after:content-[''] hover:bg-neutral-300 peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-neutral-50 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-neutral-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:peer-focus:ring-blue-800"></div>
-                        <span className="ml-3 text-sm font-medium">
-                            Quick Search
-                        </span>
-                    </label>
-                </div>
+                {!hideToggles && (
+                    <div className="flex w-full justify-end">
+                        <label className="relative inline-flex cursor-pointer items-center">
+                            <input
+                                type="checkbox"
+                                checked={quickSearch}
+                                onChange={(e) =>
+                                    setQuickSearch(e.target.checked)
+                                }
+                                className="peer sr-only"
+                            />
+                            <div className="peer h-6 w-11 rounded-full bg-neutral-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-neutral-300 after:bg-neutral-50 after:transition-all after:content-[''] hover:bg-neutral-300 peer-checked:bg-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-neutral-50 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-neutral-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:peer-focus:ring-blue-800"></div>
+                            <span className="ml-3 text-sm font-medium">
+                                Quick Search
+                            </span>
+                        </label>
+                    </div>
+                )}
             </motion.form>
         </>
     );
