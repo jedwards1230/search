@@ -21,7 +21,7 @@ export default function Input({
     const [query, setQuery] = useState(search || '');
     const [context, setContext] = useState('');
     const [showContext, setShowContext] = useState(false);
-    const [quickSearch, setQuickSearch] = useState(true);
+    const [quickSearch, setQuickSearch] = useState(false);
 
     useEffect(() => {
         if (search) setQuery(search);

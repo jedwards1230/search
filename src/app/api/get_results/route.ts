@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         .eq('input_query', query);
 
     if (error) {
-        console.log('Supabase error:', error);
+        console.error('Supabase error:', error);
         return NextResponse.json({ error: error.message });
     }
 
@@ -74,11 +74,11 @@ export async function POST(request: Request) {
                 ]);
 
             if (error) {
-                console.log('Supabase error:', error);
+                console.error('Supabase error:', error);
                 return NextResponse.json({ error: error.message });
             }
         } catch (e) {
-            console.log('error: ', e);
+            console.error('error: ', e);
             return NextResponse.json({
                 error: e,
             });
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
             searchResults: searchResults.splice(0, 5),
         });
     } catch (e) {
-        console.log('error: ', e);
+        console.error('error: ', e);
         return NextResponse.json({
             error: e,
         });

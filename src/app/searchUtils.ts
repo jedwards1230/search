@@ -31,7 +31,7 @@ export const getResults = async (
 
         return searchResults;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return [];
     }
 };
@@ -40,11 +40,9 @@ export const analyzeSingleResult = async (
     searchResult: SearchResult,
     query: string,
     key: string,
-    updateReference: (reference: string) => void,
-    onFinish: (content: string) => void,
     quickSearch?: boolean
 ) => {
-    const res = await fetch('/api/analyze_results', {
+    const res = await fetch('/api/analyze_result', {
         method: 'POST',
         body: JSON.stringify({
             searchResult,
@@ -53,70 +51,33 @@ export const analyzeSingleResult = async (
             quickSearch,
         }),
     });
+    if (!res.ok) {
+        throw new Error('Analyze result failed');
+    }
+    const context: string = await res.json();
+
+    return context;
+};
+
+export async function summarizeResult(context: string, key: string) {
+    const res = await fetch('/api/summarize_result', {
+        method: 'POST',
+        body: JSON.stringify({
+            context,
+            key,
+        }),
+    });
+
     if (!res.body) {
         throw new Error('No response body');
     }
 
-    const content = await readStream(
-        res.body,
-        (token: string) => updateReference(token),
-        (content: string) => onFinish(content)
-    );
-    return content;
-};
-
-export const analyzeResults = async (
-    id: number,
-    searchResults: SearchResult[],
-    query: string,
-    key: string,
-    callback: (id: number, reference: SearchResult) => void,
-    quickSearch?: boolean
-) => {
-    const analyzedResultsPromises = searchResults.map(async (result) => {
-        const updateResult = (content: string) => {
-            callback(id, {
-                ...result,
-                content,
-            });
-        };
-        const finishResult = (content: string) => {
-            callback(id, {
-                ...result,
-                content,
-                reviewed: true,
-            });
-        };
-        const content = await analyzeSingleResult(
-            result,
-            query,
-            key,
-            updateResult,
-            finishResult,
-            quickSearch
-        );
-        return {
-            ...result,
-            content,
-            reviewed: true,
-        };
-    });
-
-    try {
-        const analyzedResults: SearchResult[] = await Promise.all(
-            analyzedResultsPromises
-        );
-
-        return analyzedResults.filter((result) => result !== undefined);
-    } catch (err) {
-        return [];
-    }
-};
+    return res.body;
+}
 
 // stream the summary of the results
 export const summarizeResults = async (
-    newQuery: string,
-    searchResults: SearchResult[],
+    query: string,
     results: Result[],
     id: number,
     model: Model,
@@ -127,9 +88,8 @@ export const summarizeResults = async (
         const response = await fetch('/api/summarize_results', {
             method: 'POST',
             body: JSON.stringify({
-                query: newQuery,
+                query,
                 results,
-                searchResults,
                 key,
                 model,
             }),

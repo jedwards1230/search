@@ -1,6 +1,8 @@
 import { resultsToChatMessages } from '@/langchain/utils';
+import supabase from '@/lib/supabase';
 import { ConversationChain } from 'langchain/chains';
 import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { BufferMemory, ChatMessageHistory } from 'langchain/memory';
 import {
     ChatPromptTemplate,
@@ -8,6 +10,7 @@ import {
     MessagesPlaceholder,
     HumanMessagePromptTemplate,
 } from 'langchain/prompts';
+import { SupabaseVectorStore } from 'langchain/vectorstores/supabase';
 
 export const runtime = 'edge';
 
@@ -30,13 +33,11 @@ export async function POST(request: Request) {
     const {
         query,
         results,
-        searchResults,
         model,
         key,
     }: {
         query: string;
         results: Result[];
-        searchResults: SearchResult[];
         model: Model;
         key: string;
     } = res;
@@ -53,16 +54,16 @@ export async function POST(request: Request) {
         });
     }
 
-    const input = `context: ${JSON.stringify(
-        searchResults.map((result, index) => {
-            if (!result) return '';
-            return JSON.stringify({
-                title: result.title,
-                reference: `[${index}](${result.url})`,
-                content: result.content ? result.content : result.snippet,
-            });
-        })
-    )}\n\nQuery: ${query}`;
+    const vectorStore = new SupabaseVectorStore(
+        new OpenAIEmbeddings({ openAIApiKey: key }),
+        {
+            client: supabase,
+            tableName: 'documents',
+        }
+    );
+    const context = await vectorStore.similaritySearch(query, 4);
+
+    const input = `context: ${JSON.stringify(context)}\n\nQuery: ${query}`;
 
     const stream = new ReadableStream({
         async start(controller) {
@@ -102,7 +103,7 @@ export async function POST(request: Request) {
             try {
                 await resolveChain.call({ input });
             } catch (e) {
-                console.log(e);
+                console.error(e);
             }
 
             controller.close();

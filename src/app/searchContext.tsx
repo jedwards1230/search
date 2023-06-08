@@ -3,10 +3,16 @@
 import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useContext, useReducer } from 'react';
 
-import { analyzeResults, getResults, summarizeResults } from './searchUtils';
+import {
+    analyzeSingleResult,
+    getResults,
+    summarizeResult,
+    summarizeResults,
+} from './searchUtils';
 import reducer from './searchReducer';
 import { initialState } from './config';
 import { useConfig } from '@/app/config';
+import { readStream } from '@/lib/stream';
 
 const SearchContext = createContext<State>(initialState);
 
@@ -74,49 +80,71 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     payload: { id, searchResults, status: 'Scraping links' },
                 });
 
-                const updateSearchResults = (
-                    id: number,
-                    reference: SearchResult
-                ) => {
+                // update primary summary
+                const updateSummary = async () => {
+                    console.log('starting primary summary');
+                    await summarizeResults(
+                        finalQuery,
+                        state.results,
+                        id,
+                        config.model,
+                        openAIApiKey,
+                        (id: number, summary: string) => {
+                            dispatch({
+                                type: 'UPDATE_SUMMARY',
+                                payload: { id, summary },
+                            });
+                        }
+                    );
+
                     dispatch({
-                        type: 'UPDATE_SEARCH_REFERENCE',
-                        payload: {
-                            id,
-                            reference,
-                        },
+                        type: 'FINISH',
+                        payload: { id, time: Date.now() - startTime },
                     });
                 };
 
-                const searchResultsWithContent = await analyzeResults(
-                    id,
-                    searchResults,
-                    finalQuery,
-                    openAIApiKey,
-                    updateSearchResults,
-                    quickSearch
+                const analyzedResultsPromises = searchResults.map(
+                    async (result) => {
+                        const context = await analyzeSingleResult(
+                            result,
+                            finalQuery,
+                            openAIApiKey,
+                            quickSearch
+                        );
+
+                        const summarize = async () => {
+                            const updateResult = (content: string) => {
+                                dispatch({
+                                    type: 'UPDATE_SEARCH_REFERENCE',
+                                    payload: {
+                                        id,
+                                        reference: {
+                                            ...result,
+                                            content,
+                                        },
+                                    },
+                                });
+                            };
+
+                            const stream = await summarizeResult(
+                                context,
+                                openAIApiKey
+                            );
+                            const res = await readStream(
+                                stream,
+                                (token: string) => updateResult(token)
+                            );
+                        };
+
+                        summarize();
+
+                        return context;
+                    }
                 );
 
-                const updateSummary = (id: number, summary: string) => {
-                    dispatch({
-                        type: 'UPDATE_SUMMARY',
-                        payload: { id, summary },
-                    });
-                };
+                await Promise.all(analyzedResultsPromises);
 
-                await summarizeResults(
-                    finalQuery,
-                    searchResultsWithContent,
-                    state.results,
-                    id,
-                    config.model,
-                    openAIApiKey,
-                    updateSummary
-                );
-
-                dispatch({
-                    type: 'FINISH',
-                    payload: { id, time: Date.now() - startTime },
-                });
+                updateSummary();
             } catch (error) {
                 console.error(error);
                 dispatch({

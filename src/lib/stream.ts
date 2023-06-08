@@ -1,7 +1,6 @@
 export async function readStream(
     stream: ReadableStream,
-    chunkCallback: (token: string) => void,
-    endCallback?: (content: string) => void
+    chunkCallback: (token: string) => void
 ) {
     const reader = stream.getReader();
     let accumulatedResponse = '';
@@ -11,12 +10,8 @@ export async function readStream(
         if (done) break;
         if (value) {
             const decoded = new TextDecoder().decode(value);
-            if (decoded === 'LLM_END' && endCallback) {
-                endCallback(accumulatedResponse);
-            } else {
-                accumulatedResponse += decoded;
-                chunkCallback(accumulatedResponse);
-            }
+            accumulatedResponse += decoded;
+            chunkCallback(accumulatedResponse);
         }
     }
 

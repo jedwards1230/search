@@ -18,7 +18,7 @@ export default function SettingsButton({
                 key="settings-icon"
                 layout
                 onClick={openDialog}
-                className="cursor-pointer rounded-full p-1 hover:bg-neutral-200"
+                className="cursor-pointer rounded-full p-1 hover:bg-neutral-200 hover:dark:bg-neutral-600"
             >
                 <SettingsIcon />
             </motion.div>

@@ -118,7 +118,7 @@ export async function getDocs(docs: Document[], query: string, key: string) {
     try {
         await vectorStore.addDocuments(docs);
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 
     // find similar documents

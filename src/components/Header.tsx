@@ -21,7 +21,14 @@ export default function Header({ search }: { search: string }) {
                         : 'flex-1 justify-center gap-12 md:gap-8'
                 )}
             >
-                <div className="relative flex w-full items-center justify-center md:w-auto">
+                <div
+                    className={clsx(
+                        'relative flex w-full justify-center md:w-auto',
+                        results.length > 0
+                            ? 'h-full items-center md:items-start'
+                            : 'items-center'
+                    )}
+                >
                     <Title />
                     <div
                         className={clsx([
@@ -45,7 +52,7 @@ export default function Header({ search }: { search: string }) {
                 <div
                     className={clsx([
                         results.length > 0
-                            ? 'static order-2 hidden md:flex'
+                            ? 'static order-2 hidden h-full pt-2 md:flex md:items-start'
                             : 'fixed right-4 top-4',
                     ])}
                 >

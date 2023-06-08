@@ -61,9 +61,9 @@ export const initialState: State = {
     loading: false,
     results: [],
     processQuery: () => {
-        console.log('processQuery not implemented');
+        console.error('processQuery not implemented');
     },
     reset: () => {
-        console.log('reset not implemented');
+        console.error('reset not implemented');
     },
 };
