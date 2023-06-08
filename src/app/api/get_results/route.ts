@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { searchGoogle } from '@/lib/langchain';
+import { searchGoogle } from '@/lib/search';
 import supabase from '@/lib/supabase';
 import buildChain from './buildChain';
 

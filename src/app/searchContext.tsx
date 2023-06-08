@@ -8,7 +8,7 @@ import {
     getResults,
     summarizeResult,
     summarizeResults,
-} from './searchUtils';
+} from '@/lib/search';
 import reducer from './searchReducer';
 import { initialState } from './config';
 import { useConfig } from '@/app/config';
