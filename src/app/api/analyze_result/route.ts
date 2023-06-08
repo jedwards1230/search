@@ -28,56 +28,63 @@ export async function POST(request: Request) {
         let context: string;
 
         const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
-
         const vectorStore = new SupabaseVectorStore(embeddings, {
             client: supabase,
             tableName: 'documents',
         });
 
-        if (quickSearch) {
-            context = searchResult.snippet;
-            const doc = new Document({
-                pageContent: searchResult.snippet,
-                metadata: {
-                    url: searchResult.url,
-                    title: searchResult.title,
-                    snippet: searchResult.snippet,
-                },
-            });
-            await vectorStore.addDocuments([doc]);
-        } else {
-            const loader = new CheerioWebBaseLoader(searchResult.url);
-            const pages = await loader.load();
+        const results = await vectorStore.similaritySearch(query, 3, {
+            url: searchResult.url,
+        });
 
-            const textSplitter = new RecursiveCharacterTextSplitter({
-                chunkSize: 2000,
-                chunkOverlap: 200,
-            });
-            const texts = await textSplitter.splitText(
-                pages.map((doc) => doc.pageContent).join(' ')
-            );
-
-            const docs: Document[] = texts.map(
-                (pageContent) =>
-                    new Document({
-                        pageContent,
-                        metadata: {
-                            url: searchResult.url,
-                            title: searchResult.title,
-                            snippet: searchResult.snippet,
-                        },
-                    })
-            );
-
-            await vectorStore.addDocuments(docs);
-
-            const docStore = await MemoryVectorStore.fromDocuments(
-                docs,
-                embeddings
-            );
-
-            const results = await docStore.similaritySearch(query, 3);
+        if (results && results.length > 0) {
             context = results.map((res) => res.pageContent).join('\n');
+        } else {
+            if (quickSearch) {
+                context = searchResult.snippet;
+                const doc = new Document({
+                    pageContent: searchResult.snippet,
+                    metadata: {
+                        url: searchResult.url,
+                        title: searchResult.title,
+                        snippet: searchResult.snippet,
+                    },
+                });
+                await vectorStore.addDocuments([doc]);
+            } else {
+                const loader = new CheerioWebBaseLoader(searchResult.url);
+                const pages = await loader.load();
+
+                const textSplitter = new RecursiveCharacterTextSplitter({
+                    chunkSize: 2000,
+                    chunkOverlap: 200,
+                });
+                const texts = await textSplitter.splitText(
+                    pages.map((doc) => doc.pageContent).join(' ')
+                );
+
+                const docs: Document[] = texts.map(
+                    (pageContent) =>
+                        new Document({
+                            pageContent,
+                            metadata: {
+                                url: searchResult.url,
+                                title: searchResult.title,
+                                snippet: searchResult.snippet,
+                            },
+                        })
+                );
+
+                await vectorStore.addDocuments(docs);
+
+                const docStore = await MemoryVectorStore.fromDocuments(
+                    docs,
+                    embeddings
+                );
+
+                const results = await docStore.similaritySearch(query, 3);
+                context = results.map((res) => res.pageContent).join('\n');
+            }
         }
 
         return NextResponse.json({
