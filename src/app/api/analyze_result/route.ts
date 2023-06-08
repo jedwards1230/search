@@ -2,14 +2,7 @@ import { NextResponse } from 'next/server';
 import { CheerioWebBaseLoader } from 'langchain/document_loaders/web/cheerio';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { Document } from 'langchain/document';
-import { ConversationChain } from 'langchain/chains';
-import { OpenAIChat } from 'langchain/llms/openai';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
-import {
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-} from 'langchain/prompts';
 import { SupabaseVectorStore } from 'langchain/vectorstores/supabase';
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 
@@ -34,8 +27,24 @@ export async function POST(request: Request) {
     try {
         let context: string;
 
+        const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
+
+        const vectorStore = new SupabaseVectorStore(embeddings, {
+            client: supabase,
+            tableName: 'documents',
+        });
+
         if (quickSearch) {
             context = searchResult.snippet;
+            const doc = new Document({
+                pageContent: searchResult.snippet,
+                metadata: {
+                    url: searchResult.url,
+                    title: searchResult.title,
+                    snippet: searchResult.snippet,
+                },
+            });
+            await vectorStore.addDocuments([doc]);
         } else {
             const loader = new CheerioWebBaseLoader(searchResult.url);
             const pages = await loader.load();
@@ -60,12 +69,6 @@ export async function POST(request: Request) {
                     })
             );
 
-            const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
-
-            const vectorStore = new SupabaseVectorStore(embeddings, {
-                client: supabase,
-                tableName: 'documents',
-            });
             await vectorStore.addDocuments(docs);
 
             const docStore = await MemoryVectorStore.fromDocuments(
