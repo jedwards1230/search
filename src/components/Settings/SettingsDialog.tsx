@@ -3,19 +3,19 @@
 import { useConfig } from '@/app/config';
 import { motion } from 'framer-motion';
 import { CloseIcon } from '../icons';
+import InputField from './InputField';
+import CheckboxField from './CheckboxField';
 
 export default function SettingsDialog({ close }: { close: () => void }) {
+    const { config, updateConfig } = useConfig();
     const {
-        config: {
-            hideReferences,
-            summarizeReferences,
-            model,
-            openaiApiKey,
-            googleApiKey,
-            googleCseApiKey,
-        },
-        setConfigState,
-    } = useConfig();
+        hideReferences,
+        summarizeReferences,
+        model,
+        openaiApiKey,
+        googleApiKey,
+        googleCseApiKey,
+    } = config;
     return (
         <motion.dialog
             key="settings-dialog"
@@ -38,10 +38,10 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         <select
                             value={model}
                             onChange={(e) =>
-                                setConfigState((s) => ({
-                                    ...s,
+                                updateConfig({
+                                    ...config,
                                     model: e.target.value as Model,
-                                }))
+                                })
                             }
                             className="rounded border border-neutral-500 bg-inherit p-2"
                         >
@@ -49,100 +49,62 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                             <option value="gpt-4">gpt-4</option>
                         </select>
                     </div>
-                    <div className="flex w-full items-center justify-between gap-2">
-                        <div>Show References:</div>
-                        <input
-                            type="checkbox"
-                            className="cursor-pointer bg-inherit"
-                            checked={!hideReferences}
-                            onChange={(e) =>
-                                setConfigState((s) => ({
-                                    ...s,
-                                    hideReferences: !e.target.checked,
-                                }))
-                            }
-                        />
-                    </div>
-                    <div className="flex w-full items-center justify-between gap-2">
-                        <div>Summarize References:</div>
-                        <input
-                            type="checkbox"
-                            className="cursor-pointer bg-inherit"
-                            checked={summarizeReferences}
-                            onChange={(e) =>
-                                setConfigState((s) => ({
-                                    ...s,
-                                    summarizeReferences: e.target.checked,
-                                }))
-                            }
-                        />
-                    </div>
-                    <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
-                        <div>OpenAI API Key:</div>
-                        <motion.input
-                            type={openaiApiKey ? 'password' : 'text'}
-                            value={openaiApiKey || ''}
-                            onFocus={(e) => {
-                                e.target.type = 'text';
-                                e.target.selectionStart =
-                                    e.target.selectionEnd =
-                                        e.target.value.length;
-                            }}
-                            onBlur={(e) => (e.target.type = 'password')}
-                            onChange={(e) =>
-                                setConfigState((s) => ({
-                                    ...s,
-                                    openaiApiKey: e.target.value,
-                                }))
-                            }
-                            className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
-                            placeholder="************"
-                        />
-                    </div>
-                    <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
-                        <div>Google API Key:</div>
-                        <input
-                            type={googleApiKey ? 'password' : 'text'}
-                            value={googleApiKey || ''}
-                            onFocus={(e) => {
-                                e.target.type = 'text';
-                                e.target.selectionStart =
-                                    e.target.selectionEnd =
-                                        e.target.value.length;
-                            }}
-                            onBlur={(e) => (e.target.type = 'password')}
-                            onChange={(e) =>
-                                setConfigState((s) => ({
-                                    ...s,
-                                    googleApiKey: e.target.value,
-                                }))
-                            }
-                            className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
-                            placeholder="************"
-                        />
-                    </div>
-                    <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
-                        <div>Google CSE API Key:</div>
-                        <input
-                            type={googleCseApiKey ? 'password' : 'text'}
-                            value={googleCseApiKey || ''}
-                            onFocus={(e) => {
-                                e.target.type = 'text';
-                                e.target.selectionStart =
-                                    e.target.selectionEnd =
-                                        e.target.value.length;
-                            }}
-                            onBlur={(e) => (e.target.type = 'password')}
-                            onChange={(e) =>
-                                setConfigState((s) => ({
-                                    ...s,
-                                    googleCseApiKey: e.target.value,
-                                }))
-                            }
-                            className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
-                            placeholder="************"
-                        />
-                    </div>
+                    <CheckboxField
+                        label="Show References"
+                        checked={!hideReferences}
+                        onChange={(e) =>
+                            updateConfig({
+                                ...config,
+                                hideReferences: !e.target.checked,
+                            })
+                        }
+                    />
+                    <CheckboxField
+                        label="Summarize References"
+                        checked={summarizeReferences}
+                        onChange={(e) =>
+                            updateConfig({
+                                ...config,
+                                summarizeReferences: e.target.checked,
+                            })
+                        }
+                    />
+                    <InputField
+                        label="OpenAI API Key"
+                        type={openaiApiKey ? 'password' : 'text'}
+                        value={openaiApiKey || ''}
+                        placeholder="************"
+                        onChange={(e) =>
+                            updateConfig({
+                                ...config,
+                                openaiApiKey: e.target.value,
+                            })
+                        }
+                    />
+                    <InputField
+                        label="Google API Key"
+                        type={googleApiKey ? 'password' : 'text'}
+                        value={googleApiKey || ''}
+                        placeholder="************"
+                        onChange={(e) =>
+                            updateConfig({
+                                ...config,
+                                googleApiKey: e.target.value,
+                            })
+                        }
+                    />
+                    <InputField
+                        label="Google CSE API Key"
+                        type={googleCseApiKey ? 'password' : 'text'}
+                        value={googleCseApiKey || ''}
+                        placeholder="************"
+                        onChange={(e) =>
+                            updateConfig({
+                                ...config,
+                                googleCseApiKey: e.target.value,
+                            })
+                        }
+                    />
                 </div>
                 <div
                     className="absolute right-6 top-4 flex cursor-pointer items-center justify-center rounded-full p-2 text-center hover:bg-neutral-200 dark:hover:bg-neutral-700"

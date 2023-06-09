@@ -19,8 +19,14 @@ const SearchContext = createContext<State>(initialState);
 export const useSearch = () => useContext(SearchContext);
 
 export function SearchProvider({ children }: { children: React.ReactNode }) {
-    const { config } = useConfig();
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { config, updateConfig } = useConfig();
+    if (!config || !updateConfig) throw new Error('No config or updateConfig');
+
+    const [state, dispatch] = useReducer(reducer, {
+        ...initialState,
+        config,
+        updateConfig,
+    });
     const router = useRouter();
 
     const processQuery = useCallback(
@@ -185,6 +191,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 results: state.results,
                 processQuery,
                 reset,
+                config,
+                updateConfig,
             }}
         >
             {children}

@@ -82,4 +82,6 @@ type State = {
         idToUpdate?: number
     ) => void;
     reset: () => void;
+    config: Config;
+    updateConfig: (config: Config) => void;
 };

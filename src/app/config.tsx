@@ -1,16 +1,48 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-export function useConfig() {
-    const [config, setConfigState] = useState(getConfig());
-
-    useEffect(() => {
-        setConfig(config);
-    }, [config]);
-
-    return { config, setConfigState };
+interface ConfigContext {
+    config: Config;
+    updateConfig: (newConfig: Config) => void;
 }
+
+const ConfigContext = createContext<ConfigContext>({
+    config: {
+        model: 'gpt-3.5-turbo',
+        openaiApiKey: '',
+        googleApiKey: '',
+        googleCseApiKey: '',
+        hideReferences: false,
+        summarizeReferences: false,
+    },
+    updateConfig: () => {},
+});
+
+export const useConfig = () => useContext(ConfigContext);
+
+export function ConfigProvider({ children }: { children: React.ReactNode }) {
+    const initialConfig: Config = getConfig();
+    const [config, setConfigState] = useState(initialConfig);
+
+    const updateConfig = (newConfig: Config) => {
+        setConfigState(newConfig);
+        setConfig(newConfig);
+    };
+
+    return (
+        <ConfigContext.Provider
+            value={{
+                config,
+                updateConfig,
+            }}
+        >
+            {children}
+        </ConfigContext.Provider>
+    );
+}
+
+export default ConfigContext;
 
 const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
@@ -76,5 +108,9 @@ export const initialState: State = {
     },
     reset: () => {
         console.error('reset not implemented');
+    },
+    config: getConfig(),
+    updateConfig: () => {
+        console.error('updateConfig not implemented');
     },
 };
