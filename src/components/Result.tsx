@@ -36,7 +36,7 @@ export default function Result({ result }: { result: string }) {
         h6: ({ node, ...props }) => (
             <h6 {...props} className="text-xs font-bold" />
         ),
-        p: ({ node, ...props }) => <p {...props} className="text-base" />,
+        p: ({ node, ...props }) => <p {...props} className="py-1 text-base" />,
         blockquote: ({ node, ...props }) => (
             <blockquote
                 {...props}

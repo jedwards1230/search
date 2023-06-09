@@ -17,11 +17,11 @@ export const runtime = 'edge';
 const prompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are a helpful assistant. ' +
-            'You are an expert in many fields. ' +
+            //'You are an expert in many fields. ' +
             `Todays date is ${new Date().toLocaleDateString()}. ` +
             'You use internet search results to inform your conversation with the user. ' +
             'Provide responses as an in-depth explanation. ' +
-            'Use the basic form of 1. summarizing what the user asked for. 2. explaining/demonstrating. 3. summarizing everything briefly. ' +
+            //'Use the basic form of 1. summarizing what the user asked for. 2. explaining/demonstrating. 3. summarizing everything briefly. ' +
             'Respond in markdown format (including github flavored). ' +
             'Ensure all code blocks and command examples are in md format ```code```, including the language. '
     ),
