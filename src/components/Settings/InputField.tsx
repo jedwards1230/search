@@ -4,16 +4,25 @@ export default function InputField({
     value,
     placeholder,
     onChange,
+    Link,
 }: {
     label: string;
     type: string;
     value: string;
     placeholder?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    Link?: () => JSX.Element;
 }) {
     return (
         <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
-            <div>{label}:</div>
+            <div className="flex items-center justify-between md:flex-col md:items-start md:justify-center">
+                <div>{label}:</div>
+                {Link && (
+                    <div className="text-sm leading-tight tracking-tight text-blue-500 underline">
+                        <Link />
+                    </div>
+                )}
+            </div>
             <input
                 type={type}
                 value={value}

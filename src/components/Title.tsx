@@ -1,24 +1,20 @@
 'use client';
 
-import { useSearch } from '@/app/searchContext';
-import RGB from './RGB';
 import clsx from 'clsx';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
+import { useSearch } from '@/app/searchContext';
+import RGB from './RGB';
+
 export default function Title() {
-    const { reset, results } = useSearch();
-    const router = useRouter();
+    const { results } = useSearch();
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            onClick={() => {
-                router.push('/');
-                reset();
-            }}
+            onClick={() => window.location.reload()}
             className={clsx(
                 results.length === 0
                     ? 'text-5xl underline decoration-neutral-900/50 hover:decoration-neutral-950 dark:decoration-white/50 dark:hover:decoration-white md:text-7xl'

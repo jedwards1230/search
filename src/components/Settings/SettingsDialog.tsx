@@ -25,11 +25,11 @@ export default function SettingsDialog({ close }: { close: () => void }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={close}
-            className="fixed bottom-0 left-0 z-30 flex h-screen w-screen items-start justify-center bg-neutral-200/75 dark:bg-neutral-950/80 md:items-center"
+            className="fixed bottom-0 left-0 z-30 flex h-screen w-screen items-start justify-center bg-neutral-300/75 dark:bg-neutral-950/80 md:items-center"
         >
             <div
                 onClick={(event) => event.stopPropagation()}
-                className="relative flex w-full flex-col rounded-md border border-neutral-100 bg-neutral-50 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 md:w-auto"
+                className="relative flex w-full flex-col rounded-lg border border-neutral-100 bg-neutral-50 px-4 py-4 text-neutral-900 shadow-lg dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 md:w-auto"
             >
                 <div className="flex justify-center pb-4 text-lg">Config</div>
                 <div className="flex flex-col gap-4 rounded p-2">
@@ -80,6 +80,34 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                                 openaiApiKey: e.target.value,
                             })
                         }
+                        Link={() => (
+                            <a
+                                target="_blank"
+                                href="https://platform.openai.com/account/api-keys"
+                            >
+                                Get OpenAI API key
+                            </a>
+                        )}
+                    />
+                    <InputField
+                        label="Google Search Engine ID"
+                        type={'text'}
+                        value={googleCseApiKey || ''}
+                        placeholder="************"
+                        onChange={(e) =>
+                            updateConfig({
+                                ...config,
+                                googleCseApiKey: e.target.value,
+                            })
+                        }
+                        Link={() => (
+                            <a
+                                target="_blank"
+                                href="https://programmablesearchengine.google.com/about/"
+                            >
+                                Create CSE ID
+                            </a>
+                        )}
                     />
                     <InputField
                         label="Google API Key"
@@ -92,18 +120,14 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                                 googleApiKey: e.target.value,
                             })
                         }
-                    />
-                    <InputField
-                        label="Google CSE API Key"
-                        type={googleCseApiKey ? 'password' : 'text'}
-                        value={googleCseApiKey || ''}
-                        placeholder="************"
-                        onChange={(e) =>
-                            updateConfig({
-                                ...config,
-                                googleCseApiKey: e.target.value,
-                            })
-                        }
+                        Link={() => (
+                            <a
+                                target="_blank"
+                                href="https://developers.google.com/webmaster-tools/search-console-api/v1/configure"
+                            >
+                                Get Google API key
+                            </a>
+                        )}
                     />
                 </div>
                 <div
