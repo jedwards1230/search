@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
 import { LinkIcon } from '../icons';
-import { useConfig } from '@/app/config';
+import { useConfig } from '@/app/configContext';
 import Reference from './Reference';
 
 export default function ReferenceList({

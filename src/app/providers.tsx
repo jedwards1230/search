@@ -3,7 +3,7 @@
 import { ThemeProvider } from 'next-themes';
 import { Analytics } from '@vercel/analytics/react';
 import { SearchProvider } from './searchContext';
-import { ConfigProvider } from './config';
+import { ConfigProvider } from './configContext';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (

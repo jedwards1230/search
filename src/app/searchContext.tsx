@@ -10,8 +10,8 @@ import {
     summarizeResults,
 } from '@/lib/search';
 import reducer from './searchReducer';
-import { initialState } from './config';
-import { useConfig } from '@/app/config';
+import { initialState } from './configContext';
+import { useConfig } from '@/app/configContext';
 import { readStream } from '@/lib/stream';
 
 const SearchContext = createContext<State>(initialState);

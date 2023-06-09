@@ -1,4 +1,4 @@
-import { initialState } from './config';
+import { initialState } from './configContext';
 
 export default function reducer(state: State, action: Action): State {
     switch (action.type) {

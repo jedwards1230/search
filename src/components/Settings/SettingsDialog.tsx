@@ -1,6 +1,6 @@
 'use client';
 
-import { useConfig } from '@/app/config';
+import { useConfig } from '@/app/configContext';
 import { motion } from 'framer-motion';
 import { CloseIcon } from '../icons';
 import InputField from './InputField';

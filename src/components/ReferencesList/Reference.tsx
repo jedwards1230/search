@@ -1,4 +1,4 @@
-import { useConfig } from '@/app/config';
+import { useConfig } from '@/app/configContext';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
