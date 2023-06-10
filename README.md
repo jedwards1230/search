@@ -18,10 +18,10 @@ Built using:
 
 ## Features
 
--   Scrapes, vectorizes, and summarizes the top 5 Google search results
+-   Scrape, vectorize, and summarize the top 5 Google search results
 -   Quick search
     -   Enabled: Summarize results based on google snippets
-    -   Disabled: Summarize results based on scraped pages
+    -   Disabled: Gather Google snippets and then summarize scraped web pages (DEFAULT)
 -   Stores basic chat history
 -   Progressive web app (PWA)
 
@@ -33,6 +33,8 @@ Built using:
     -   Store chat history in a database
     -   Vectorize chat history
 -   Caching
+-   Encrypt API keys and chat history
+-   Don't autofill / ask for API keys if they are handled by the server
 -   Optimized prompting
 
 ## Installation
