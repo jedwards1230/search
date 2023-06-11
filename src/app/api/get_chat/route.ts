@@ -1,9 +1,11 @@
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { SupabaseVectorStore } from 'langchain/vectorstores/supabase';
+import { AIChatMessage, HumanChatMessage } from 'langchain/schema';
 
-import { resultsToChatMessages } from '@/lib/langchain';
 import supabase from '@/lib/supabase';
 import buildChain from './chain';
+import { loadSummarizationChain } from 'langchain/chains';
+import { OpenAI } from 'langchain/llms/openai';
 
 export const runtime = 'edge';
 
@@ -13,15 +15,28 @@ export async function POST(request: Request) {
     const res = await request.json();
     const {
         query,
-        results,
+        history,
         model,
         key,
     }: {
         query: string;
-        results: Result[];
+        history: {
+            type: 'ai' | 'human';
+            data: {
+                content: string;
+            };
+        }[];
         model: Model;
         key?: string;
     } = res;
+
+    const chatHistory = history.map((msg) => {
+        if (msg.type === 'ai') {
+            return new AIChatMessage(msg.data.content);
+        } else {
+            return new HumanChatMessage(msg.data.content);
+        }
+    });
 
     if (!query) {
         return new Response('No query', {
@@ -50,9 +65,21 @@ export async function POST(request: Request) {
             tableName: 'documents',
         }
     );
-    const context = await vectorStore.similaritySearch(query, 4);
+    const context = await vectorStore.similaritySearch(
+        `history: ${JSON.stringify(history)}\n\nquery: ${query}`,
+        8
+    );
 
-    const input = `context: ${JSON.stringify(context)}\n\nQuery: ${query}`;
+    // This convenience function creates a document chain prompted to summarize a set of documents.
+    const chain = loadSummarizationChain(new OpenAI({ temperature: 0 }), {
+        type: 'map_reduce',
+    });
+
+    const summary = await chain.call({
+        input_documents: context,
+    });
+
+    const input = `context: ${JSON.stringify(summary.text)}\n\nQuery: ${query}`;
 
     const stream = new ReadableStream({
         async start(controller) {
@@ -63,13 +90,11 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
-            const pastMessages = resultsToChatMessages(results);
-
             const chain = buildChain(
                 openAIApiKey,
                 callback,
                 model,
-                pastMessages
+                chatHistory
             );
             try {
                 await chain.call({ input });

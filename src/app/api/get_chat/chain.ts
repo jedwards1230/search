@@ -13,7 +13,7 @@ export default function buildChain(
     openAIApiKey: string,
     callback: (token: string) => void,
     model: string,
-    pastMessages: (HumanChatMessage | AIChatMessage)[]
+    chatHistory: (AIChatMessage | HumanChatMessage)[]
 ) {
     const prompt = ChatPromptTemplate.fromPromptMessages([
         SystemMessagePromptTemplate.fromTemplate(
@@ -42,7 +42,7 @@ export default function buildChain(
         ],
     });
     const memory = new BufferMemory({
-        chatHistory: new ChatMessageHistory(pastMessages),
+        chatHistory: new ChatMessageHistory(chatHistory),
         returnMessages: true,
         memoryKey: 'history',
     });

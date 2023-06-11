@@ -37,7 +37,8 @@ export default function ReferenceList({
     };
 
     return (
-        <div
+        <motion.div
+            layout="position"
             className={clsx(
                 'flex w-full flex-col justify-start gap-2 lg:w-auto',
                 open ? 'lg:min-w-[40%] lg:max-w-[40%]' : ''
@@ -92,6 +93,6 @@ export default function ReferenceList({
                     </AnimatePresence>
                 </motion.div>
             )}
-        </div>
+        </motion.div>
     );
 }

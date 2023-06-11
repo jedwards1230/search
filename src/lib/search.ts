@@ -1,4 +1,5 @@
 import { readStream } from '@/lib/stream';
+import { resultsToChatMessages } from './langchain';
 
 // get search results based on query
 export async function getResults(
@@ -76,7 +77,7 @@ export async function summarizeResult(context: string, key?: string | null) {
 }
 
 // stream the summary of the results
-export async function summarizeResults(
+export async function getChat(
     query: string,
     results: Result[],
     id: number,
@@ -84,12 +85,14 @@ export async function summarizeResults(
     updateSummary: (id: number, summary: string) => void,
     key?: string | null
 ) {
+    const history = resultsToChatMessages(results);
+
     try {
         const response = await fetch('/api/get_chat', {
             method: 'POST',
             body: JSON.stringify({
                 query,
-                results,
+                history,
                 key,
                 model,
             }),

@@ -7,7 +7,7 @@ import {
     analyzeSingleResult,
     getResults,
     summarizeResult,
-    summarizeResults,
+    getChat,
 } from '@/lib/search';
 import reducer from './searchReducer';
 import { initialState } from './configContext';
@@ -54,7 +54,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             }
 
             let id: number;
-
             if (idToUpdate !== undefined) {
                 id = idToUpdate;
                 dispatch({
@@ -146,7 +145,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
                 await Promise.all(analyzedResultsPromises);
 
-                await summarizeResults(
+                await getChat(
                     finalQuery,
                     state.results,
                     id,

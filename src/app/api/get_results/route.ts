@@ -100,7 +100,7 @@ export async function POST(request: Request) {
         );
 
         return NextResponse.json({
-            searchResults: searchResults.splice(0, 5),
+            searchResults,
         });
     } catch (e) {
         console.error('error: ', e);
