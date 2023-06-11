@@ -65,7 +65,7 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     />
                     <InputField
                         label="OpenAI API Key"
-                        type={openaiApiKey ? 'password' : 'text'}
+                        type={openaiApiKey ? 'oneTimeCode' : 'text'}
                         value={openaiApiKey || ''}
                         onChange={(e) =>
                             updateConfig({
@@ -109,7 +109,7 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                     />
                     <InputField
                         label="Google API Key"
-                        type={googleApiKey ? 'password' : 'text'}
+                        type={googleApiKey ? 'oneTimeCode' : 'text'}
                         value={googleApiKey || ''}
                         onChange={(e) =>
                             updateConfig({

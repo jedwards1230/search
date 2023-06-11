@@ -7,7 +7,7 @@ export default function InputField({
     Link,
 }: {
     label: string;
-    type: 'text' | 'password';
+    type: 'text' | 'oneTimeCode';
     value: string;
     placeholder?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -33,6 +33,7 @@ export default function InputField({
                     e.target.selectionStart = e.target.selectionEnd =
                         e.target.value.length;
                 }}
+                autoComplete="off"
                 onBlur={(e) => (e.target.type = type)}
                 className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
             />
