@@ -28,13 +28,12 @@ Built using:
 ### Planned Improvements
 
 -   Integration with alternative search engines
--   Enhanced agent tools (web browser, calculator, code sandbox)
+-   Add agent tools (web browser, calculator, code sandbox)
 -   Improved chat history management
     -   Store chat history in a database
     -   Vectorize chat history
 -   Caching
 -   Encrypt API keys and chat history
--   Don't autofill / ask for API keys if they are handled by the server
 -   Optimized prompting
 
 ## Installation
