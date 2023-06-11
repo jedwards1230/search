@@ -4,9 +4,7 @@ import { readStream } from '@/lib/stream';
 export async function getResults(
     newQuery: string,
     results: Result[],
-    openAIApiKey: string,
-    googleApiKey: string,
-    googleCSEId: string
+    keys?: Keys
 ) {
     const history = results.map((result) => {
         return {
@@ -20,12 +18,14 @@ export async function getResults(
             body: JSON.stringify({
                 query: newQuery,
                 history: JSON.stringify(history),
-                openAIApiKey,
-                googleApiKey,
-                googleCSEId,
+                keys,
             }),
         });
         const data = await res.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
 
         const searchResults: SearchResult[] = data.searchResults;
 
@@ -39,7 +39,7 @@ export async function getResults(
 export async function analyzeSingleResult(
     searchResult: SearchResult,
     query: string,
-    key: string,
+    key?: string | null,
     quickSearch?: boolean
 ) {
     const res = await fetch('/api/analyze_result', {
@@ -59,7 +59,7 @@ export async function analyzeSingleResult(
     return context;
 }
 
-export async function summarizeResult(context: string, key: string) {
+export async function summarizeResult(context: string, key?: string | null) {
     const res = await fetch('/api/summarize_result', {
         method: 'POST',
         body: JSON.stringify({
@@ -81,8 +81,8 @@ export async function summarizeResults(
     results: Result[],
     id: number,
     model: Model,
-    key: string,
-    updateSummary: (id: number, summary: string) => void
+    updateSummary: (id: number, summary: string) => void,
+    key?: string | null
 ) {
     try {
         const response = await fetch('/api/summarize_results', {

@@ -8,6 +8,8 @@ import {
 
 export const runtime = 'edge';
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 const prompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You generate a summary based on the provided data.\n' +
@@ -25,7 +27,7 @@ export async function POST(request: Request) {
         key,
     }: {
         context: string;
-        key: string;
+        key?: string;
     } = res;
 
     if (!context) {
@@ -34,7 +36,9 @@ export async function POST(request: Request) {
         });
     }
 
-    if (!key) {
+    const openAIApiKey = key || OPENAI_API_KEY;
+
+    if (!openAIApiKey) {
         return new Response('No key', {
             status: 400,
         });
@@ -53,7 +57,7 @@ export async function POST(request: Request) {
                 prompt,
                 llm: new OpenAIChat({
                     temperature: 0,
-                    openAIApiKey: key,
+                    openAIApiKey,
                     streaming: true,
                     callbacks: [
                         {

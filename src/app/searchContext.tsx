@@ -13,6 +13,7 @@ import reducer from './searchReducer';
 import { initialState } from './configContext';
 import { useConfig } from '@/app/configContext';
 import { readStream } from '@/lib/stream';
+import { checkKeys } from '@/lib/config';
 
 const SearchContext = createContext<State>(initialState);
 
@@ -41,8 +42,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             if (newQuery === '') return;
             const newContext = context?.trim() || undefined;
 
-            const { openAIApiKey, googleApiKey, googleCseApiKey } =
-                checkKeys(config);
+            const keys = checkKeys(config);
 
             dispatch({ type: 'SET_LOADING', payload: true });
             const startTime = Date.now();
@@ -93,9 +93,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 const searchResults = await getResults(
                     finalQuery,
                     state.results,
-                    openAIApiKey,
-                    googleApiKey,
-                    googleCseApiKey
+                    keys
                 );
 
                 if (searchResults.length === 0) {
@@ -112,7 +110,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                         const context = await analyzeSingleResult(
                             result,
                             finalQuery,
-                            openAIApiKey,
+                            keys?.openaiApiKey,
                             quickSearch
                         );
 
@@ -133,11 +131,10 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
                                 const stream = await summarizeResult(
                                     context,
-                                    openAIApiKey
+                                    keys?.openaiApiKey
                                 );
-                                const res = await readStream(
-                                    stream,
-                                    (token: string) => updateResult(token)
+                                await readStream(stream, (token: string) =>
+                                    updateResult(token)
                                 );
                             };
                             summarize();
@@ -154,13 +151,13 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     state.results,
                     id,
                     config.model,
-                    openAIApiKey,
                     (id: number, summary: string) => {
                         dispatch({
                             type: 'UPDATE_SUMMARY',
                             payload: { id, summary },
                         });
-                    }
+                    },
+                    keys?.openaiApiKey
                 );
 
                 dispatch({
@@ -198,29 +195,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             {children}
         </SearchContext.Provider>
     );
-}
-
-function checkKeys(config: Config) {
-    if (!config.openaiApiKey) {
-        alert('Please add your OpenAI API key in the config');
-        throw new Error('OpenAI API key not found');
-    }
-
-    if (!config.googleApiKey) {
-        alert('Please add your Google API key in the config');
-        throw new Error('Google API key not found');
-    }
-
-    if (!config.googleCseApiKey) {
-        alert('Please add your Google CSE API key in the config');
-        throw new Error('Google CSE API key not found');
-    }
-
-    return {
-        openAIApiKey: config.openaiApiKey,
-        googleApiKey: config.googleApiKey,
-        googleCseApiKey: config.googleCseApiKey,
-    };
 }
 
 export default SearchContext;

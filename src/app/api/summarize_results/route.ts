@@ -14,6 +14,8 @@ import { SupabaseVectorStore } from 'langchain/vectorstores/supabase';
 
 export const runtime = 'edge';
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 const prompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(
         'You are a helpful assistant. ' +
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
         query: string;
         results: Result[];
         model: Model;
-        key: string;
+        key?: string;
     } = res;
 
     if (!query) {
@@ -53,8 +55,16 @@ export async function POST(request: Request) {
         });
     }
 
+    const openAIApiKey = key || OPENAI_API_KEY;
+
+    if (!openAIApiKey) {
+        return new Response('No key', {
+            status: 400,
+        });
+    }
+
     const vectorStore = new SupabaseVectorStore(
-        new OpenAIEmbeddings({ openAIApiKey: key }),
+        new OpenAIEmbeddings({ openAIApiKey }),
         {
             client: supabase,
             tableName: 'documents',

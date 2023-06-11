@@ -54,6 +54,13 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+    const GOOGLE_CSE_ID = process.env.GOOGLE_CSE_ID;
+
+    const keys =
+        OPENAI_API_KEY && GOOGLE_API_KEY && GOOGLE_CSE_ID ? true : false;
+
     return (
         <html
             className="mx-auto flex h-full w-full bg-neutral-50 p-2 text-neutral-900 transition-colors dark:bg-neutral-900 dark:text-neutral-100 lg:max-w-[90%]"
@@ -61,7 +68,7 @@ export default function RootLayout({
             suppressHydrationWarning={true}
         >
             <body className={clsx(inter.className, 'flex h-full w-full')}>
-                <Providers>{children}</Providers>
+                <Providers keys={keys}>{children}</Providers>
             </body>
         </html>
     );

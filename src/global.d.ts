@@ -62,13 +62,18 @@ type Action =
           payload: { id: number; summary: string };
       };
 
+type Keys = {
+    openaiApiKey?: string | null | undefined;
+    googleApiKey?: string | null | undefined;
+    googleCseApiKey?: string | null | undefined;
+};
+
 type Config = {
     model: Model;
     hideReferences: boolean;
-    openaiApiKey: string | null;
-    googleApiKey: string | null;
-    googleCseApiKey: string | null;
     summarizeReferences: boolean;
+    serverSideKeys?: boolean;
+    keys?: Keys | null;
 };
 
 type State = {

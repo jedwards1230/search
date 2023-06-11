@@ -7,14 +7,14 @@ export default function InputField({
     Link,
 }: {
     label: string;
-    type: string;
+    type: 'text' | 'password';
     value: string;
     placeholder?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     Link?: () => JSX.Element;
 }) {
     return (
-        <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center">
+        <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center md:gap-4">
             <div className="flex items-center justify-between md:flex-col md:items-start md:justify-center">
                 <div>{label}:</div>
                 {Link && (
@@ -33,7 +33,7 @@ export default function InputField({
                     e.target.selectionStart = e.target.selectionEnd =
                         e.target.value.length;
                 }}
-                onBlur={(e) => (e.target.type = 'password')}
+                onBlur={(e) => (e.target.type = type)}
                 className="rounded border border-neutral-500 bg-inherit p-2 focus:outline-none md:text-right"
             />
         </div>

@@ -8,14 +8,8 @@ import CheckboxField from './CheckboxField';
 
 export default function SettingsDialog({ close }: { close: () => void }) {
     const { config, updateConfig } = useConfig();
-    const {
-        hideReferences,
-        summarizeReferences,
-        model,
-        openaiApiKey,
-        googleApiKey,
-        googleCseApiKey,
-    } = config;
+    const { hideReferences, summarizeReferences, model, keys } = config;
+    const { openaiApiKey, googleApiKey, googleCseApiKey } = keys || {};
     return (
         <motion.dialog
             key="settings-dialog"
@@ -73,11 +67,13 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         label="OpenAI API Key"
                         type={openaiApiKey ? 'password' : 'text'}
                         value={openaiApiKey || ''}
-                        placeholder="************"
                         onChange={(e) =>
                             updateConfig({
                                 ...config,
-                                openaiApiKey: e.target.value,
+                                keys: {
+                                    ...keys,
+                                    openaiApiKey: e.target.value,
+                                },
                             })
                         }
                         Link={() => (
@@ -93,11 +89,13 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         label="Google Search Engine ID"
                         type={'text'}
                         value={googleCseApiKey || ''}
-                        placeholder="************"
                         onChange={(e) =>
                             updateConfig({
                                 ...config,
-                                googleCseApiKey: e.target.value,
+                                keys: {
+                                    ...keys,
+                                    googleCseApiKey: e.target.value,
+                                },
                             })
                         }
                         Link={() => (
@@ -113,11 +111,13 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                         label="Google API Key"
                         type={googleApiKey ? 'password' : 'text'}
                         value={googleApiKey || ''}
-                        placeholder="************"
                         onChange={(e) =>
                             updateConfig({
                                 ...config,
-                                googleApiKey: e.target.value,
+                                keys: {
+                                    ...keys,
+                                    googleApiKey: e.target.value,
+                                },
                             })
                         }
                         Link={() => (

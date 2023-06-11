@@ -10,6 +10,8 @@ import supabase from '@/lib/supabase';
 
 export const runtime = 'edge';
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 export async function POST(request: Request) {
     const res = await request.json();
     const {
@@ -20,14 +22,22 @@ export async function POST(request: Request) {
     }: {
         query: string;
         searchResult: SearchResult;
-        key: string;
+        key?: string;
         quickSearch?: boolean;
     } = res;
 
     try {
         let context: string;
 
-        const embeddings = new OpenAIEmbeddings({ openAIApiKey: key });
+        const openAIApiKey = key || OPENAI_API_KEY;
+
+        if (!openAIApiKey) {
+            return new Response('No key', {
+                status: 400,
+            });
+        }
+
+        const embeddings = new OpenAIEmbeddings({ openAIApiKey });
         const vectorStore = new SupabaseVectorStore(embeddings, {
             client: supabase,
             tableName: 'documents',

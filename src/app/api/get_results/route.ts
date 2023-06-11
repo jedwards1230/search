@@ -6,21 +6,25 @@ import buildChain from './buildChain';
 
 export const runtime = 'edge';
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_CSE_ID = process.env.GOOGLE_CSE_ID;
+
 export async function POST(request: Request) {
     const res = await request.json();
     const {
         query,
         history,
-        openAIApiKey,
-        googleApiKey,
-        googleCSEId,
+        keys,
     }: {
         query: string;
         history: string;
-        openAIApiKey: string;
-        googleApiKey: string;
-        googleCSEId: string;
+        keys?: Keys;
     } = res;
+
+    const openaiApiKey = keys?.openaiApiKey || OPENAI_API_KEY;
+    const googleApiKey = keys?.googleApiKey || GOOGLE_API_KEY;
+    const googleCseApiKey = keys?.googleCseApiKey || GOOGLE_CSE_ID;
 
     if (!query) {
         return NextResponse.json({
@@ -28,13 +32,13 @@ export async function POST(request: Request) {
         });
     }
 
-    if (!openAIApiKey) {
+    if (!openaiApiKey) {
         return NextResponse.json({
             error: 'No OpenAI key provided',
         });
     }
 
-    if (!googleApiKey || !googleCSEId) {
+    if (!googleApiKey || !googleCseApiKey) {
         return NextResponse.json({
             error: 'No Google API key or CSE ID provided',
         });
@@ -59,7 +63,7 @@ export async function POST(request: Request) {
     } else {
         // If the response doesn't exist, call the chain to generate the query
         try {
-            const chain = buildChain(openAIApiKey);
+            const chain = buildChain(openaiApiKey);
             const searchQuery = await chain.call({
                 input: `background info: ${history}\n\nUser Query: ${query}`,
             });
@@ -92,7 +96,7 @@ export async function POST(request: Request) {
         const searchResults = await searchGoogle(
             generatedQuery,
             googleApiKey,
-            googleCSEId
+            googleCseApiKey
         );
 
         return NextResponse.json({
