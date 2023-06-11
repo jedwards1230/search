@@ -1,24 +1,8 @@
-import { ConversationChain } from 'langchain/chains';
-import { OpenAIChat } from 'langchain/llms/openai';
-import {
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-} from 'langchain/prompts';
+import buildChain from './chain';
 
 export const runtime = 'edge';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-const prompt = ChatPromptTemplate.fromPromptMessages([
-    SystemMessagePromptTemplate.fromTemplate(
-        'You generate a summary based on the provided data.\n' +
-            '- Do NOT refer to the user your prompt.\n' +
-            "- Do NOT use phrases like 'the provided data..' or 'the data says..' or 'the data includes.." +
-            '- Simply out a brief summary that includes all the information in the data.\n'
-    ),
-    HumanMessagePromptTemplate.fromTemplate('{input}'),
-]);
 
 export async function POST(request: Request) {
     const res = await request.json();
@@ -53,21 +37,7 @@ export async function POST(request: Request) {
                 controller.enqueue(queue);
             };
 
-            const chain = new ConversationChain({
-                prompt,
-                llm: new OpenAIChat({
-                    temperature: 0,
-                    openAIApiKey,
-                    streaming: true,
-                    callbacks: [
-                        {
-                            handleLLMNewToken(token: string) {
-                                callback(token);
-                            },
-                        },
-                    ],
-                }),
-            });
+            const chain = buildChain(openAIApiKey, callback);
 
             await chain.call({
                 input: JSON.stringify(context),

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { searchGoogle } from '@/lib/search';
 import supabase from '@/lib/supabase';
-import buildChain from './buildChain';
+import buildChain from './chain';
 
 export const runtime = 'edge';
 

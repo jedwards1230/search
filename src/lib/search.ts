@@ -85,7 +85,7 @@ export async function summarizeResults(
     key?: string | null
 ) {
     try {
-        const response = await fetch('/api/summarize_results', {
+        const response = await fetch('/api/get_chat', {
             method: 'POST',
             body: JSON.stringify({
                 query,
