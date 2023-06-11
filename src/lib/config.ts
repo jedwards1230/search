@@ -49,7 +49,7 @@ export function getConfig(keys?: boolean): Config {
             hideReferences:
                 window.localStorage.getItem('hideReferences') === 'true',
             summarizeReferences:
-                window.localStorage.getItem('summarizeReferences') !== 'false',
+                window.localStorage.getItem('summarizeReferences') === 'true',
             keys: keys
                 ? undefined
                 : {

@@ -7,7 +7,6 @@ import { LoadIcon } from './icons';
 import ReferenceList from './ReferencesList';
 import Result from './Result';
 import Input from './Input';
-import { formatTime } from '@/lib/utils';
 import { useSearch } from '@/app/searchContext';
 
 export default function Results({ result }: { result: Result }) {

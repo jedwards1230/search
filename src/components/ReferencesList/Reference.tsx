@@ -17,7 +17,7 @@ export default function Reference({
 
     return (
         <motion.div
-            layout
+            //layout="position"
             initial={{ opacity: 0, translateX: 150 }}
             animate={{ opacity: 1, translateX: 0 }}
             exit={{
