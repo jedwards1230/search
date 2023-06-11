@@ -5,22 +5,22 @@ export function checkKeys(config: Config): Keys | undefined {
 
     if (!config.keys) {
         alert('Please add your API keys in the config');
-        throw new Error('API keys not found');
+        return;
     }
 
     if (!config.keys.openaiApiKey) {
         alert('Please add your OpenAI API key in the config');
-        throw new Error('OpenAI API key not found');
+        return;
     }
 
     if (!config.keys.googleApiKey) {
         alert('Please add your Google API key in the config');
-        throw new Error('Google API key not found');
+        return;
     }
 
     if (!config.keys.googleCseApiKey) {
         alert('Please add your Google Search Engine ID in the config');
-        throw new Error('Google CSE API key not found');
+        return;
     }
 
     return {

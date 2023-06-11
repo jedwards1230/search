@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { LinkIcon } from '../icons';
 import { useConfig } from '@/app/configContext';
@@ -17,6 +17,8 @@ export default function ReferenceList({
         config: { hideReferences },
     } = useConfig();
     const [open, setOpen] = useState(!hideReferences);
+    const [closing, setClosing] = useState(false);
+
     const [referenceList, setReferenceList] =
         useState<SearchResult[]>(references);
 
@@ -25,6 +27,14 @@ export default function ReferenceList({
             setReferenceList(references);
         }
     }, [references]);
+
+    const toggleReferences = () => {
+        if (open) {
+            setClosing(true);
+        } else {
+            setOpen(true);
+        }
+    };
 
     return (
         <div
@@ -35,7 +45,6 @@ export default function ReferenceList({
         >
             <div className="flex w-auto items-center justify-between">
                 <motion.div
-                    layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className={clsx(
@@ -53,21 +62,35 @@ export default function ReferenceList({
                         !open &&
                             'pt-2 text-neutral-500 transition-colors dark:text-neutral-500'
                     )}
-                    onClick={() => setOpen(!open)}
+                    onClick={toggleReferences}
                 >
                     <LinkIcon />
                 </motion.div>
             </div>
             {open && (
-                <div className="w-full overflow-y-auto">
-                    {referenceList.map((reference, i) => (
-                        <Reference
-                            reference={reference}
-                            i={i}
-                            key={`reference-${i}`}
-                        />
-                    ))}
-                </div>
+                <motion.div
+                    layout
+                    className="flex w-full flex-col overflow-y-auto overflow-x-hidden"
+                >
+                    <AnimatePresence
+                        onExitComplete={() => {
+                            setOpen(false);
+                            setClosing(false);
+                        }}
+                    >
+                        {referenceList.map((reference, i) => {
+                            if (!reference || closing) return null;
+                            return (
+                                <Reference
+                                    numReferences={referenceList.length}
+                                    key={`reference-${i}`}
+                                    reference={reference}
+                                    i={i}
+                                />
+                            );
+                        })}
+                    </AnimatePresence>
+                </motion.div>
             )}
         </div>
     );

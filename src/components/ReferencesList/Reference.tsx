@@ -3,9 +3,11 @@ import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
 export default function Reference({
+    numReferences,
     reference,
     i,
 }: {
+    numReferences: number;
     reference: SearchResult;
     i: number;
 }) {
@@ -13,13 +15,24 @@ export default function Reference({
         config: { summarizeReferences },
     } = useConfig();
 
-    if (!reference) return null;
     return (
         <motion.div
+            layout
             initial={{ opacity: 0, translateX: 150 }}
             animate={{ opacity: 1, translateX: 0 }}
-            transition={{ delay: i * 0.1 }}
-            key={reference.url + i}
+            exit={{
+                opacity: 0,
+                translateX: 150,
+                scale: 0.9,
+                transition: {
+                    delay: (numReferences - i - 1) * 0.1,
+                    duration: 0.2,
+                },
+            }}
+            transition={{
+                delay: i * 0.1,
+                type: 'spring',
+            }}
             title={
                 !reference.content
                     ? summarizeReferences
