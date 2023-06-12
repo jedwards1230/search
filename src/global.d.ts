@@ -8,12 +8,17 @@ interface IntermediateStep {
 }
 
 interface SearchResult {
+    /** Query used with Search Engine API */
+    query: string;
     url: string;
     snippet: string;
     title: string;
+    /** AI-generated summary */
     content?: string;
     error?: string;
+    /** Finished analysis for primary chat */
     reviewed?: boolean;
+    /** Fime taken to store text embeddings  */
     timeToComplete?: number;
 }
 

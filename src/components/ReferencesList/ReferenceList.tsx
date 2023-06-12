@@ -9,8 +9,10 @@ import { useConfig } from '@/app/configContext';
 import Reference from './Reference';
 
 export default function ReferenceList({
+    query,
     references,
 }: {
+    query: string;
     references: SearchResult[];
 }) {
     const {
@@ -69,29 +71,34 @@ export default function ReferenceList({
                 </motion.div>
             </div>
             {open && (
-                <motion.div
-                    layout
-                    className="flex w-full flex-col overflow-y-auto overflow-x-hidden"
-                >
-                    <AnimatePresence
-                        onExitComplete={() => {
-                            setOpen(false);
-                            setClosing(false);
-                        }}
+                <>
+                    <div className="font-semibold italic">
+                        {'"' + query + '"'}
+                    </div>
+                    <motion.div
+                        layout
+                        className="flex w-full flex-col overflow-y-auto overflow-x-hidden"
                     >
-                        {referenceList.map((reference, i) => {
-                            if (!reference || closing) return null;
-                            return (
-                                <Reference
-                                    numReferences={referenceList.length}
-                                    key={`reference-${i}`}
-                                    reference={reference}
-                                    i={i}
-                                />
-                            );
-                        })}
-                    </AnimatePresence>
-                </motion.div>
+                        <AnimatePresence
+                            onExitComplete={() => {
+                                setOpen(false);
+                                setClosing(false);
+                            }}
+                        >
+                            {referenceList.map((reference, i) => {
+                                if (!reference || closing) return null;
+                                return (
+                                    <Reference
+                                        numReferences={referenceList.length}
+                                        key={`reference-${i}`}
+                                        reference={reference}
+                                        i={i}
+                                    />
+                                );
+                            })}
+                        </AnimatePresence>
+                    </motion.div>
+                </>
             )}
         </motion.div>
     );

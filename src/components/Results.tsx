@@ -102,7 +102,10 @@ export default function Results({ result }: { result: Result }) {
                     </div>
                 </div>
                 {result.references.length > 0 && (
-                    <ReferenceList references={result.references} />
+                    <ReferenceList
+                        query={result.query}
+                        references={result.references}
+                    />
                 )}
             </div>
 

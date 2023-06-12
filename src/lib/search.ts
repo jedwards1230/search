@@ -142,6 +142,7 @@ export async function searchGoogle(
     const results: SearchResult[] =
         json?.items?.map(
             (item: { title?: string; link?: string; snippet?: string }) => ({
+                query: input,
                 title: item.title,
                 url: item.link,
                 snippet: item.snippet,
