@@ -143,7 +143,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                     }
                 );
 
-                await Promise.all(analyzedResultsPromises);
+                await Promise.allSettled(analyzedResultsPromises);
 
                 await getChat(
                     finalQuery,

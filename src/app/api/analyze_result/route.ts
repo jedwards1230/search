@@ -13,12 +13,6 @@ export const runtime = 'edge';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export async function POST(request: Request) {
-    setTimeout(() => {
-        return NextResponse.json({
-            error: 'Timeout',
-        });
-    }, 24000);
-
     const res = await request.json();
     const {
         query,

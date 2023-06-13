@@ -43,21 +43,35 @@ export async function analyzeSingleResult(
     key?: string | null,
     quickSearch?: boolean
 ) {
-    const res = await fetch('/api/analyze_result', {
-        method: 'POST',
-        body: JSON.stringify({
-            searchResult,
-            query,
-            key,
-            quickSearch,
-        }),
-    });
-    if (!res.ok) {
-        throw new Error('Analyze result failed');
-    }
-    const context: string = await res.json();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+        controller.abort();
+        throw new Error('Fetch request timed out');
+    }, 15000); // 15 seconds
 
-    return context;
+    try {
+        const res = await fetch('/api/analyze_result', {
+            method: 'POST',
+            body: JSON.stringify({
+                searchResult,
+                query,
+                key,
+                quickSearch,
+            }),
+            signal: controller.signal,
+        });
+
+        if (!res.ok) {
+            throw new Error('Analyze result failed');
+        }
+
+        const context: string = await res.json();
+        clearTimeout(timeout); // Clear the timeout if the fetch request completes within the timeout period
+        return context;
+    } catch (error) {
+        clearTimeout(timeout); // Clear the timeout if an error occurs
+        throw error;
+    }
 }
 
 export async function summarizeResult(context: string, key?: string | null) {
