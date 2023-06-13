@@ -22,7 +22,7 @@ interface SearchResult {
     timeToComplete?: number;
 }
 
-type Model = 'gpt-3.5-turbo' | 'gpt-4';
+type Model = 'gpt-3.5-turbo' | 'gpt-3.5-turbo-16k' | 'gpt-4';
 
 type ResultStatus = 'Getting links' | 'Scraping links' | 'Summarizing' | 'Done';
 

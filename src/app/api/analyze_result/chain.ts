@@ -31,7 +31,7 @@ export default function buildChain(
     const llm = new ChatOpenAI({
         temperature: 0.2,
         streaming: true,
-        modelName: model,
+        modelName: 'gpt-3.5-turbo-16k',
         openAIApiKey,
         callbacks: [
             {

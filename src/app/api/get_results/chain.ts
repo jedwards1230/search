@@ -24,6 +24,7 @@ export default function buildChain(openAIApiKey: string) {
     ]);
 
     const chat = new ChatOpenAI({
+        modelName: 'gpt-3.5-turbo-16k',
         temperature: 0,
         openAIApiKey,
     });

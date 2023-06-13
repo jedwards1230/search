@@ -33,7 +33,7 @@ export function checkKeys(config: Config): Keys | undefined {
 export function getConfig(keys?: boolean): Config {
     if (typeof window === 'undefined') {
         return {
-            model: 'gpt-3.5-turbo',
+            model: 'gpt-3.5-turbo-16k',
             hideReferences: false,
             summarizeReferences: true,
             serverSideKeys: keys ? true : false,
@@ -45,7 +45,7 @@ export function getConfig(keys?: boolean): Config {
         return {
             model: window.localStorage.getItem('model')
                 ? (window.localStorage.getItem('model') as Model)
-                : 'gpt-3.5-turbo',
+                : 'gpt-3.5-turbo-16k',
             hideReferences:
                 window.localStorage.getItem('hideReferences') === 'true',
             summarizeReferences:

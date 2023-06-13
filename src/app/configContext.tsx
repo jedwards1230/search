@@ -25,7 +25,7 @@ interface ConfigContext {
 
 const ConfigContext = createContext<ConfigContext>({
     config: {
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-3.5-turbo-16k',
         hideReferences: false,
         summarizeReferences: false,
     },
