@@ -4,8 +4,6 @@ import { AIChatMessage, HumanChatMessage } from 'langchain/schema';
 
 import supabase from '@/lib/supabase';
 import buildChain from './chain';
-import { loadSummarizationChain } from 'langchain/chains';
-import { OpenAI } from 'langchain/llms/openai';
 
 export const runtime = 'edge';
 
@@ -70,16 +68,7 @@ export async function POST(request: Request) {
         8
     );
 
-    // This convenience function creates a document chain prompted to summarize a set of documents.
-    const chain = loadSummarizationChain(new OpenAI({ temperature: 0 }), {
-        type: 'map_reduce',
-    });
-
-    const summary = await chain.call({
-        input_documents: context,
-    });
-
-    const input = `context: ${JSON.stringify(summary.text)}\n\nQuery: ${query}`;
+    const input = `context: ${JSON.stringify(context)}\n\nQuery: ${query}`;
 
     const stream = new ReadableStream({
         async start(controller) {
