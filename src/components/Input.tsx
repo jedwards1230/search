@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
 import clsx from 'clsx';
 
-import { ChevronIcon, HideIcon, SearchIcon } from './icons';
+import { ChevronIcon, CloseIcon, HideIcon, SearchIcon } from './icons';
 import { useSearch } from '@/app/searchContext';
 import RGB from './RGB';
 import { motion } from 'framer-motion';
@@ -68,20 +67,35 @@ export default function Input({
             >
                 <div className="relative flex h-full w-full flex-col pb-2">
                     <div className="flex h-full w-full rounded-lg shadow-lg">
-                        <motion.textarea
-                            value={query}
-                            initial={{ padding: '0.75rem', opacity: 0 }}
-                            whileFocus={{ padding: '1rem', opacity: 1 }}
-                            animate={{ padding: '0.75rem', opacity: 1 }}
-                            transition={{
-                                duration: 0.2,
-                            }}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={onKeyDownHandler}
-                            rows={queryRows > 15 ? 15 : queryRows}
-                            className="w-full rounded-r-none rounded-tl-lg border border-b-0 border-neutral-400 p-2 shadow shadow-neutral-400 transition-colors focus:p-3 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700 dark:hover:bg-neutral-700 dark:disabled:bg-neutral-700"
-                            placeholder={placeholder}
-                        />
+                        <div className="relative h-full w-full">
+                            <motion.textarea
+                                value={query}
+                                initial={{ padding: '0.75rem', opacity: 0 }}
+                                whileFocus={{ padding: '1rem', opacity: 1 }}
+                                animate={{ padding: '0.75rem', opacity: 1 }}
+                                transition={{
+                                    duration: 0.2,
+                                }}
+                                onChange={(e) => setQuery(e.target.value)}
+                                onKeyDown={onKeyDownHandler}
+                                rows={queryRows > 15 ? 15 : queryRows}
+                                className="h-full w-full rounded-r-none rounded-bl-none rounded-tl-lg border border-b-0 border-neutral-400 p-2 transition-colors focus:p-3 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:shadow-neutral-700 dark:hover:bg-neutral-700 dark:disabled:bg-neutral-700"
+                                placeholder={placeholder}
+                            />
+                            {topLevel && (query || context) && (
+                                <div
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setQuery('');
+                                        setContext('');
+                                    }}
+                                    title="Clear Input"
+                                    className="absolute inset-y-0 right-0 flex scale-125 cursor-pointer items-center pl-2 pr-3"
+                                >
+                                    <CloseIcon />
+                                </div>
+                            )}
+                        </div>
                         <button
                             onClick={(e) => {
                                 e.preventDefault();
