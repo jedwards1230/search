@@ -77,7 +77,7 @@ export default function ReferenceList({
                     </div>
                     <motion.div
                         layout
-                        className="flex w-full flex-col overflow-y-auto overflow-x-hidden"
+                        className="flex w-full flex-col overflow-y-auto"
                     >
                         <AnimatePresence
                             onExitComplete={() => {

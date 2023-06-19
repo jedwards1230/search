@@ -21,6 +21,7 @@ export default function buildChain(
                 `Todays date is ${new Date().toLocaleDateString()}. ` +
                 'You use internet search results to inform your conversation with the user. ' +
                 'Provide responses as an in-depth explanation. ' +
+                'Cite all of your source inline with numbers (use markdown links), then list links at the end in a section titled References. ' +
                 'Respond in markdown format (including github flavored). ' +
                 'Ensure all code blocks and command examples are in md format ```code```, including the language. '
         ),

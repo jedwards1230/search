@@ -63,7 +63,7 @@ export default function Result({ result }: { result: string }) {
                     {...props}
                     className={clsx(
                         className,
-                        '!w-full !overflow-x-scroll transition-colors'
+                        '!w-full !overflow-x-scroll bg-neutral-200 tracking-wide transition-colors dark:bg-neutral-500'
                     )}
                 >
                     {children}

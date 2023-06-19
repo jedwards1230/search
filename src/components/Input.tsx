@@ -34,7 +34,7 @@ export default function Input({
     }, [search]);
 
     const submit = (update?: boolean) => {
-        if (context === '') setShowContext(false);
+        setShowContext(false);
         if (topLevel) reset();
         processQuery(query, context, update, quickSearch, id);
     };

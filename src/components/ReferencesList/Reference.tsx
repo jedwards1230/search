@@ -17,20 +17,11 @@ export default function Reference({
 
     return (
         <motion.div
-            //layout="position"
             initial={{ opacity: 0, translateX: 150 }}
             animate={{ opacity: 1, translateX: 0 }}
-            exit={{
-                opacity: 0,
-                translateX: 150,
-                scale: 0.9,
-                transition: {
-                    delay: (numReferences - i - 1) * 0.1,
-                    duration: 0.2,
-                },
-            }}
             transition={{
-                delay: i * 0.1,
+                delay: i * 0.09,
+
                 type: 'spring',
             }}
             title={

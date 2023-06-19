@@ -44,6 +44,7 @@ export default function SettingsDialog({ close }: { close: () => void }) {
                                 gpt-3.5-turbo-16k
                             </option>
                             <option value="gpt-4">gpt-4</option>
+                            <option value="gpt-4-0613">gpt-4-0613</option>
                         </select>
                     </div>
                     <CheckboxField

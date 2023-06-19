@@ -93,15 +93,12 @@ export async function POST(request: Request) {
     generatedQuery = generatedQuery.replace(/"/g, '');
 
     try {
-        const searchResults = await searchGoogle(
-            generatedQuery,
-            googleApiKey,
-            googleCseApiKey
-        );
-
-        return NextResponse.json({
-            searchResults,
-        });
+        return searchGoogle(generatedQuery, googleApiKey, googleCseApiKey)
+            .then((searchResults) => NextResponse.json({ searchResults }))
+            .catch((e) => {
+                console.error('error: ', e);
+                return NextResponse.json({ error: e });
+            });
     } catch (e) {
         console.error('error: ', e);
         return NextResponse.json({
